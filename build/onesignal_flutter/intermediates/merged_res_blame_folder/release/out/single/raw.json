@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.onesignal.flutter.onesignal_flutter-merged_res-44:/raw/firebase_common_keep.xml",
+        "source": "com.onesignal.flutter.onesignal_flutter-jetified-firebase-common-20.4.2-21:/raw/firebase_common_keep.xml"
+    },
+    {
+        "merged": "com.onesignal.flutter.onesignal_flutter-merged_res-44:/raw/consumer_onesignal_keep.xml",
+        "source": "com.onesignal.flutter.onesignal_flutter-jetified-notifications-5.1.24-6:/raw/consumer_onesignal_keep.xml"
+    }
+]

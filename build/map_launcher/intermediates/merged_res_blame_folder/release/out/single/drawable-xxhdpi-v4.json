@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_answer_low.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_answer_low.png"
+    },
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_answer_video.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_answer_video.png"
+    },
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_decline_low.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_decline_low.png"
+    },
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_decline.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_decline.png"
+    },
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_answer.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_answer.png"
+    },
+    {
+        "merged": "com.alexmiller.map_launcher-merged_res-26:/drawable-xxhdpi-v4/ic_call_answer_video_low.png",
+        "source": "com.alexmiller.map_launcher-core-1.13.1-9:/drawable-xxhdpi-v4/ic_call_answer_video_low.png"
+    }
+]

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">980935620101</string>
+    <string name="google_api_key" translatable="false">AIzaSyBf5kZx5V-40dpi4isxJwJ6LcSsmckbogg</string>
+    <string name="google_app_id" translatable="false">1:980935620101:android:e2b092ee17d6d4ddcace6c</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBf5kZx5V-40dpi4isxJwJ6LcSsmckbogg</string>
+    <string name="google_storage_bucket" translatable="false">quickcargoo-68335.appspot.com</string>
+    <string name="project_id" translatable="false">quickcargoo-68335</string>
+</resources>
