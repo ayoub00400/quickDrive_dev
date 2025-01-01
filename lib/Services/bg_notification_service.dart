@@ -23,12 +23,12 @@ import '../model/FRideBookingModel.dart';
 import '../utils/FirebaseOption.dart';
 import 'RideService.dart';
 
-final AudioPlayer player = AudioPlayer();
-
 class NotificationWithSoundService {
   static const int notificationId = 888;
+  static AudioPlayer player = AudioPlayer();
 
-  static const String channelDescription = 'This channel is used for important notifications';
+  static const String channelDescription =
+      'This channel is used for important notifications';
   static const String channelId = 'high_importance_channel';
   static const String channelName = 'High Importance Notifications';
 
@@ -58,21 +58,25 @@ class NotificationWithSoundService {
     playSound: true,
   );
 
-  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin()
-    ..initialize(
-      const InitializationSettings(android: AndroidInitializationSettings(notificationIcon)),
-    );
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin()
+        ..initialize(
+          const InitializationSettings(
+              android: AndroidInitializationSettings(notificationIcon)),
+        );
 
   static final service = FlutterBackgroundService();
 
   @pragma('vm:entry-point')
   static Future<void> initializeService() async {
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(oneNotificationChannel);
 
     await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(oneNotificationChannel1);
 
     await service.configure(
@@ -130,9 +134,11 @@ class NotificationWithSoundService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.reload();
     String selectedLang = prefs.getString(SELECTED_LANGUAGE_CODE) ?? 'ar';
-    Stream<QuerySnapshot<Object?>> result = rideService.fetchRide(userId: prefs.getInt(USER_ID));
+    Stream<QuerySnapshot<Object?>> result =
+        rideService.fetchRide(userId: prefs.getInt(USER_ID));
 
-    bool isNotificationShown = false; // Flag to ensure notification triggers only once
+    bool isNotificationShown =
+        false; // Flag to ensure notification triggers only once
 
     result.listen((event) {
       List<FRideBookingModel> data = event.docs.map((e) {
@@ -141,8 +147,14 @@ class NotificationWithSoundService {
 
       print('-----------my rider id ----------=${prefs.getInt(USER_ID)}');
       print('-----------data from firebase----------=${data}');
-
-      if (data.isNotEmpty && data[0].status == NEW_RIDE_REQUESTED && !isNotificationShown) {
+      if (data == [] || data.isEmpty || data.length == 0) {
+        isNotificationShown = false;
+        print("-----------data from firebase----------= add ");
+        stopSoundnotificatiion();
+      }
+      if (data.isNotEmpty &&
+          data[0].status == NEW_RIDE_REQUESTED &&
+          !isNotificationShown) {
         // Trigger the notification and set the flag
         isNotificationShown = true;
         SoundService.audioPlayWithLimit();
@@ -176,27 +188,28 @@ class NotificationWithSoundService {
             ),
           ),
         );
-        Timer(Duration(seconds: 5), () {
+        Timer(Duration(seconds: 10), () {
           isNotificationShown = false;
         });
       } else if (data.isNotEmpty && data[0].status != NEW_RIDE_REQUESTED) {
+        // isNotificationShown = false;
+
         // Reset the flag if the ride status changes
-        isNotificationShown = false;
       }
     });
   }
-}
 
-void stopAudio() async {
-  await player.stop();
-}
+  static void stopAudio() async {
+    await player.stop();
+  }
 
-Future<void> audioPlayWithLimit() async {
-  try {
-    Timer(Duration(seconds: 20), () {
-      stopAudio();
-    });
-    await player.setReleaseMode(ReleaseMode.loop);
-    await player.play(AssetSource('sounds/request_sound.aac'));
-  } catch (e) {}
+  Future<void> audioPlayWithLimit() async {
+    try {
+      Timer(Duration(seconds: 20), () {
+        stopAudio();
+      });
+      await player.setReleaseMode(ReleaseMode.loop);
+      await player.play(AssetSource('sounds/request_sound.aac'));
+    } catch (e) {}
+  }
 }

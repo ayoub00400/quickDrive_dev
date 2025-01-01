@@ -2415,7 +2415,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                               })
                         : SizedBox();
                   } else {
-                    SoundService.stopAudio();
+                    NotificationWithSoundService.stopAudio();
                     if (data.isEmpty) {
                       try {
                         // FlutterRingtonePlayer().stop();

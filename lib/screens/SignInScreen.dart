@@ -109,18 +109,11 @@ class SignInScreenState extends State<SignInScreen> {
                   sharedPref.setDouble(LONGITUDE, value.longitude);
                 });
               });
-              if (sharedPref.getInt(IS_ONLINE) == 1) {
-                await NotificationWithSoundService.initializeService()
-                    .then((value) {
-                  launchScreen(context, DashboardScreen(),
-                      isNewTask: true,
-                      pageRouteAnimation: PageRouteAnimation.Slide);
-                });
-              } else {
-                launchScreen(context, DashboardScreen(),
-                    isNewTask: true,
-                    pageRouteAnimation: PageRouteAnimation.Slide);
-              }
+              launchScreen(context, DashboardScreen(),
+                  isNewTask: true,
+                  pageRouteAnimation: PageRouteAnimation.Slide);
+              // if (sharedPref.getInt(IS_ONLINE) == 1) {
+              // } else {}
             } else {
               launchScreen(context, DocumentsScreen(isShow: true),
                   isNewTask: true,
