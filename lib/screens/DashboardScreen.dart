@@ -298,16 +298,19 @@ class DashboardScreenState extends State<DashboardScreen> {
         if (data['data'] != null &&
             data['data'] != {} &&
             data['data'].isNotEmpty &&
-            int.parse(data['data'][0]['driver_id'].toString()) == sharedPref.getInt(USER_ID)) getCurrentRequest();
+            int.parse(data['data'][0]['driver_id'].toString()) ==
+                sharedPref.getInt(USER_ID)) getCurrentRequest();
 
         {
           getCurrentRequest();
         }
       }
 
-      if (data['action'] != null && data['action']['action'] == 'new_ride_request') {
+      if (data['action'] != null &&
+          data['action']['action'] == 'new_ride_request') {
         if (data['action']['drivers_id'] != null) {
-          if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
+          if ((data['action']['drivers_id'] as List)
+              .contains(sharedPref.getInt(USER_ID))) {
             developer.log('Audio play condition met.');
             // TODO houssam: play audio here
             audioPlayWithLimit();
@@ -402,7 +405,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     walletCheckApi();
 
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    driverIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
 
     getCurrentRequest();
 
@@ -414,11 +418,14 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     getSettings();
 
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    driverIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
 
-    sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
+    sourceIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
 
-    destinationIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
+    destinationIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
 
     if (appStore.isLoggedIn) {
       startLocationTracking();
@@ -428,14 +435,16 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> locationPermission() async {
-    serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+    serviceStatusStream =
+        Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       if (status == ServiceStatus.disabled) {
         locationEnable = false;
 
         Future.delayed(
           Duration(seconds: 1),
           () {
-            launchScreen(navigatorKey.currentState!.overlay!.context, LocationPermissionScreen());
+            launchScreen(navigatorKey.currentState!.overlay!.context,
+                LocationPermissionScreen());
           },
         );
       } else if (status == ServiceStatus.enabled) {
@@ -510,20 +519,25 @@ class DashboardScreenState extends State<DashboardScreen> {
     if (sharedPref.getString(IS_TIME2) == null) {
       duration = startTime;
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: startTime)).toString());
+      await sharedPref.setString(IS_TIME2,
+          DateTime.now().add(Duration(seconds: startTime)).toString());
 
       startTimer(tag: "line222");
     } else {
-      duration = DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds;
+      duration = DateTime.parse(sharedPref.getString(IS_TIME2)!)
+          .difference(DateTime.now())
+          .inSeconds;
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: duration)).toString());
+      await sharedPref.setString(
+          IS_TIME2, DateTime.now().add(Duration(seconds: duration)).toString());
 
       if (duration < 0) {
         await sharedPref.remove(IS_TIME2);
 
         sharedPref.remove(ON_RIDE_MODEL);
 
-        if (sharedPref.getString("RIDE_ID_IS") == null || sharedPref.getString("RIDE_ID_IS") == "$riderId") {
+        if (sharedPref.getString("RIDE_ID_IS") == null ||
+            sharedPref.getString("RIDE_ID_IS") == "$riderId") {
           return cancelRideTimeOut();
         } else {
           duration = startTime;
@@ -542,7 +556,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
       if (duration > 0) {
         if (sharedPref.getString(ON_RIDE_MODEL) != null) {
-          servicesListData = OnRideRequest.fromJson(jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
+          servicesListData = OnRideRequest.fromJson(
+              jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
 
           // setState(() {});
         }
@@ -650,15 +665,18 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         value.walletSetting!.forEach((element) {
           if (element.key == PRESENT_TOPUP_AMOUNT) {
-            appStore.setWalletPresetTopUpAmount(element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
+            appStore.setWalletPresetTopUpAmount(
+                element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
           }
 
           if (element.key == MIN_AMOUNT_TO_ADD) {
-            if (element.value != null) appStore.setMinAmountToAdd(int.parse(element.value!));
+            if (element.value != null)
+              appStore.setMinAmountToAdd(int.parse(element.value!));
           }
 
           if (element.key == MAX_AMOUNT_TO_ADD) {
-            if (element.value != null) appStore.setMaxAmountToAdd(int.parse(element.value!));
+            if (element.value != null)
+              appStore.setMaxAmountToAdd(int.parse(element.value!));
           }
         });
       }
@@ -668,7 +686,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         value.rideSetting!.forEach((element) {
           if (element.key == PRESENT_TIP_AMOUNT) {
-            appStore.setWalletTipAmount(element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
+            appStore.setWalletTipAmount(
+                element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
           }
 
           if (element.key == MAX_TIME_FOR_DRIVER_SECOND) {
@@ -684,9 +703,11 @@ class DashboardScreenState extends State<DashboardScreen> {
       if (value.currencySetting != null) {
         developer.log("currencySetting:::${value.currencySetting}");
 
-        appStore.setCurrencyCode(value.currencySetting!.symbol ?? currencySymbol);
+        appStore
+            .setCurrencyCode(value.currencySetting!.symbol ?? currencySymbol);
 
-        appStore.setCurrencyName(value.currencySetting!.code ?? currencyNameConst);
+        appStore
+            .setCurrencyName(value.currencySetting!.code ?? currencyNameConst);
 
         appStore.setCurrencyPosition(value.currencySetting!.position ?? LEFT);
       }
@@ -718,9 +739,10 @@ class DashboardScreenState extends State<DashboardScreen> {
       if (value.walletSetting != null && value.walletSetting!.isNotEmpty) {
         developer.log("walletSetting:::${value.walletSetting}");
 
-        appStore.setWalletPresetTopUpAmount(
-            value.walletSetting!.firstWhere((element) => element.key == PRESENT_TOPUP_AMOUNT).value ??
-                PRESENT_TOP_UP_AMOUNT_CONST);
+        appStore.setWalletPresetTopUpAmount(value.walletSetting!
+                .firstWhere((element) => element.key == PRESENT_TOPUP_AMOUNT)
+                .value ??
+            PRESENT_TOP_UP_AMOUNT_CONST);
       }
 
       markers.add(
@@ -734,20 +756,24 @@ class DashboardScreenState extends State<DashboardScreen> {
 
       setState(() {});
     }).catchError((error, stack) {
-      FirebaseCrashlytics.instance.recordError("setting_update_issue::" + error.toString(), stack, fatal: true);
+      FirebaseCrashlytics.instance.recordError(
+          "setting_update_issue::" + error.toString(), stack,
+          fatal: true);
 
       log('${error.toString()}');
     });
   }
 
   Future<void> setSourceAndDestinationIcons() async {
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    driverIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
 
     if (servicesListData != null)
       servicesListData!.status != IN_PROGRESS
-          ? sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon)
-          : destinationIcon =
-              await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
+          ? sourceIcon = await BitmapDescriptor.fromAssetImage(
+              ImageConfiguration(devicePixelRatio: 2.5), SourceIcon)
+          : destinationIcon = await BitmapDescriptor.fromAssetImage(
+              ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
   }
 
   onMapCreated(GoogleMapController controller) {
@@ -777,7 +803,9 @@ class DashboardScreenState extends State<DashboardScreen> {
   Future<void> getCurrentRequest() async {
     await getCurrentRideRequest().then((value) async {
       try {
-        await rideService.updateStatusOfRide(rideID: value.onRideRequest!.id, req: {'on_rider_stream_api_call': 0});
+        await rideService.updateStatusOfRide(
+            rideID: value.onRideRequest!.id,
+            req: {'on_rider_stream_api_call': 0});
       } catch (e) {
         print("Error Found:::$e");
       }
@@ -791,11 +819,14 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         if (value.estimated_price != null && value.estimated_price.isNotEmpty) {
           try {
-            estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            estimatedTotalPrice = num.tryParse(
+                value.estimated_price[0]['total_amount'].toString());
 
-            estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            estimatedDistance =
+                num.tryParse(value.estimated_price[0]['distance'].toString());
 
-            distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            distance_unit =
+                value.estimated_price[0]['distance_unit'].toString();
           } catch (e) {}
         } else {
           estimatedDistance = null;
@@ -814,21 +845,28 @@ class DashboardScreenState extends State<DashboardScreen> {
             setMapPins();
           }
 
-          if (servicesListData!.status == COMPLETED && servicesListData!.isDriverRated == 0) {
+          if (servicesListData!.status == COMPLETED &&
+              servicesListData!.isDriverRated == 0) {
             if (current_screen == false) return;
 
             current_screen = false;
 
             // value.onRideRequest.otherRiderData
 
-            launchScreen(context, ReviewScreen(rideId: value.onRideRequest!.id!, currentData: value),
-                pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
-          } else if (value.payment != null && value.payment!.paymentStatus == PENDING) {
+            launchScreen(
+                context,
+                ReviewScreen(
+                    rideId: value.onRideRequest!.id!, currentData: value),
+                pageRouteAnimation: PageRouteAnimation.Slide,
+                isNewTask: true);
+          } else if (value.payment != null &&
+              value.payment!.paymentStatus == PENDING) {
             if (current_screen == false) return;
 
             current_screen = false;
 
-            launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+            launchScreen(context, DetailScreen(),
+                pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           }
         }
       } else {
@@ -837,7 +875,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
           current_screen = false;
 
-          launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+          launchScreen(context, DetailScreen(),
+              pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         }
       }
 
@@ -863,7 +902,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     requestDataFetching = true;
 
-    if (servicesListData != null && servicesListData!.status == NEW_RIDE_REQUESTED) {
+    if (servicesListData != null &&
+        servicesListData!.status == NEW_RIDE_REQUESTED) {
       return;
     }
 
@@ -908,11 +948,14 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         if (value.estimated_price != null && value.estimated_price.isNotEmpty) {
           try {
-            estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            estimatedTotalPrice = num.tryParse(
+                value.estimated_price[0]['total_amount'].toString());
 
-            estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            estimatedDistance =
+                num.tryParse(value.estimated_price[0]['distance'].toString());
 
-            distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            distance_unit =
+                value.estimated_price[0]['distance_unit'].toString();
           } catch (e) {}
         } else {
           estimatedDistance = null;
@@ -927,7 +970,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         ride.otherRiderData;
 
         if (servicesListData != null)
-          await rideService.updateStatusOfRide(rideID: servicesListData!.id, req: {'on_rider_stream_api_call': 0});
+          await rideService.updateStatusOfRide(
+              rideID: servicesListData!.id,
+              req: {'on_rider_stream_api_call': 0});
 
         sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
 
@@ -945,7 +990,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       print("TEST981");
       rideDetailsFetching = false;
 
-      FirebaseCrashlytics.instance.recordError("pop_up_issue::" + error.toString(), stack, fatal: true);
+      FirebaseCrashlytics.instance
+          .recordError("pop_up_issue::" + error.toString(), stack, fatal: true);
 
       appStore.setLoading(false);
 
@@ -961,7 +1007,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       "status": status,
     };
 
-    await rideRequestUpdate(request: req, rideId: servicesListData!.id).then((value) async {
+    await rideRequestUpdate(request: req, rideId: servicesListData!.id)
+        .then((value) async {
       appStore.setLoading(false);
 
       getCurrentRequest().then((value) async {
@@ -1087,12 +1134,14 @@ class DashboardScreenState extends State<DashboardScreen> {
           receiverId: riderData!.uid.validate());
 
       try {
-        await rideService.updateStatusOfRide(rideID: servicesListData!.id, req: {'on_rider_stream_api_call': 0});
+        await rideService.updateStatusOfRide(
+            rideID: servicesListData!.id, req: {'on_rider_stream_api_call': 0});
       } catch (e) {
         print("Error Found:::$e");
       }
 
-      sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
+      sourceIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
 
       appStore.setLoading(false);
 
@@ -1117,11 +1166,14 @@ class DashboardScreenState extends State<DashboardScreen> {
         googleApiKey: GOOGLE_MAP_API_KEY,
 
         request: PolylineRequest(
-            origin: PointLatLng(driverLocation!.latitude, driverLocation!.longitude),
+            origin: PointLatLng(
+                driverLocation!.latitude, driverLocation!.longitude),
             destination: servicesListData!.status != IN_PROGRESS
-                ? PointLatLng(double.parse(servicesListData!.startLatitude.validate()),
+                ? PointLatLng(
+                    double.parse(servicesListData!.startLatitude.validate()),
                     double.parse(servicesListData!.startLongitude.validate()))
-                : PointLatLng(double.parse(servicesListData!.endLatitude.validate()),
+                : PointLatLng(
+                    double.parse(servicesListData!.endLatitude.validate()),
                     double.parse(servicesListData!.endLongitude.validate())),
             mode: TravelMode.driving),
 
@@ -1185,7 +1237,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                 Marker(
                   markerId: MarkerId('sourceLocation'),
                   position: LatLng(
-                      double.parse(servicesListData!.startLatitude!), double.parse(servicesListData!.startLongitude!)),
+                      double.parse(servicesListData!.startLatitude!),
+                      double.parse(servicesListData!.startLongitude!)),
                   icon: sourceIcon,
                   infoWindow: InfoWindow(title: servicesListData!.startAddress),
                 ),
@@ -1193,8 +1246,8 @@ class DashboardScreenState extends State<DashboardScreen> {
             : markers.add(
                 Marker(
                   markerId: MarkerId('destinationLocation'),
-                  position: LatLng(
-                      double.parse(servicesListData!.endLatitude!), double.parse(servicesListData!.endLongitude!)),
+                  position: LatLng(double.parse(servicesListData!.endLatitude!),
+                      double.parse(servicesListData!.endLongitude!)),
                   icon: destinationIcon,
                   infoWindow: InfoWindow(title: servicesListData!.endAddress),
                 ),
@@ -1215,16 +1268,22 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     polylineCoordinates.clear();
 
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((value) async {
       log("=====Location:::${value.latitude}:::${value.longitude}");
       await Geolocator.isLocationServiceEnabled().then((value) async {
         log("======Location:::${value}");
         if (locationEnable) {
-          final LocationSettings locationSettings =
-              LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 100, timeLimit: Duration(seconds: 30));
+          final LocationSettings locationSettings = LocationSettings(
+              accuracy: LocationAccuracy.high,
+              distanceFilter: 100,
+              timeLimit: Duration(seconds: 30));
 
-          positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((event) async {
-            DateTime? d = DateTime.tryParse(sharedPref.getString("UPDATE_CALL").toString());
+          positionStream =
+              Geolocator.getPositionStream(locationSettings: locationSettings)
+                  .listen((event) async {
+            DateTime? d = DateTime.tryParse(
+                sharedPref.getString("UPDATE_CALL").toString());
 
             if (d != null && DateTime.now().difference(d).inSeconds > 30) {
               if (appStore.isLoggedIn) {
@@ -1265,7 +1324,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       Future.delayed(
         Duration(seconds: 1),
         () {
-          launchScreen(navigatorKey.currentState!.overlay!.context, LocationPermissionScreen());
+          launchScreen(navigatorKey.currentState!.overlay!.context,
+              LocationPermissionScreen());
 
           // Navigator.push(context, MaterialPageRoute(builder: (_) => LocationPermissionScreen()));
         },
@@ -1338,7 +1398,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     controller.moveCamera(
       CameraUpdate.newLatLngZoom(
-        LatLng(double.parse(prediction.lat ?? ""), double.parse(prediction.lng ?? "")),
+        LatLng(double.parse(prediction.lat ?? ""),
+            double.parse(prediction.lng ?? "")),
         14,
       ),
     );
@@ -1380,7 +1441,8 @@ class DashboardScreenState extends State<DashboardScreen> {
         }),
         body: Stack(
           children: [
-            if (sharedPref.getDouble(LATITUDE) != null && sharedPref.getDouble(LONGITUDE) != null)
+            if (sharedPref.getDouble(LATITUDE) != null &&
+                sharedPref.getDouble(LONGITUDE) != null)
               GoogleMap(
                 mapToolbarEnabled: false,
                 zoomControlsEnabled: false,
@@ -1389,7 +1451,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                 padding: EdgeInsets.only(top: context.statusBarHeight + 4 + 24),
                 onMapCreated: onMapCreated,
                 initialCameraPosition: CameraPosition(
-                  target: driverLocation ?? LatLng(sharedPref.getDouble(LATITUDE)!, sharedPref.getDouble(LONGITUDE)!),
+                  target: driverLocation ??
+                      LatLng(sharedPref.getDouble(LATITUDE)!,
+                          sharedPref.getDouble(LONGITUDE)!),
                   zoom: 17.0,
                 ),
                 markers: markers,
@@ -1423,7 +1487,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                 if (snapshot.hasData) {
                   // SoundService.showNotification("New Ride Requested");
                   List<FRideBookingModel> data = snapshot.data!.docs
-                      .map((e) => FRideBookingModel.fromJson(e.data() as Map<String, dynamic>))
+                      .map((e) => FRideBookingModel.fromJson(
+                          e.data() as Map<String, dynamic>))
                       .toList();
 
                   if (data.length == 2) {
@@ -1437,7 +1502,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                   if (data.length != 0) {
                     rideCancelDetected = false;
                     if (data[0].onStreamApiCall == 0) {
-                      rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 1});
+                      rideService.updateStatusOfRide(
+                          rideID: data[0].rideId,
+                          req: {'on_stream_api_call': 1});
                       if (data[0].status == NEW_RIDE_REQUESTED) {
                         print("TEST1");
                         getNewRideReq(data[0].rideId);
@@ -1451,7 +1518,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                         data[0].onStreamApiCall == 1) {
                       reqCheckCounter++;
                       if (reqCheckCounter < 1) {
-                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                        rideService.updateStatusOfRide(
+                            rideID: data[0].rideId,
+                            req: {'on_stream_api_call': 0});
                       }
                     }
                     if ((servicesListData != null &&
@@ -1463,14 +1532,17 @@ class DashboardScreenState extends State<DashboardScreen> {
                             data[0].onStreamApiCall == 1)) {
                       if (rideDetailsFetching != true) {
                         rideDetailsFetching = true;
-                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                        rideService.updateStatusOfRide(
+                            rideID: data[0].rideId,
+                            req: {'on_stream_api_call': 0});
                       }
                     }
                     if (servicesListData != null &&
                         servicesListData!.status != null &&
                         servicesListData!.status == NEW_RIDE_REQUESTED) {}
                     return servicesListData != null
-                        ? servicesListData!.status != null && servicesListData!.status == NEW_RIDE_REQUESTED
+                        ? servicesListData!.status != null &&
+                                servicesListData!.status == NEW_RIDE_REQUESTED
                             ? Builder(builder: (context) {
                                 // if (sendPrice == true && countdown == 0)
                                 //   return SizedBox();
@@ -1485,91 +1557,161 @@ class DashboardScreenState extends State<DashboardScreen> {
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(2 * defaultRadius),
-                                                    topRight: Radius.circular(2 * defaultRadius)),
+                                                    topLeft: Radius.circular(
+                                                        2 * defaultRadius),
+                                                    topRight: Radius.circular(
+                                                        2 * defaultRadius)),
                                               ),
                                               child: SingleChildScrollView(
                                                 // controller: scrollController,
 
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Align(
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       child: Container(
-                                                        margin: EdgeInsets.only(top: 16),
+                                                        margin: EdgeInsets.only(
+                                                            top: 16),
                                                         height: 6,
                                                         width: 60,
                                                         decoration: BoxDecoration(
                                                             color: primaryColor,
-                                                            borderRadius: BorderRadius.circular(defaultRadius)),
-                                                        alignment: Alignment.center,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        defaultRadius)),
+                                                        alignment:
+                                                            Alignment.center,
                                                       ),
                                                     ),
                                                     SizedBox(height: 8),
                                                     Padding(
-                                                      padding: EdgeInsets.only(left: 16),
-                                                      child: Text(language.requests, style: primaryTextStyle(size: 18)),
+                                                      padding: EdgeInsets.only(
+                                                          left: 16),
+                                                      child: Text(
+                                                          language.requests,
+                                                          style:
+                                                              primaryTextStyle(
+                                                                  size: 18)),
                                                     ),
                                                     SizedBox(height: 8),
                                                     Padding(
-                                                      padding: EdgeInsets.all(16),
+                                                      padding:
+                                                          EdgeInsets.all(16),
                                                       child: Column(
                                                         children: [
                                                           Row(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               ClipRRect(
-                                                                borderRadius: BorderRadius.circular(defaultRadius),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            defaultRadius),
                                                                 child: commonCachedNetworkImage(
-                                                                    servicesListData!.riderProfileImage.validate(),
+                                                                    servicesListData!
+                                                                        .riderProfileImage
+                                                                        .validate(),
                                                                     height: 35,
                                                                     width: 35,
-                                                                    fit: BoxFit.cover),
+                                                                    fit: BoxFit
+                                                                        .cover),
                                                               ),
-                                                              SizedBox(width: 12),
+                                                              SizedBox(
+                                                                  width: 12),
                                                               Expanded(
                                                                 child: Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
                                                                     Text(
                                                                         '${servicesListData!.riderName.capitalizeFirstLetter()}',
-                                                                        maxLines: 1,
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: boldTextStyle(size: 14)),
-                                                                    SizedBox(height: 4),
-                                                                    Text('${servicesListData!.riderEmail.validate()}',
-                                                                        maxLines: 1,
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: secondaryTextStyle()),
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .ellipsis,
+                                                                        style: boldTextStyle(
+                                                                            size:
+                                                                                14)),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            4),
+                                                                    Text(
+                                                                        '${servicesListData!.riderEmail.validate()}',
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .ellipsis,
+                                                                        style:
+                                                                            secondaryTextStyle()),
                                                                   ],
                                                                 ),
                                                               ),
                                                               if (duration > 0)
                                                                 Container(
                                                                   decoration: BoxDecoration(
-                                                                      color: primaryColor,
+                                                                      color:
+                                                                          primaryColor,
                                                                       borderRadius:
-                                                                          BorderRadius.circular(defaultRadius)),
-                                                                  padding: EdgeInsets.all(6),
-                                                                  child: Text("$duration".padLeft(2, "0"),
-                                                                      style: boldTextStyle(color: Colors.white)),
+                                                                          BorderRadius.circular(
+                                                                              defaultRadius)),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              6),
+                                                                  child: Text(
+                                                                      "$duration"
+                                                                          .padLeft(
+                                                                              2,
+                                                                              "0"),
+                                                                      style: boldTextStyle(
+                                                                          color:
+                                                                              Colors.white)),
                                                                 )
                                                             ],
                                                           ),
-                                                          if (estimatedTotalPrice != null && estimatedDistance != null)
+                                                          if (estimatedTotalPrice !=
+                                                                  null &&
+                                                              estimatedDistance !=
+                                                                  null)
                                                             Container(
-                                                              padding: EdgeInsets.symmetric(vertical: 8),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          8),
                                                               decoration: BoxDecoration(
-                                                                  color: !appStore.isDarkMode
+                                                                  color: !appStore
+                                                                          .isDarkMode
                                                                       ? scaffoldColorLight
                                                                       : scaffoldColorDark,
-                                                                  borderRadius: BorderRadius.all(radiusCircular(8)),
-                                                                  border: Border.all(width: 1, color: dividerColor)),
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          radiusCircular(
+                                                                              8)),
+                                                                  border: Border
+                                                                      .all(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              dividerColor)),
                                                               child: Row(
-                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                mainAxisSize: MainAxisSize.max,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
                                                                 children: [
                                                                   // Expanded(
                                                                   //   child: Row(
@@ -1592,43 +1734,77 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                   // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
 
                                                                   Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    mainAxisSize: MainAxisSize.max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
                                                                     children: [
-                                                                      Text('${language.distance}:',
-                                                                          style: secondaryTextStyle(size: 16)),
-                                                                      SizedBox(width: 4),
-                                                                      Text('${estimatedDistance} ${distance_unit}',
-                                                                          maxLines: 1,
-                                                                          overflow: TextOverflow.ellipsis,
-                                                                          style: boldTextStyle(size: 14)),
+                                                                      Text(
+                                                                          '${language.distance}:',
+                                                                          style:
+                                                                              secondaryTextStyle(size: 16)),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              4),
+                                                                      Text(
+                                                                          '${estimatedDistance} ${distance_unit}',
+                                                                          maxLines:
+                                                                              1,
+                                                                          overflow: TextOverflow
+                                                                              .ellipsis,
+                                                                          style:
+                                                                              boldTextStyle(size: 14)),
                                                                     ],
                                                                   ),
                                                                 ],
                                                               ),
-                                                              width: context.width(),
+                                                              width: context
+                                                                  .width(),
                                                             ),
                                                           addressDisplayWidget(
                                                               endLatLong: LatLng(
-                                                                  servicesListData!.endLatitude.toDouble(),
-                                                                  servicesListData!.endLongitude.toDouble()),
-                                                              endAddress: servicesListData!.endAddress,
+                                                                  servicesListData!
+                                                                      .endLatitude
+                                                                      .toDouble(),
+                                                                  servicesListData!
+                                                                      .endLongitude
+                                                                      .toDouble()),
+                                                              endAddress:
+                                                                  servicesListData!
+                                                                      .endAddress,
                                                               startLatLong: LatLng(
-                                                                  servicesListData!.startLatitude.toDouble(),
-                                                                  servicesListData!.startLongitude.toDouble()),
-                                                              startAddress: servicesListData!.startAddress),
+                                                                  servicesListData!
+                                                                      .startLatitude
+                                                                      .toDouble(),
+                                                                  servicesListData!
+                                                                      .startLongitude
+                                                                      .toDouble()),
+                                                              startAddress:
+                                                                  servicesListData!
+                                                                      .startAddress),
                                                           Align(
-                                                            alignment: AlignmentDirectional.centerStart,
+                                                            alignment:
+                                                                AlignmentDirectional
+                                                                    .centerStart,
                                                             child: Text(
                                                               '${language.shipmentType}: ${servicesListData!.shipmentType}',
-                                                              style: primaryTextStyle(),
-                                                              textAlign: TextAlign.start,
+                                                              style:
+                                                                  primaryTextStyle(),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
                                                             ),
                                                           ),
-                                                          if (servicesListData != null &&
-                                                              servicesListData!.otherRiderData != null)
+                                                          if (servicesListData !=
+                                                                  null &&
+                                                              servicesListData!
+                                                                      .otherRiderData !=
+                                                                  null)
                                                             Divider(
-                                                              color: Colors.grey.shade300,
+                                                              color: Colors.grey
+                                                                  .shade300,
                                                               thickness: 0.7,
                                                               height: 8,
                                                             ),
@@ -1636,123 +1812,204 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                           SizedBox(height: 8),
                                                           (countdown > 0)
                                                               ? Stack(
-                                                                  alignment: Alignment.center,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
                                                                   children: [
                                                                     Container(
-                                                                      width: MediaQuery.of(context).size.width,
-                                                                      height: 48,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(8),
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      height:
+                                                                          48,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8),
                                                                         border: Border.all(
-                                                                            color: Colors.grey.withOpacity(0.5)),
-                                                                        gradient: LinearGradient(
+                                                                            color:
+                                                                                Colors.grey.withOpacity(0.5)),
+                                                                        gradient:
+                                                                            LinearGradient(
                                                                           colors: [
                                                                             const Color(0xFF417CFF),
                                                                             Colors.white
                                                                           ],
-                                                                          stops: [progress, progress + 0.01],
-                                                                          begin: Alignment.centerLeft,
-                                                                          end: Alignment.centerRight,
+                                                                          stops: [
+                                                                            progress,
+                                                                            progress +
+                                                                                0.01
+                                                                          ],
+                                                                          begin:
+                                                                              Alignment.centerLeft,
+                                                                          end: Alignment
+                                                                              .centerRight,
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     Center(
-                                                                      child: Text(
+                                                                      child:
+                                                                          Text(
                                                                         'تم ارسال العرض (${countdown}s)',
-                                                                        style: boldTextStyle(
-                                                                          size: 16,
-                                                                          color: Colors.black, // Ensure text contrast
+                                                                        style:
+                                                                            boldTextStyle(
+                                                                          size:
+                                                                              16,
+                                                                          color:
+                                                                              Colors.black, // Ensure text contrast
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ],
                                                                 )
                                                               : AppTextField(
-                                                                  controller: priceController,
-                                                                  textFieldType: TextFieldType.PHONE,
-                                                                  decoration: InputDecoration(
-                                                                    hintText: language.enterPrice,
-                                                                    hintStyle: primaryTextStyle(),
+                                                                  controller:
+                                                                      priceController,
+                                                                  textFieldType:
+                                                                      TextFieldType
+                                                                          .PHONE,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    hintText:
+                                                                        language
+                                                                            .enterPrice,
+                                                                    hintStyle:
+                                                                        primaryTextStyle(),
                                                                     contentPadding:
-                                                                        EdgeInsets.symmetric(horizontal: 16),
-                                                                    border: OutlineInputBorder(),
+                                                                        EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                16),
+                                                                    border:
+                                                                        OutlineInputBorder(),
                                                                   ),
                                                                   inputFormatters: [
-                                                                    FilteringTextInputFormatter.digitsOnly
+                                                                    FilteringTextInputFormatter
+                                                                        .digitsOnly
                                                                   ],
                                                                 ),
                                                           SizedBox(height: 8),
                                                           Row(
                                                             children: [
                                                               Expanded(
-                                                                child: inkWellWidget(
+                                                                child:
+                                                                    inkWellWidget(
                                                                   onTap: () {
                                                                     showConfirmDialogCustom(
-                                                                        dialogType: DialogType.DELETE,
-                                                                        primaryColor: primaryColor,
+                                                                        dialogType:
+                                                                            DialogType
+                                                                                .DELETE,
+                                                                        primaryColor:
+                                                                            primaryColor,
                                                                         title: language
                                                                             .areYouSureYouWantToCancelThisRequest,
-                                                                        positiveText: language.yes,
-                                                                        negativeText: language.no,
-                                                                        context, onAccept: (v) {
+                                                                        positiveText:
+                                                                            language
+                                                                                .yes,
+                                                                        negativeText:
+                                                                            language
+                                                                                .no,
+                                                                        context,
+                                                                        onAccept:
+                                                                            (v) {
                                                                       try {
                                                                         // FlutterRingtonePlayer()
                                                                         // .stop();
 
-                                                                        timerData!.cancel();
+                                                                        timerData!
+                                                                            .cancel();
                                                                       } catch (e) {}
 
-                                                                      sharedPref.remove(IS_TIME2);
+                                                                      sharedPref
+                                                                          .remove(
+                                                                              IS_TIME2);
 
-                                                                      sharedPref.remove(ON_RIDE_MODEL);
+                                                                      sharedPref
+                                                                          .remove(
+                                                                              ON_RIDE_MODEL);
 
-                                                                      rideRequestAccept(deCline: true);
+                                                                      rideRequestAccept(
+                                                                          deCline:
+                                                                              true);
                                                                     }).then(
                                                                       (value) {
-                                                                        _polyLines.clear();
+                                                                        _polyLines
+                                                                            .clear();
 
                                                                         setState;
                                                                       },
                                                                     );
                                                                   },
-                                                                  child: Container(
+                                                                  child:
+                                                                      Container(
                                                                     padding: EdgeInsets.symmetric(
-                                                                        vertical: 10, horizontal: 8),
+                                                                        vertical:
+                                                                            10,
+                                                                        horizontal:
+                                                                            8),
                                                                     decoration: BoxDecoration(
                                                                         borderRadius:
-                                                                            BorderRadius.circular(defaultRadius),
-                                                                        border: Border.all(color: Colors.red)),
-                                                                    child: Text(language.decline,
-                                                                        style: boldTextStyle(color: Colors.red),
-                                                                        textAlign: TextAlign.center),
+                                                                            BorderRadius.circular(
+                                                                                defaultRadius),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.red)),
+                                                                    child: Text(
+                                                                        language
+                                                                            .decline,
+                                                                        style: boldTextStyle(
+                                                                            color: Colors
+                                                                                .red),
+                                                                        textAlign:
+                                                                            TextAlign.center),
                                                                   ),
                                                                 ),
                                                               ),
-                                                              if (!sendPrice) SizedBox(width: 16),
+                                                              if (!sendPrice)
+                                                                SizedBox(
+                                                                    width: 16),
                                                               if (!sendPrice)
                                                                 Expanded(
-                                                                  child: AppButtonWidget(
+                                                                  child:
+                                                                      AppButtonWidget(
                                                                     padding: EdgeInsets.symmetric(
-                                                                        vertical: 12, horizontal: 8),
-                                                                    text: language.accept,
-                                                                    shapeBorder: RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(defaultRadius)),
-                                                                    color: primaryColor,
-                                                                    textStyle: boldTextStyle(color: Colors.white),
+                                                                        vertical:
+                                                                            12,
+                                                                        horizontal:
+                                                                            8),
+                                                                    text: language
+                                                                        .accept,
+                                                                    shapeBorder:
+                                                                        RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(defaultRadius)),
+                                                                    color:
+                                                                        primaryColor,
+                                                                    textStyle: boldTextStyle(
+                                                                        color: Colors
+                                                                            .white),
                                                                     onTap: () {
-                                                                      if (sendPrice == true) return;
+                                                                      if (sendPrice ==
+                                                                          true)
+                                                                        return;
                                                                       showConfirmDialogCustom(
-                                                                          primaryColor: primaryColor,
-                                                                          dialogType: DialogType.ACCEPT,
-                                                                          positiveText: language.yes,
-                                                                          negativeText: language.no,
+                                                                          primaryColor:
+                                                                              primaryColor,
+                                                                          dialogType: DialogType
+                                                                              .ACCEPT,
+                                                                          positiveText: language
+                                                                              .yes,
+                                                                          negativeText: language
+                                                                              .no,
                                                                           title: language
                                                                               .areYouSureYouWantToAcceptThisRequest,
-                                                                          context, onAccept: (v) {
+                                                                          context,
+                                                                          onAccept:
+                                                                              (v) {
                                                                         if (double.tryParse(priceController.text) ==
                                                                             null) {
-                                                                          toast(language.pleaseEnterValidPrice);
+                                                                          toast(
+                                                                              language.pleaseEnterValidPrice);
 
                                                                           return;
                                                                         } else if (int.parse(priceController.text) <
@@ -1767,7 +2024,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                           // FlutterRingtonePlayer()
                                                                           //     .stop();
 
-                                                                          timerData!.cancel();
+                                                                          timerData!
+                                                                              .cancel();
                                                                         } catch (e) {}
 
                                                                         // sharedPref
@@ -1783,8 +2041,11 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                         //         ON_RIDE_MODEL);
 
                                                                         sendTripPrice(
-                                                                          price: priceController.text,
-                                                                          rideId: servicesListData!.id.toString(),
+                                                                          price:
+                                                                              priceController.text,
+                                                                          rideId: servicesListData!
+                                                                              .id
+                                                                              .toString(),
                                                                         );
                                                                       });
                                                                     },
@@ -1801,7 +2062,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                                             )
                                           : SizedBox(),
                                       Observer(builder: (context) {
-                                        return appStore.isLoading ? loaderWidget() : SizedBox();
+                                        return appStore.isLoading
+                                            ? loaderWidget()
+                                            : SizedBox();
                                       })
                                     ],
                                   ),
@@ -1816,34 +2079,50 @@ class DashboardScreenState extends State<DashboardScreen> {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(2 * defaultRadius),
-                                          topRight: Radius.circular(2 * defaultRadius)),
+                                          topLeft: Radius.circular(
+                                              2 * defaultRadius),
+                                          topRight: Radius.circular(
+                                              2 * defaultRadius)),
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             ClipRRect(
-                                              borderRadius: BorderRadius.circular(defaultRadius),
-                                              child: commonCachedNetworkImage(servicesListData!.riderProfileImage,
-                                                  height: 48, width: 48, fit: BoxFit.cover),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      defaultRadius),
+                                              child: commonCachedNetworkImage(
+                                                  servicesListData!
+                                                      .riderProfileImage,
+                                                  height: 48,
+                                                  width: 48,
+                                                  fit: BoxFit.cover),
                                             ),
                                             SizedBox(width: 12),
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Text('${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                  Text(
+                                                      '${servicesListData!.riderName.capitalizeFirstLetter()}',
                                                       maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: boldTextStyle(size: 18)),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: boldTextStyle(
+                                                          size: 18)),
                                                   SizedBox(height: 4),
-                                                  Text('${servicesListData!.riderEmail.validate()}',
+                                                  Text(
+                                                      '${servicesListData!.riderEmail.validate()}',
                                                       maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: secondaryTextStyle()),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style:
+                                                          secondaryTextStyle()),
                                                 ],
                                               ),
                                             ),
@@ -1853,10 +2132,15 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                   context: context,
                                                   builder: (_) {
                                                     return AlertDialog(
-                                                      contentPadding: EdgeInsets.all(0),
+                                                      contentPadding:
+                                                          EdgeInsets.all(0),
                                                       content: AlertScreen(
-                                                          rideId: servicesListData!.id,
-                                                          regionId: servicesListData!.regionId),
+                                                          rideId:
+                                                              servicesListData!
+                                                                  .id,
+                                                          regionId:
+                                                              servicesListData!
+                                                                  .regionId),
                                                     );
                                                   },
                                                 );
@@ -1866,8 +2150,11 @@ class DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(width: 8),
                                             inkWellWidget(
                                               onTap: () {
-                                                launchUrl(Uri.parse('tel:${servicesListData!.riderContactNumber}'),
-                                                    mode: LaunchMode.externalApplication);
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        'tel:${servicesListData!.riderContactNumber}'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
                                               },
                                               child: chatCallWidget(Icons.call),
                                             ),
@@ -1875,7 +2162,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                                             inkWellWidget(
                                               onTap: () {
                                                 if (riderData == null ||
-                                                    (riderData != null && riderData!.uid == null)) {
+                                                    (riderData != null &&
+                                                        riderData!.uid ==
+                                                            null)) {
                                                   init();
 
                                                   return;
@@ -1890,16 +2179,23 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                       ));
                                                 }
                                               },
-                                              child: chatCallWidget(Icons.chat_bubble_outline, data: riderData),
+                                              child: chatCallWidget(
+                                                  Icons.chat_bubble_outline,
+                                                  data: riderData),
                                             ),
                                           ],
                                         ),
-                                        if (estimatedTotalPrice != null && estimatedDistance != null)
+                                        if (estimatedTotalPrice != null &&
+                                            estimatedDistance != null)
                                           Container(
-                                            padding: EdgeInsets.symmetric(vertical: 8),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 // Expanded(
@@ -1922,15 +2218,24 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                 // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
 
                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   children: [
-                                                    Text('${language.distance}:', style: secondaryTextStyle(size: 16)),
+                                                    Text(
+                                                        '${language.distance}:',
+                                                        style:
+                                                            secondaryTextStyle(
+                                                                size: 16)),
                                                     SizedBox(width: 4),
-                                                    Text('${estimatedDistance} ${distance_unit}',
+                                                    Text(
+                                                        '${estimatedDistance} ${distance_unit}',
                                                         maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: boldTextStyle(size: 14)),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: boldTextStyle(
+                                                            size: 14)),
                                                   ],
                                                 ),
                                               ],
@@ -1944,69 +2249,104 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         ),
                                         SizedBox(height: 8),
                                         addressDisplayWidget(
-                                            endLatLong: LatLng(servicesListData!.endLatitude.toDouble(),
-                                                servicesListData!.endLongitude.toDouble()),
-                                            endAddress: servicesListData!.endAddress,
-                                            startLatLong: LatLng(servicesListData!.startLatitude.toDouble(),
-                                                servicesListData!.startLongitude.toDouble()),
-                                            startAddress: servicesListData!.startAddress),
+                                            endLatLong: LatLng(
+                                                servicesListData!.endLatitude
+                                                    .toDouble(),
+                                                servicesListData!.endLongitude
+                                                    .toDouble()),
+                                            endAddress:
+                                                servicesListData!.endAddress,
+                                            startLatLong: LatLng(
+                                                servicesListData!.startLatitude
+                                                    .toDouble(),
+                                                servicesListData!.startLongitude
+                                                    .toDouble()),
+                                            startAddress:
+                                                servicesListData!.startAddress),
                                         SizedBox(height: 8),
-                                        servicesListData!.status != NEW_RIDE_REQUESTED
+                                        servicesListData!.status !=
+                                                NEW_RIDE_REQUESTED
                                             ? Padding(
                                                 padding: EdgeInsets.only(
-                                                    bottom: servicesListData!.status == IN_PROGRESS ? 0 : 8),
+                                                    bottom: servicesListData!
+                                                                .status ==
+                                                            IN_PROGRESS
+                                                        ? 0
+                                                        : 8),
                                                 child: _bookingForView(),
                                               )
                                             : SizedBox(),
-                                        if (servicesListData!.status == IN_PROGRESS &&
+                                        if (servicesListData!.status ==
+                                                IN_PROGRESS &&
                                             servicesListData != null &&
-                                            servicesListData!.otherRiderData != null)
+                                            servicesListData!.otherRiderData !=
+                                                null)
 
                                           // Divider(color: Colors.grey.shade300,thickness: 0.7,height: 8,),
 
                                           SizedBox(height: 8),
-                                        if (servicesListData!.status == IN_PROGRESS)
+                                        if (servicesListData!.status ==
+                                            IN_PROGRESS)
                                           if (appStore.extraChargeValue != null)
                                             Observer(builder: (context) {
                                               return Visibility(
-                                                visible: int.parse(appStore.extraChargeValue!) != 0,
+                                                visible: int.parse(appStore
+                                                        .extraChargeValue!) !=
+                                                    0,
                                                 child: inkWellWidget(
                                                   onTap: () async {
-                                                    List<ExtraChargeRequestModel>? extraChargeListData =
+                                                    List<ExtraChargeRequestModel>?
+                                                        extraChargeListData =
                                                         await showModalBottomSheet(
                                                       isScrollControlled: true,
                                                       shape: RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.only(
-                                                              topLeft: Radius.circular(defaultRadius),
-                                                              topRight: Radius.circular(defaultRadius))),
+                                                              topLeft: Radius
+                                                                  .circular(
+                                                                      defaultRadius),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      defaultRadius))),
                                                       context: context,
                                                       builder: (_) {
                                                         return Padding(
                                                           padding: EdgeInsets.only(
-                                                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                          child: ExtraChargesWidget(data: extraChargeList),
+                                                              bottom: MediaQuery
+                                                                      .of(context)
+                                                                  .viewInsets
+                                                                  .bottom),
+                                                          child: ExtraChargesWidget(
+                                                              data:
+                                                                  extraChargeList),
                                                         );
                                                       },
                                                     );
 
-                                                    if (extraChargeListData != null) {
+                                                    if (extraChargeListData !=
+                                                        null) {
                                                       log("extraChargeListData   $extraChargeListData");
 
                                                       extraChargeAmount = 0;
 
                                                       extraChargeList.clear();
 
-                                                      extraChargeListData.forEach((element) {
-                                                        extraChargeAmount = extraChargeAmount + element.value!;
+                                                      extraChargeListData
+                                                          .forEach((element) {
+                                                        extraChargeAmount =
+                                                            extraChargeAmount +
+                                                                element.value!;
 
-                                                        extraChargeList = extraChargeListData;
+                                                        extraChargeList =
+                                                            extraChargeListData;
                                                       });
                                                     }
                                                   },
                                                   child: Column(
                                                     children: [
                                                       Padding(
-                                                        padding: EdgeInsets.only(bottom: 8),
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                bottom: 8),
 
                                                         // padding: EdgeInsets.symmetric(vertical: 8),
 
@@ -2026,8 +2366,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                           // color: Colors.red,
 
                                                           child: Row(
-                                                            mainAxisSize: MainAxisSize.max,
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
                                                               // Row(
 
@@ -2047,10 +2391,13 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                                               // ),
 
-                                                              if (extraChargeAmount != 0)
+                                                              if (extraChargeAmount !=
+                                                                  0)
                                                                 Text(
                                                                     '${language.extraCharges} ${printAmount(extraChargeAmount.toString())}',
-                                                                    style: secondaryTextStyle(color: Colors.green)),
+                                                                    style: secondaryTextStyle(
+                                                                        color: Colors
+                                                                            .green)),
                                                             ],
                                                           ),
                                                         ),
@@ -2158,11 +2505,13 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> getUserLocation() async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(driverLocation!.latitude, driverLocation!.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        driverLocation!.latitude, driverLocation!.longitude);
 
     Placemark place = placemarks[0];
 
-    endLocationAddress = '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
+    endLocationAddress =
+        '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
   }
 
   Widget topWidget() {
@@ -2398,7 +2747,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                 await showConfirmDialogCustom(
                     dialogType: DialogType.CONFIRMATION,
                     primaryColor: primaryColor,
-                    title: isOnLine ? language.areYouCertainOffline : language.areYouCertainOnline,
+                    title: isOnLine
+                        ? language.areYouCertainOffline
+                        : language.areYouCertainOnline,
                     context, onAccept: (v) async {
                   driverStatus(status: isOnLine ? 0 : 1);
                   if (isOnLine) {
@@ -2422,7 +2773,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                 ),
                 padding: EdgeInsets.all(8),
                 child: Icon(
-                  isOnLine ? Icons.power_settings_new_outlined : Icons.power_settings_new_sharp,
+                  isOnLine
+                      ? Icons.power_settings_new_outlined
+                      : Icons.power_settings_new_sharp,
                   color: isOnLine ? Colors.green : Colors.red,
                   size: 32,
                 ),
@@ -2453,7 +2806,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                   textColor: primaryColor,
                   color: Colors.white,
                   shapeBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: primaryColor)),
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      side: BorderSide(color: primaryColor)),
 
                   // color: Colors.grey,
 
@@ -2506,22 +2860,26 @@ class DashboardScreenState extends State<DashboardScreen> {
                   textColor: primaryColor,
                   color: Colors.white,
                   shapeBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: primaryColor)),
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      side: BorderSide(color: primaryColor)),
 
                   // color: Colors.grey,
 
                   // textStyle: boldTextStyle(color: Colors.white),
 
                   onTap: () async {
-                    List<ExtraChargeRequestModel>? extraChargeListData = await showModalBottomSheet(
+                    List<ExtraChargeRequestModel>? extraChargeListData =
+                        await showModalBottomSheet(
                       isScrollControlled: true,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+                              topLeft: Radius.circular(defaultRadius),
+                              topRight: Radius.circular(defaultRadius))),
                       context: context,
                       builder: (_) {
                         return Padding(
-                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
                           child: ExtraChargesWidget(data: extraChargeList),
                         );
                       },
@@ -2591,9 +2949,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(language.enterOtp, style: boldTextStyle(), textAlign: TextAlign.center),
+                                  Text(language.enterOtp,
+                                      style: boldTextStyle(),
+                                      textAlign: TextAlign.center),
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: inkWellWidget(
@@ -2602,8 +2963,11 @@ class DashboardScreenState extends State<DashboardScreen> {
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(4),
-                                        decoration: BoxDecoration(color: primaryColor, shape: BoxShape.circle),
-                                        child: Icon(Icons.close, size: 20, color: Colors.white),
+                                        decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            shape: BoxShape.circle),
+                                        child: Icon(Icons.close,
+                                            size: 20, color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -2611,7 +2975,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                               ),
                               SizedBox(height: 16),
                               Text(language.startRideAskOTP,
-                                  style: secondaryTextStyle(size: 12), textAlign: TextAlign.center),
+                                  style: secondaryTextStyle(size: 12),
+                                  textAlign: TextAlign.center),
                               SizedBox(height: 16),
                               Directionality(
                                 textDirection: TextDirection.ltr,
@@ -2637,7 +3002,9 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                                     cursor: Text(
                                       "|",
-                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w500),
                                     ),
 
                                     focusedPinTheme: PinTheme(
@@ -2648,8 +3015,10 @@ class DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.transparent,
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: primaryColor)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          border:
+                                              Border.all(color: primaryColor)),
                                     ),
 
                                     toolbarEnabled: true,
@@ -2664,15 +3033,19 @@ class DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                       decoration: BoxDecoration(
                                           color: Colors.transparent,
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: dividerColor)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          border:
+                                              Border.all(color: dividerColor)),
                                     ),
 
                                     isCursorAnimationEnabled: true,
 
                                     showCursor: true,
 
-                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
 
                                     closeKeyboardWhenCompleted: false,
 
@@ -2693,7 +3066,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                                 width: MediaQuery.of(context).size.width,
                                 text: language.confirm,
                                 onTap: () {
-                                  if (otpCheck == null || otpCheck != servicesListData!.otp) {
+                                  if (otpCheck == null ||
+                                      otpCheck != servicesListData!.otp) {
                                     return toast(language.pleaseEnterValidOtp);
                                   } else {
                                     Navigator.pop(context);
@@ -2719,8 +3093,10 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                       getUserLocation().then((value2) async {
                         totalDistance = calculateDistance(
-                            double.parse(servicesListData!.startLatitude.validate()),
-                            double.parse(servicesListData!.startLongitude.validate()),
+                            double.parse(
+                                servicesListData!.startLatitude.validate()),
+                            double.parse(
+                                servicesListData!.startLongitude.validate()),
                             driverLocation!.latitude,
                             driverLocation!.longitude);
 
@@ -2738,7 +3114,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget addressDisplayWidget(
-      {String? startAddress, String? endAddress, required LatLng startLatLong, required LatLng endLatLong}) {
+      {String? startAddress,
+      String? endAddress,
+      required LatLng startLatLong,
+      required LatLng endLatLong}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -2746,8 +3125,12 @@ class DashboardScreenState extends State<DashboardScreen> {
           children: [
             Icon(Icons.near_me, color: Colors.green, size: 18),
             SizedBox(width: 8),
-            Expanded(child: Text(startAddress ?? ''.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
-            mapRedirectionWidget(latLong: LatLng(startLatLong.latitude.toDouble(), startLatLong.longitude.toDouble()))
+            Expanded(
+                child: Text(startAddress ?? ''.validate(),
+                    style: primaryTextStyle(size: 14), maxLines: 2)),
+            mapRedirectionWidget(
+                latLong: LatLng(startLatLong.latitude.toDouble(),
+                    startLatLong.longitude.toDouble()))
           ],
         ),
         Row(
@@ -2769,9 +3152,13 @@ class DashboardScreenState extends State<DashboardScreen> {
           children: [
             Icon(Icons.location_on, color: Colors.red, size: 18),
             SizedBox(width: 8),
-            Expanded(child: Text(endAddress ?? '', style: primaryTextStyle(size: 14), maxLines: 2)),
+            Expanded(
+                child: Text(endAddress ?? '',
+                    style: primaryTextStyle(size: 14), maxLines: 2)),
             SizedBox(width: 8),
-            mapRedirectionWidget(latLong: LatLng(endLatLong.latitude.toDouble(), endLatLong.longitude.toDouble()))
+            mapRedirectionWidget(
+                latLong: LatLng(endLatLong.latitude.toDouble(),
+                    endLatLong.longitude.toDouble()))
           ],
         ),
       ],
@@ -2786,7 +3173,8 @@ class DashboardScreenState extends State<DashboardScreen> {
           children: [
             Image.asset(walletGIF, height: 150, fit: BoxFit.contain),
             SizedBox(height: 8),
-            Text(language.lessWalletAmountMsg, style: primaryTextStyle(), textAlign: TextAlign.justify),
+            Text(language.lessWalletAmountMsg,
+                style: primaryTextStyle(), textAlign: TextAlign.justify),
             SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -2846,7 +3234,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       "reason": reason,
     };
     print("CancelRIdeCall");
-    await rideRequestUpdate(request: req, rideId: servicesListData!.id).then((value) async {
+    await rideRequestUpdate(request: req, rideId: servicesListData!.id)
+        .then((value) async {
       print("CancelRIdeCall2");
       print("CancelRIdeCall2CHeck::${value}");
       toast(value.message);

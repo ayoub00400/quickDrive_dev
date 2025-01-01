@@ -14,6 +14,7 @@ import 'package:taxi_driver/utils/Extensions/context_extensions.dart';
 import 'package:taxi_driver/utils/Images.dart';
 import '../../main.dart';
 import '../Services/AuthService.dart';
+import '../Services/bg_notification_service.dart';
 import '../components/OTPDialog.dart';
 import '../model/UserDetailModel.dart';
 import '../network/RestApis.dart';
@@ -108,9 +109,18 @@ class SignInScreenState extends State<SignInScreen> {
                   sharedPref.setDouble(LONGITUDE, value.longitude);
                 });
               });
-              launchScreen(context, DashboardScreen(),
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+              if (sharedPref.getInt(IS_ONLINE) == 1) {
+                await NotificationWithSoundService.initializeService()
+                    .then((value) {
+                  launchScreen(context, DashboardScreen(),
+                      isNewTask: true,
+                      pageRouteAnimation: PageRouteAnimation.Slide);
+                });
+              } else {
+                launchScreen(context, DashboardScreen(),
+                    isNewTask: true,
+                    pageRouteAnimation: PageRouteAnimation.Slide);
+              }
             } else {
               launchScreen(context, DocumentsScreen(isShow: true),
                   isNewTask: true,
@@ -345,8 +355,8 @@ class SignInScreenState extends State<SignInScreen> {
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           activeColor: primaryColor,
-                          value: isAcceptedTc, 
-                          shape: 
+                          value: isAcceptedTc,
+                          shape:
                               RoundedRectangleBorder(borderRadius: radius(4)),
                           onChanged: (v) async {
                             isAcceptedTc = v!;

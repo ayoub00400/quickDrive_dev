@@ -66,12 +66,12 @@ Future<void> initialize({
   String? defaultLanguage,
 }) async {
   localeLanguageList = aLocaleLanguageList ?? [];
-  selectedLanguageDataModel = getSelectedLanguageModel(defaultLanguage: defaultLanguage);
+  selectedLanguageDataModel =
+      getSelectedLanguageModel(defaultLanguage: defaultLanguage);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationWithSoundService.initializeService();
   //await SoundService.initializeService();
   // await Firebase.initializeApp().then((value) {
   await Firebase.initializeApp(
@@ -89,12 +89,14 @@ void main() async {
   FlutterError.onError = (
     errorDetails,
   ) {
-    FirebaseCrashlytics.instance.recordError(errorDetails.exception, errorDetails.stack, fatal: true);
+    FirebaseCrashlytics.instance
+        .recordError(errorDetails.exception, errorDetails.stack, fatal: true);
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordFlutterError(FlutterErrorDetails(exception: error, stack: stack));
+    FirebaseCrashlytics.instance.recordFlutterError(
+        FlutterErrorDetails(exception: error, stack: stack));
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
@@ -105,18 +107,28 @@ void main() async {
   //   FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
   // };
   // Async exceptions
-  await appStore.setLoggedIn(sharedPref.getBool(IS_LOGGED_IN) ?? false, isInitializing: true);
-  await appStore.setUserId(sharedPref.getInt(USER_ID) ?? 0, isInitializing: true);
-  await appStore.setUserEmail(sharedPref.getString(USER_EMAIL).validate(), isInitialization: true);
-  await appStore.setUserProfile(sharedPref.getString(USER_PROFILE_PHOTO).validate(), isInitialization: true);
+  await appStore.setLoggedIn(sharedPref.getBool(IS_LOGGED_IN) ?? false,
+      isInitializing: true);
+  await appStore.setUserId(sharedPref.getInt(USER_ID) ?? 0,
+      isInitializing: true);
+  await appStore.setUserEmail(sharedPref.getString(USER_EMAIL).validate(),
+      isInitialization: true);
+  await appStore.setUserProfile(
+      sharedPref.getString(USER_PROFILE_PHOTO).validate(),
+      isInitialization: true);
+      if (sharedPref.getInt(IS_ONLINE) == 1) {
+    await NotificationWithSoundService.initializeService();
+  }
   // await oneSignalSettings();
-  print("CHECK_ONE_SIGNAL_PLAYER:::${sharedPref.getString(PLAYER_ID)}");
+  print("CHECK_ONE_SIGNAL_PLAYER:::${sharedPref.getInt(IS_ONLINE)}");
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   ChuckerFlutter.showOnRelease = false; // TODO: Set to false before release
-  await initializeService();
+  // await initializeService();
+  
   runApp(MyApp());
 }
 
@@ -138,7 +150,8 @@ class _MyAppState extends State<MyApp> {
     connectivitySubscription = Connectivity().onConnectivityChanged.listen((e) {
       if (e.contains(ConnectivityResult.none)) {
         log('not connected');
-        launchScreen(navigatorKey.currentState!.overlay!.context, NoInternetScreen());
+        launchScreen(
+            navigatorKey.currentState!.overlay!.context, NoInternetScreen());
       } else {
         if (netScreenKey.currentContext != null) {
           if (Navigator.canPop(navigatorKey.currentState!.overlay!.context)) {
@@ -187,7 +200,8 @@ class _MyAppState extends State<MyApp> {
             GlobalCupertinoLocalizations.delegate,
           ],
           localeResolutionCallback: (locale, supportedLocales) => locale,
-          locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
+          locale: Locale(
+              appStore.selectedLanguage.validate(value: defaultLanguage)),
         ),
       );
     });
