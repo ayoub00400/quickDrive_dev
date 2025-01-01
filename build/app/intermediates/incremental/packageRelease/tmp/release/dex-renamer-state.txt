@@ -1,4 +1,4 @@
-#Wed Jan 01 11:30:27 CET 2025
+#Wed Jan 01 12:48:14 CET 2025
 base.0=/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 base.1=/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/dex/release/minifyReleaseWithR8/classes2.dex
 path.0=classes.dex
