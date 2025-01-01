@@ -311,7 +311,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           if ((data['action']['drivers_id'] as List)
               .contains(sharedPref.getInt(USER_ID))) {
             developer.log('Audio play condition met.');
-            audioPlayWithLimit();
+            // audioPlayWithLimit();
             cancelTimer();
             sendPrice = false;
             setState(() {});
