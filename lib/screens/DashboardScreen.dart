@@ -60,7 +60,6 @@ import 'package:audioplayers/audioplayers.dart';
 import '../Services/RideService.dart';
 
 import '../Services/bg_notification_service.dart';
-import '../Services/sound_service.dart';
 import '../components/AlertScreen.dart';
 
 import '../components/CancelOrderDialog.dart';
@@ -312,7 +311,6 @@ class DashboardScreenState extends State<DashboardScreen> {
           if ((data['action']['drivers_id'] as List)
               .contains(sharedPref.getInt(USER_ID))) {
             developer.log('Audio play condition met.');
-            // TODO houssam: play audio here
             audioPlayWithLimit();
             cancelTimer();
             sendPrice = false;
@@ -381,7 +379,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     fetchTotalEarning();
 
-    // initPusher();
+    initPusher();
 
     init();
   }
@@ -498,7 +496,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         "driver_id": sharedPref.getInt(USER_ID),
         "is_accept": "0",
       };
-//TODO:
+
       duration = startTime;
 
       rideRequestResPond(request: req).then((value) {
@@ -911,7 +909,6 @@ class DashboardScreenState extends State<DashboardScreen> {
       appStore.setLoading(false);
 
       if (value.data!.status == NEW_RIDE_REQUESTED) {
-        // SoundService.showNotification("New Ride Requested");
         developer.log(" new ride requested 487");
 
         OnRideRequest ride = OnRideRequest();
@@ -1405,7 +1402,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-//TODO:this is build function
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -1485,7 +1481,6 @@ class DashboardScreenState extends State<DashboardScreen> {
               stream: rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
               builder: (c, snapshot) {
                 if (snapshot.hasData) {
-                  // SoundService.showNotification("New Ride Requested");
                   List<FRideBookingModel> data = snapshot.data!.docs
                       .map((e) => FRideBookingModel.fromJson(
                           e.data() as Map<String, dynamic>))
@@ -1537,9 +1532,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                             req: {'on_stream_api_call': 0});
                       }
                     }
-                    if (servicesListData != null &&
-                        servicesListData!.status != null &&
-                        servicesListData!.status == NEW_RIDE_REQUESTED) {}
+
                     return servicesListData != null
                         ? servicesListData!.status != null &&
                                 servicesListData!.status == NEW_RIDE_REQUESTED
@@ -2070,352 +2063,342 @@ class DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 );
                               })
-                            : Builder(builder: (context) {
-                                return Positioned(
-                                  bottom: 0,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(
-                                              2 * defaultRadius),
-                                          topRight: Radius.circular(
-                                              2 * defaultRadius)),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      defaultRadius),
-                                              child: commonCachedNetworkImage(
-                                                  servicesListData!
-                                                      .riderProfileImage,
-                                                  height: 48,
-                                                  width: 48,
-                                                  fit: BoxFit.cover),
+                            : Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft:
+                                            Radius.circular(2 * defaultRadius),
+                                        topRight:
+                                            Radius.circular(2 * defaultRadius)),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                defaultRadius),
+                                            child: commonCachedNetworkImage(
+                                                servicesListData!
+                                                    .riderProfileImage,
+                                                height: 48,
+                                                width: 48,
+                                                fit: BoxFit.cover),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: boldTextStyle(
+                                                        size: 18)),
+                                                SizedBox(height: 4),
+                                                Text(
+                                                    '${servicesListData!.riderEmail.validate()}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        secondaryTextStyle()),
+                                              ],
                                             ),
-                                            SizedBox(width: 12),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                          ),
+                                          inkWellWidget(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) {
+                                                  return AlertDialog(
+                                                    contentPadding:
+                                                        EdgeInsets.all(0),
+                                                    content: AlertScreen(
+                                                        rideId:
+                                                            servicesListData!
+                                                                .id,
+                                                        regionId:
+                                                            servicesListData!
+                                                                .regionId),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: chatCallWidget(Icons.sos),
+                                          ),
+                                          SizedBox(width: 8),
+                                          inkWellWidget(
+                                            onTap: () {
+                                              launchUrl(
+                                                  Uri.parse(
+                                                      'tel:${servicesListData!.riderContactNumber}'),
+                                                  mode: LaunchMode
+                                                      .externalApplication);
+                                            },
+                                            child: chatCallWidget(Icons.call),
+                                          ),
+                                          SizedBox(width: 8),
+                                          inkWellWidget(
+                                            onTap: () {
+                                              if (riderData == null ||
+                                                  (riderData != null &&
+                                                      riderData!.uid == null)) {
+                                                init();
+
+                                                return;
+                                              }
+
+                                              if (riderData != null) {
+                                                launchScreen(
+                                                    context,
+                                                    ChatScreen(
+                                                      userData: riderData,
+                                                      ride_id: riderId,
+                                                    ));
+                                              }
+                                            },
+                                            child: chatCallWidget(
+                                                Icons.chat_bubble_outline,
+                                                data: riderData),
+                                          ),
+                                        ],
+                                      ),
+                                      if (estimatedTotalPrice != null &&
+                                          estimatedDistance != null)
+                                        Container(
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              // Expanded(
+                                              //   child: Row(
+                                              //     children: [
+                                              //       Text(
+                                              //           '${language.estAmount}:',
+                                              //           style:
+                                              //               secondaryTextStyle(
+                                              //                   size: 16)),
+                                              //       SizedBox(width: 4),
+                                              //       Text(
+                                              //           '${printAmount(estimatedTotalPrice.toStringAsFixed(2))}',
+                                              //           style: boldTextStyle(
+                                              //               size: 14)),
+                                              //     ],
+                                              //   ),
+                                              // ),
+
+                                              // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
+
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                mainAxisSize: MainAxisSize.max,
                                                 children: [
+                                                  Text('${language.distance}:',
+                                                      style: secondaryTextStyle(
+                                                          size: 16)),
+                                                  SizedBox(width: 4),
                                                   Text(
-                                                      '${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                      '${estimatedDistance} ${distance_unit}',
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: boldTextStyle(
-                                                          size: 18)),
-                                                  SizedBox(height: 4),
-                                                  Text(
-                                                      '${servicesListData!.riderEmail.validate()}',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style:
-                                                          secondaryTextStyle()),
+                                                          size: 14)),
                                                 ],
                                               ),
-                                            ),
-                                            inkWellWidget(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (_) {
-                                                    return AlertDialog(
-                                                      contentPadding:
-                                                          EdgeInsets.all(0),
-                                                      content: AlertScreen(
-                                                          rideId:
-                                                              servicesListData!
-                                                                  .id,
-                                                          regionId:
-                                                              servicesListData!
-                                                                  .regionId),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: chatCallWidget(Icons.sos),
-                                            ),
-                                            SizedBox(width: 8),
-                                            inkWellWidget(
-                                              onTap: () {
-                                                launchUrl(
-                                                    Uri.parse(
-                                                        'tel:${servicesListData!.riderContactNumber}'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
-                                              },
-                                              child: chatCallWidget(Icons.call),
-                                            ),
-                                            SizedBox(width: 8),
-                                            inkWellWidget(
-                                              onTap: () {
-                                                if (riderData == null ||
-                                                    (riderData != null &&
-                                                        riderData!.uid ==
-                                                            null)) {
-                                                  init();
-
-                                                  return;
-                                                }
-
-                                                if (riderData != null) {
-                                                  launchScreen(
-                                                      context,
-                                                      ChatScreen(
-                                                        userData: riderData,
-                                                        ride_id: riderId,
-                                                      ));
-                                                }
-                                              },
-                                              child: chatCallWidget(
-                                                  Icons.chat_bubble_outline,
-                                                  data: riderData),
-                                            ),
-                                          ],
-                                        ),
-                                        if (estimatedTotalPrice != null &&
-                                            estimatedDistance != null)
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                // Expanded(
-                                                //   child: Row(
-                                                //     children: [
-                                                //       Text(
-                                                //           '${language.estAmount}:',
-                                                //           style:
-                                                //               secondaryTextStyle(
-                                                //                   size: 16)),
-                                                //       SizedBox(width: 4),
-                                                //       Text(
-                                                //           '${printAmount(estimatedTotalPrice.toStringAsFixed(2))}',
-                                                //           style: boldTextStyle(
-                                                //               size: 14)),
-                                                //     ],
-                                                //   ),
-                                                // ),
-
-                                                // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
-
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Text(
-                                                        '${language.distance}:',
-                                                        style:
-                                                            secondaryTextStyle(
-                                                                size: 16)),
-                                                    SizedBox(width: 4),
-                                                    Text(
-                                                        '${estimatedDistance} ${distance_unit}',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: boldTextStyle(
-                                                            size: 14)),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            width: context.width(),
+                                            ],
                                           ),
-                                        Divider(
-                                          color: Colors.grey.shade300,
-                                          thickness: 0.7,
-                                          height: 4,
+                                          width: context.width(),
                                         ),
+                                      Divider(
+                                        color: Colors.grey.shade300,
+                                        thickness: 0.7,
+                                        height: 4,
+                                      ),
+                                      SizedBox(height: 8),
+                                      addressDisplayWidget(
+                                          endLatLong: LatLng(
+                                              servicesListData!.endLatitude
+                                                  .toDouble(),
+                                              servicesListData!.endLongitude
+                                                  .toDouble()),
+                                          endAddress:
+                                              servicesListData!.endAddress,
+                                          startLatLong: LatLng(
+                                              servicesListData!.startLatitude
+                                                  .toDouble(),
+                                              servicesListData!.startLongitude
+                                                  .toDouble()),
+                                          startAddress:
+                                              servicesListData!.startAddress),
+                                      SizedBox(height: 8),
+                                      servicesListData!.status !=
+                                              NEW_RIDE_REQUESTED
+                                          ? Padding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: servicesListData!
+                                                              .status ==
+                                                          IN_PROGRESS
+                                                      ? 0
+                                                      : 8),
+                                              child: _bookingForView(),
+                                            )
+                                          : SizedBox(),
+                                      if (servicesListData!.status ==
+                                              IN_PROGRESS &&
+                                          servicesListData != null &&
+                                          servicesListData!.otherRiderData !=
+                                              null)
+
+                                        // Divider(color: Colors.grey.shade300,thickness: 0.7,height: 8,),
+
                                         SizedBox(height: 8),
-                                        addressDisplayWidget(
-                                            endLatLong: LatLng(
-                                                servicesListData!.endLatitude
-                                                    .toDouble(),
-                                                servicesListData!.endLongitude
-                                                    .toDouble()),
-                                            endAddress:
-                                                servicesListData!.endAddress,
-                                            startLatLong: LatLng(
-                                                servicesListData!.startLatitude
-                                                    .toDouble(),
-                                                servicesListData!.startLongitude
-                                                    .toDouble()),
-                                            startAddress:
-                                                servicesListData!.startAddress),
-                                        SizedBox(height: 8),
-                                        servicesListData!.status !=
-                                                NEW_RIDE_REQUESTED
-                                            ? Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom: servicesListData!
-                                                                .status ==
-                                                            IN_PROGRESS
-                                                        ? 0
-                                                        : 8),
-                                                child: _bookingForView(),
-                                              )
-                                            : SizedBox(),
-                                        if (servicesListData!.status ==
-                                                IN_PROGRESS &&
-                                            servicesListData != null &&
-                                            servicesListData!.otherRiderData !=
-                                                null)
+                                      if (servicesListData!.status ==
+                                          IN_PROGRESS)
+                                        if (appStore.extraChargeValue != null)
+                                          Observer(builder: (context) {
+                                            return Visibility(
+                                              visible: int.parse(appStore
+                                                      .extraChargeValue!) !=
+                                                  0,
+                                              child: inkWellWidget(
+                                                onTap: () async {
+                                                  List<ExtraChargeRequestModel>?
+                                                      extraChargeListData =
+                                                      await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    defaultRadius),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    defaultRadius))),
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return Padding(
+                                                        padding: EdgeInsets.only(
+                                                            bottom:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .viewInsets
+                                                                    .bottom),
+                                                        child: ExtraChargesWidget(
+                                                            data:
+                                                                extraChargeList),
+                                                      );
+                                                    },
+                                                  );
 
-                                          // Divider(color: Colors.grey.shade300,thickness: 0.7,height: 8,),
+                                                  if (extraChargeListData !=
+                                                      null) {
+                                                    log("extraChargeListData   $extraChargeListData");
 
-                                          SizedBox(height: 8),
-                                        if (servicesListData!.status ==
-                                            IN_PROGRESS)
-                                          if (appStore.extraChargeValue != null)
-                                            Observer(builder: (context) {
-                                              return Visibility(
-                                                visible: int.parse(appStore
-                                                        .extraChargeValue!) !=
-                                                    0,
-                                                child: inkWellWidget(
-                                                  onTap: () async {
-                                                    List<ExtraChargeRequestModel>?
-                                                        extraChargeListData =
-                                                        await showModalBottomSheet(
-                                                      isScrollControlled: true,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(
-                                                                      defaultRadius),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      defaultRadius))),
-                                                      context: context,
-                                                      builder: (_) {
-                                                        return Padding(
-                                                          padding: EdgeInsets.only(
-                                                              bottom: MediaQuery
-                                                                      .of(context)
-                                                                  .viewInsets
-                                                                  .bottom),
-                                                          child: ExtraChargesWidget(
-                                                              data:
-                                                                  extraChargeList),
-                                                        );
-                                                      },
-                                                    );
+                                                    extraChargeAmount = 0;
 
-                                                    if (extraChargeListData !=
-                                                        null) {
-                                                      log("extraChargeListData   $extraChargeListData");
+                                                    extraChargeList.clear();
 
-                                                      extraChargeAmount = 0;
+                                                    extraChargeListData
+                                                        .forEach((element) {
+                                                      extraChargeAmount =
+                                                          extraChargeAmount +
+                                                              element.value!;
 
-                                                      extraChargeList.clear();
+                                                      extraChargeList =
+                                                          extraChargeListData;
+                                                    });
+                                                  }
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 8),
 
-                                                      extraChargeListData
-                                                          .forEach((element) {
-                                                        extraChargeAmount =
-                                                            extraChargeAmount +
-                                                                element.value!;
+                                                      // padding: EdgeInsets.symmetric(vertical: 8),
 
-                                                        extraChargeList =
-                                                            extraChargeListData;
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                bottom: 8),
+                                                      child: Container(
+                                                        // decoration: BoxDecoration(
 
-                                                        // padding: EdgeInsets.symmetric(vertical: 8),
+                                                        //   borderRadius: BorderRadius.circular(defaultRadius),
 
-                                                        child: Container(
-                                                          // decoration: BoxDecoration(
+                                                        //   color: Colors.white,
 
-                                                          //   borderRadius: BorderRadius.circular(defaultRadius),
+                                                        //   border: Border.all(color: primaryColor.withOpacity(0.3),width: 1,strokeAlign: BorderSide.strokeAlignInside)
 
-                                                          //   color: Colors.white,
+                                                        // ),
 
-                                                          //   border: Border.all(color: primaryColor.withOpacity(0.3),width: 1,strokeAlign: BorderSide.strokeAlignInside)
+                                                        // padding: EdgeInsets.all(4),
 
-                                                          // ),
+                                                        // color: Colors.red,
 
-                                                          // padding: EdgeInsets.all(4),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            // Row(
 
-                                                          // color: Colors.red,
+                                                            //   mainAxisSize: MainAxisSize.min,
 
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              // Row(
+                                                            //   mainAxisAlignment: MainAxisAlignment.start,
 
-                                                              //   mainAxisSize: MainAxisSize.min,
+                                                            //   children: [
 
-                                                              //   mainAxisAlignment: MainAxisAlignment.start,
+                                                            //     Icon(Icons.add, size: 22),
 
-                                                              //   children: [
+                                                            //     SizedBox(width: 4),
 
-                                                              //     Icon(Icons.add, size: 22),
+                                                            //     Text(language.extraFees, style: boldTextStyle()),
 
-                                                              //     SizedBox(width: 4),
+                                                            //   ],
 
-                                                              //     Text(language.extraFees, style: boldTextStyle()),
+                                                            // ),
 
-                                                              //   ],
-
-                                                              // ),
-
-                                                              if (extraChargeAmount !=
-                                                                  0)
-                                                                Text(
-                                                                    '${language.extraCharges} ${printAmount(extraChargeAmount.toString())}',
-                                                                    style: secondaryTextStyle(
-                                                                        color: Colors
-                                                                            .green)),
-                                                            ],
-                                                          ),
+                                                            if (extraChargeAmount !=
+                                                                0)
+                                                              Text(
+                                                                  '${language.extraCharges} ${printAmount(extraChargeAmount.toString())}',
+                                                                  style: secondaryTextStyle(
+                                                                      color: Colors
+                                                                          .green)),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              );
-                                            }),
-                                        buttonWidget()
-                                      ],
-                                    ),
+                                              ),
+                                            );
+                                          }),
+                                      buttonWidget()
+                                    ],
                                   ),
-                                );
-                              })
+                                ),
+                              )
                         : SizedBox();
                   } else {
-                    NotificationWithSoundService.stopAudio();
                     if (data.isEmpty) {
                       try {
                         // FlutterRingtonePlayer().stop();
@@ -3225,7 +3208,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     return SizedBox();
   }
 
-//TODO: Cancel Request
   Future<void> cancelRequest(String? reason) async {
     Map req = {
       "id": servicesListData!.id,
@@ -3266,7 +3248,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-//TODO: Check Ride Cancel
   void checkRideCancel() async {
     if (rideCancelDetected) return;
 
