@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "980935620101",
+    "project_id": "quickcargoo-68335",
+    "storage_bucket": "quickcargoo-68335.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980935620101:android:45c12d8db41ef817cace6c",
+        "android_client_info": {
+          "package_name": "com.dcsec.quickcargoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf5kZx5V-40dpi4isxJwJ6LcSsmckbogg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980935620101:android:e2b092ee17d6d4ddcace6c",
+        "android_client_info": {
+          "package_name": "com.dcsec.quickcargoodriver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf5kZx5V-40dpi4isxJwJ6LcSsmckbogg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
