@@ -24,8 +24,7 @@ class LanguageScreenState extends State<LanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.language,
-            style: boldTextStyle(color: appTextPrimaryColorWhite)),
+        title: Text(language.language, style: boldTextStyle(color: appTextPrimaryColorWhite)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -36,8 +35,7 @@ class LanguageScreenState extends State<LanguageScreen> {
             LanguageDataModel data = localeLanguageList[index];
             return inkWellWidget(
               onTap: () async {
-                await sharedPref.setString(
-                    SELECTED_LANGUAGE_CODE, data.languageCode!);
+                await sharedPref.setString(SELECTED_LANGUAGE_CODE, data.languageCode!);
 
                 selectedLanguageDataModel = data;
                 appStore.setLanguage(data.languageCode!, context: context);
@@ -51,9 +49,7 @@ class LanguageScreenState extends State<LanguageScreen> {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     border: Border.all(color: dividerColor),
-                    color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ??
-                                defaultLanguage) ==
-                            data.languageCode
+                    color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode
                         ? primaryColor.withOpacity(0.6)
                         : Colors.transparent,
                     borderRadius: radius(defaultRadius)),
@@ -63,10 +59,7 @@ class LanguageScreenState extends State<LanguageScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ClipRRect(
-                        borderRadius: radius(8),
-                        child: Image.asset(data.flag.validate(),
-                            width: 32, height: 32)),
+                    ClipRRect(borderRadius: radius(8), child: Image.asset(data.flag.validate(), width: 32, height: 32)),
                     SizedBox(width: 8),
                     Expanded(
                       child: Column(
@@ -74,26 +67,20 @@ class LanguageScreenState extends State<LanguageScreen> {
                         children: [
                           Text('${data.name.validate()}',
                               style: boldTextStyle(
-                                  color: (sharedPref.getString(
-                                                  SELECTED_LANGUAGE_CODE) ??
-                                              defaultLanguage) ==
+                                  color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) ==
                                           data.languageCode
                                       ? Colors.white
                                       : textPrimaryColorGlobal)),
                           Text('${data.subTitle.validate()}',
                               style: secondaryTextStyle(
-                                  color: (sharedPref.getString(
-                                                  SELECTED_LANGUAGE_CODE) ??
-                                              defaultLanguage) ==
+                                  color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) ==
                                           data.languageCode
                                       ? Colors.white
                                       : textSecondaryColorGlobal)),
                         ],
                       ),
                     ),
-                    if ((sharedPref.getString(SELECTED_LANGUAGE_CODE) ??
-                            defaultLanguage) ==
-                        data.languageCode)
+                    if ((sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode)
                       Icon(Icons.check_circle, color: Colors.white),
                   ],
                 ),

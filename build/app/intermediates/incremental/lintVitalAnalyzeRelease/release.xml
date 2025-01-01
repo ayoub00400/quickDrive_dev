@@ -5,7 +5,7 @@
     targetSdkVersion="34"
     shrinking="true"
     mergedManifest="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/merged_manifest/release/AndroidManifest.xml"
-    proguardFiles="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android.txt-7.3.0:/Users/mac/development/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro:proguard-rules.pro:/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-7.3.0:proguard-rules.pro"
+    proguardFiles="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android.txt-7.3.0:/Users/mac/development/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro:proguard-rules.pro"
     partialResultsDir="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/lint_vital_partial_results/release/out"
     desugaredMethodsFiles="/Users/mac/.gradle/caches/transforms-3/aabae80819487ba4c26081f8f9919cd7/transformed/D8BackportedDesugaredMethods.txt">
   <buildFeatures

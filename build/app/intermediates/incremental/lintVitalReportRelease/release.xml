@@ -6,7 +6,7 @@
     shrinking="true"
     mergedManifest="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/merged_manifest/release/AndroidManifest.xml"
     manifestMergeReport="/Users/mac/Desktop/quickDrive_dev/build/app/outputs/logs/manifest-merger-release-report.txt"
-    proguardFiles="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android.txt-7.3.0:/Users/mac/development/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro:proguard-rules.pro:/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android-optimize.txt-7.3.0:proguard-rules.pro"
+    proguardFiles="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/default_proguard_files/global/proguard-android.txt-7.3.0:/Users/mac/development/flutter/packages/flutter_tools/gradle/flutter_proguard_rules.pro:proguard-rules.pro"
     partialResultsDir="/Users/mac/Desktop/quickDrive_dev/build/app/intermediates/lint_vital_partial_results/release/out">
   <buildFeatures
       namespacing="REQUIRED"/>
