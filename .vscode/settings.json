@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "background service "
+        "background service ",
+        "all app"
     ]
 }
