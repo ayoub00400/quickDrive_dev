@@ -1,6 +1,10 @@
 {
     "conventionalCommits.scopes": [
         "background service ",
-        "all app"
+        "all app",
+        "controller"
+    ],
+    "cSpell.words": [
+        "Dachboard"
     ]
 }

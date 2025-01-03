@@ -102,7 +102,6 @@ import '../../utils/Extensions/app_common.dart';
 import '../../utils/Images.dart';
 
 import '../../utils/var/var_app.dart';
-import '../../utils/var/var_app.dart';
 import 'LocationPermissionScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -162,7 +161,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   LatLng? destinationLocation;
 
   // bool timerRunning = false;
-
+// TODO: TO STATE CUBt
   bool timeSetCalled = false;
 
   bool isOnLine = true;
