@@ -20,7 +20,7 @@ import '../../utils/Constants.dart';
 import '../../utils/Extensions/ConformationDialog.dart';
 import '../../utils/Images.dart';
 import '../../utils/var/var_app.dart';
-import 'DashboardScreen.dart';
+import 'dashboard/dashboard.dart';
 import 'package:file_picker/file_picker.dart';
 
 class DocumentsScreen extends StatefulWidget {
@@ -64,9 +64,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
             ),
             dialogBackgroundColor: Colors.white,
             datePickerTheme: DatePickerThemeData(
-                backgroundColor: Colors.white,
-                cancelButtonStyle: ButtonStyle(),
-                headerBackgroundColor: Colors.white),
+                backgroundColor: Colors.white, cancelButtonStyle: ButtonStyle(), headerBackgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -139,23 +137,17 @@ class DocumentsScreenState extends State<DocumentsScreen> {
   }
 
   /// Add Documents
-  addDocument(int? docId, int? isExpire,
-      {int? updateId, DateTime? dateTime}) async {
+  addDocument(int? docId, int? isExpire, {int? updateId, DateTime? dateTime}) async {
     print("Just Checking::::110");
-    MultipartRequest multiPartRequest = await getMultiPartRequest(
-        updateId == null
-            ? 'driver-document-save'
-            : 'driver-document-update/$updateId');
-    multiPartRequest.fields['driver_id'] =
-        sharedPref.getInt(USER_ID).toString();
+    MultipartRequest multiPartRequest =
+        await getMultiPartRequest(updateId == null ? 'driver-document-save' : 'driver-document-update/$updateId');
+    multiPartRequest.fields['driver_id'] = sharedPref.getInt(USER_ID).toString();
     multiPartRequest.fields['document_id'] = docId.toString();
     multiPartRequest.fields['is_verified'] = '0';
     print("Just Checking::::115");
-    if (isExpire != null)
-      multiPartRequest.fields['expire_date'] = dateTime.toString();
+    if (isExpire != null) multiPartRequest.fields['expire_date'] = dateTime.toString();
     if (imagePath != null) {
-      multiPartRequest.files
-          .add(await MultipartFile.fromPath("driver_document", imagePath!));
+      multiPartRequest.files.add(await MultipartFile.fromPath("driver_document", imagePath!));
     }
     print("Just Checking::::120");
     multiPartRequest.headers.addAll(buildHeaderTokens());
@@ -181,14 +173,12 @@ class DocumentsScreenState extends State<DocumentsScreen> {
   }
 
   /// SelectImage
-  getMultipleFile(int? docId, int? isExpire,
-      {int? updateId, DateTime? dateTime}) async {
+  getMultipleFile(int? docId, int? isExpire, {int? updateId, DateTime? dateTime}) async {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(defaultRadius),
-              topRight: Radius.circular(defaultRadius))),
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
       builder: (_) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
@@ -197,48 +187,39 @@ class DocumentsScreenState extends State<DocumentsScreen> {
               child: ImageSourceDialog(
                 onCamera: () async {
                   Navigator.pop(context);
-                  var result = await ImagePicker()
-                      .pickImage(source: ImageSource.camera, imageQuality: 100);
+                  var result = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100);
                   if (result != null) {
                     int b = await result.length();
                     double fileSizeInMB = b / (1024 * 1024);
                     if (fileSizeInMB > 5) {
                       return toast(language.fileSizeValidateMsg);
                     }
-                    uploadFile(result.path, docId, isExpire,
-                        updateId: updateId);
+                    uploadFile(result.path, docId, isExpire, updateId: updateId);
                   }
                 },
                 onGallery: () async {
                   Navigator.pop(context);
-                  var result = await ImagePicker().pickImage(
-                      source: ImageSource.gallery, imageQuality: 100);
+                  var result = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
                   if (result != null) {
                     int b = await result.length();
                     double fileSizeInMB = b / (1024 * 1024);
                     if (fileSizeInMB > 5) {
                       return toast(language.fileSizeValidateMsg);
                     }
-                    uploadFile(result.path, docId, isExpire,
-                        updateId: updateId);
+                    uploadFile(result.path, docId, isExpire, updateId: updateId);
                   }
                 },
                 onFile: () async {
                   Navigator.pop(context);
-                  FilePickerResult? filePickerResult = await FilePicker.platform
-                      .pickFiles(
-                          type: FileType.custom,
-                          allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf'],
-                          allowMultiple: false);
+                  FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
+                      type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf'], allowMultiple: false);
                   if (filePickerResult != null) {
                     int b = filePickerResult.files.first.size;
                     double fileSizeInMB = b / (1024 * 1024);
                     if (fileSizeInMB > 5) {
                       return toast(language.fileSizeValidateMsg);
                     }
-                    uploadFile(
-                        filePickerResult.files.first.path, docId, isExpire,
-                        updateId: updateId);
+                    uploadFile(filePickerResult.files.first.path, docId, isExpire, updateId: updateId);
                   }
                 },
                 isFile: true,
@@ -259,8 +240,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
           setState(() {
             imagePath = file;
           });
-          addDocument(docId, isExpire,
-              dateTime: selectedDate, updateId: updateId);
+          addDocument(docId, isExpire, dateTime: selectedDate, updateId: updateId);
         },
         positiveText: language.yes,
         negativeText: language.no,
@@ -294,8 +274,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
         toast(language.someRequiredDocumentAreNotUploaded);
       } else {
         if (sharedPref.getInt(IS_Verified_Driver) == 1) {
-          launchScreen(context, DashboardScreen(),
-              isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
         } else {
           launchScreen(context, WaitingScreen(), isNewTask: false);
           // toast('${language.userNotApproveMsg}');
@@ -326,8 +305,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(language.documents,
-              style: boldTextStyle(color: appTextPrimaryColorWhite)),
+          title: Text(language.documents, style: boldTextStyle(color: appTextPrimaryColorWhite)),
         ),
         body: Observer(builder: (context) {
           return Stack(
@@ -337,10 +315,8 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(language.fileSizeValidate,
-                        style: secondaryTextStyle(size: 12)),
-                    Text(language.isMandatoryDocument,
-                        style: primaryTextStyle(color: Colors.red)),
+                    Text(language.fileSizeValidate, style: secondaryTextStyle(size: 12)),
+                    Text(language.isMandatoryDocument, style: primaryTextStyle(color: Colors.red)),
                     SizedBox(height: 8),
                     ListView.separated(
                       shrinkWrap: true,
@@ -361,8 +337,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.5),
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius),
+                              borderRadius: BorderRadius.circular(defaultRadius),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -379,11 +354,7 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                                     style: primaryTextStyle(),
                                     children: [
                                       TextSpan(
-                                        text: getRemainingDocument()[index]
-                                                    .isRequired ==
-                                                1
-                                            ? ' *'
-                                            : '',
+                                        text: getRemainingDocument()[index].isRequired == 1 ? ' *' : '',
                                         style: boldTextStyle(color: Colors.red),
                                       ),
                                     ],
@@ -407,75 +378,45 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(driverDocumentList[index].documentName!,
-                                style: boldTextStyle()),
+                            Text(driverDocumentList[index].documentName!, style: boldTextStyle()),
                             SizedBox(height: 8),
                             Container(
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey.withOpacity(0.5)),
-                                  borderRadius:
-                                      BorderRadius.circular(defaultRadius)),
+                                  border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                                  borderRadius: BorderRadius.circular(defaultRadius)),
                               child: Column(
                                 children: [
-                                  driverDocumentList[index]
-                                          .driverDocument!
-                                          .contains('.pdf')
+                                  driverDocumentList[index].driverDocument!.contains('.pdf')
                                       ? InkWell(
                                           child: Column(
                                             children: [
-                                              Image.asset(ic_pdf,
-                                                  fit: BoxFit.cover,
-                                                  height: 35,
-                                                  width: 35),
+                                              Image.asset(ic_pdf, fit: BoxFit.cover, height: 35, width: 35),
                                               SizedBox(height: 8),
-                                              Text(
-                                                  driverDocumentList[index]
-                                                      .driverDocument!
-                                                      .split('/')
-                                                      .last,
+                                              Text(driverDocumentList[index].driverDocument!.split('/').last,
                                                   style: primaryTextStyle()),
                                             ],
                                           ),
                                           onTap: () {
-                                            launchUrl(
-                                                Uri.parse(
-                                                    driverDocumentList[index]
-                                                        .driverDocument
-                                                        .validate()),
-                                                mode: LaunchMode
-                                                    .externalApplication);
+                                            launchUrl(Uri.parse(driverDocumentList[index].driverDocument.validate()),
+                                                mode: LaunchMode.externalApplication);
                                           },
                                         )
                                       : ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              defaultRadius),
-                                          child: commonCachedNetworkImage(
-                                              driverDocumentList[index]
-                                                  .driverDocument!,
-                                              height: 200,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              fit: BoxFit.cover),
+                                          borderRadius: BorderRadius.circular(defaultRadius),
+                                          child: commonCachedNetworkImage(driverDocumentList[index].driverDocument!,
+                                              height: 200, width: MediaQuery.of(context).size.width, fit: BoxFit.cover),
                                         ),
                                   SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      driverDocumentList[index].expireDate !=
-                                              null
-                                          ? Text(language.expireDate,
-                                              style: boldTextStyle())
+                                      driverDocumentList[index].expireDate != null
+                                          ? Text(language.expireDate, style: boldTextStyle())
                                           : Text(''),
                                       SizedBox(width: 8),
-                                      driverDocumentList[index].expireDate !=
-                                              null
+                                      driverDocumentList[index].expireDate != null
                                           ? Expanded(
-                                              child: Text(
-                                                  driverDocumentList[index]
-                                                      .expireDate
-                                                      .toString(),
+                                              child: Text(driverDocumentList[index].expireDate.toString(),
                                                   style: primaryTextStyle()))
                                           : Expanded(
                                               child: Text(
@@ -483,70 +424,41 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                                               style: primaryTextStyle(),
                                             )),
                                       Visibility(
-                                        visible: driverDocumentList[index]
-                                                .isVerified ==
-                                            0,
+                                        visible: driverDocumentList[index].isVerified == 0,
                                         child: inkWellWidget(
                                           onTap: () {
                                             if (isExpire == 1) {
-                                              getMultipleFile(
-                                                  driverDocumentList[index]
-                                                      .documentId,
-                                                  driverDocumentList[index]
-                                                              .expireDate !=
-                                                          null
-                                                      ? 1
-                                                      : null,
-                                                  dateTime: selectedDate,
-                                                  updateId:
-                                                      driverDocumentList[index]
-                                                          .id);
+                                              getMultipleFile(driverDocumentList[index].documentId,
+                                                  driverDocumentList[index].expireDate != null ? 1 : null,
+                                                  dateTime: selectedDate, updateId: driverDocumentList[index].id);
                                             } else {
-                                              getMultipleFile(
-                                                  driverDocumentList[index]
-                                                      .documentId,
-                                                  driverDocumentList[index]
-                                                              .expireDate !=
-                                                          null
-                                                      ? 1
-                                                      : null,
-                                                  updateId:
-                                                      driverDocumentList[index]
-                                                          .id);
+                                              getMultipleFile(driverDocumentList[index].documentId,
+                                                  driverDocumentList[index].expireDate != null ? 1 : null,
+                                                  updateId: driverDocumentList[index].id);
                                             }
                                           },
                                           child: Container(
                                             height: 25,
                                             width: 25,
                                             decoration: BoxDecoration(
-                                              color:
-                                                  primaryColor.withOpacity(0.1),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              border: Border.all(
-                                                  color: primaryColor),
+                                              color: primaryColor.withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(4),
+                                              border: Border.all(color: primaryColor),
                                             ),
-                                            child: Icon(Icons.edit,
-                                                color: primaryColor, size: 14),
+                                            child: Icon(Icons.edit, color: primaryColor, size: 14),
                                           ),
                                         ),
                                       ),
                                       SizedBox(width: 10),
                                       Visibility(
-                                        visible: driverDocumentList[index]
-                                                .isVerified ==
-                                            0,
+                                        visible: driverDocumentList[index].isVerified == 0,
                                         child: inkWellWidget(
                                           onTap: () async {
                                             showConfirmDialogCustom(
                                               context,
-                                              title: language
-                                                  .areYouSureYouWantToDeleteThisDocument,
-                                              onAccept:
-                                                  (BuildContext context) async {
-                                                await deleteDoc(
-                                                    driverDocumentList[index]
-                                                        .id);
+                                              title: language.areYouSureYouWantToDeleteThisDocument,
+                                              onAccept: (BuildContext context) async {
+                                                await deleteDoc(driverDocumentList[index].id);
                                               },
                                               positiveText: language.yes,
                                               negativeText: language.no,
@@ -557,27 +469,18 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                                             height: 25,
                                             width: 25,
                                             decoration: BoxDecoration(
-                                              color:
-                                                  Colors.red.withOpacity(0.2),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              border:
-                                                  Border.all(color: Colors.red),
+                                              color: Colors.red.withOpacity(0.2),
+                                              borderRadius: BorderRadius.circular(4),
+                                              border: Border.all(color: Colors.red),
                                             ),
-                                            child: Icon(Icons.delete,
-                                                color: Colors.red, size: 14),
+                                            child: Icon(Icons.delete, color: Colors.red, size: 14),
                                           ),
                                         ),
                                       ),
-                                      driverDocumentList[index].isVerified == 1
-                                          ? SizedBox(width: 16)
-                                          : SizedBox(),
+                                      driverDocumentList[index].isVerified == 1 ? SizedBox(width: 16) : SizedBox(),
                                       Visibility(
-                                        visible: driverDocumentList[index]
-                                                .isVerified ==
-                                            1,
-                                        child: Icon(Icons.verified_user,
-                                            color: Colors.green),
+                                        visible: driverDocumentList[index].isVerified == 1,
+                                        child: Icon(Icons.verified_user, color: Colors.green),
                                       ),
                                     ],
                                   ),

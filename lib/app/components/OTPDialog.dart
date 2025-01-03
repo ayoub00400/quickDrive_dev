@@ -12,7 +12,7 @@ import '../../../main.dart';
 import '../Services/network/RestApis.dart';
 import '../Services/AuthService.dart';
 import '../utils/var/var_app.dart';
-import '../view/screens/DashboardScreen.dart';
+import '../view/screens/dashboard/dashboard.dart';
 import '../view/screens/SignUpScreen.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
@@ -55,7 +55,8 @@ class OTPDialogState extends State<OTPDialog> {
   Future<void> submit() async {
     appStore.setLoading(true);
 
-    AuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId!, smsCode: verId.validate());
+    AuthCredential credential =
+        PhoneAuthProvider.credential(verificationId: widget.verificationId!, smsCode: verId.validate());
 
     print("Number->" + otpCode);
     print("Number->" + widget.phoneNumber.toString());
@@ -75,7 +76,12 @@ class OTPDialogState extends State<OTPDialog> {
         appStore.setLoading(false);
         if (value.data == null) {
           Navigator.pop(context);
-          launchScreen(context, SignUpScreen(countryCode: widget.phoneNumber!.split(" ").first, userName: widget.phoneNumber!.split(" ").last, socialLogin: true));
+          launchScreen(
+              context,
+              SignUpScreen(
+                  countryCode: widget.phoneNumber!.split(" ").first,
+                  userName: widget.phoneNumber!.split(" ").last,
+                  socialLogin: true));
         } else {
           updatePlayerId();
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
@@ -83,7 +89,8 @@ class OTPDialogState extends State<OTPDialog> {
             launchScreen(context, DashboardScreen(), isNewTask: true);
           } else {
             Navigator.pop(context);
-            launchScreen(context, DocumentsScreen(isShow: true), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+            launchScreen(context, DocumentsScreen(isShow: true),
+                pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           }
         }
       }).catchError((e) {
@@ -106,11 +113,11 @@ class OTPDialogState extends State<OTPDialog> {
 
     log('$otpCode${phoneController.text.trim()}');
 
-    try{
+    try {
       await authService.loginWithOTP(context, number).then((value) {
         //
       });
-    }catch(e){
+    } catch (e) {
       toast(e.toString());
     }
     // await authService.loginWithOTP(context, number).then((value) {
@@ -159,7 +166,8 @@ class OTPDialogState extends State<OTPDialog> {
                       padding: EdgeInsets.zero,
                       initialSelection: otpCode,
                       showCountryOnly: false,
-                      dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                      dialogSize:
+                          Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
                       showFlag: true,
                       showFlagDialog: true,
                       showOnlyCountryWhenClosed: false,
@@ -171,7 +179,8 @@ class OTPDialogState extends State<OTPDialog> {
                       searchDecoration: InputDecoration(
                         focusColor: primaryColor,
                         iconColor: Theme.of(context).dividerColor,
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                        enabledBorder:
+                            UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                         focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
                       ),
                       searchStyle: primaryTextStyle(),
@@ -252,18 +261,18 @@ class OTPDialogState extends State<OTPDialog> {
                 scrollDirection: Axis.horizontal,
                 child: Directionality(
                   textDirection: TextDirection.ltr,
-                    //             child:Pinput(
-                    //               keyboardType: TextInputType.number,
-                    //               controller: otpController,
-                    //               length: 6,
-                    //               onCompleted: (pin) {
-                    //                 verId = pin;
-                    //                 submit();
-                    //               },
-                    // onChanged: (s) {
-                    //     verId = otpController.text;
-                    //   },
-                    //             ),
+                  //             child:Pinput(
+                  //               keyboardType: TextInputType.number,
+                  //               controller: otpController,
+                  //               length: 6,
+                  //               onCompleted: (pin) {
+                  //                 verId = pin;
+                  //                 submit();
+                  //               },
+                  // onChanged: (s) {
+                  //     verId = otpController.text;
+                  //   },
+                  //             ),
 
                   // child: Pinput(
                   //   keyboardType: TextInputType.number,
@@ -308,45 +317,43 @@ class OTPDialogState extends State<OTPDialog> {
                   //     verId = otpController.text;
                   //   },
                   // ),
-                  child:Pinput(
+                  child: Pinput(
                     keyboardType: TextInputType.number,
                     readOnly: false,
                     autofocus: true,
                     length: 6,
-                    onTap: () {
-                    },
+                    onTap: () {},
                     // onClipboardFound: (value) {
                     // otpController.text=value;
                     // },
-                    onLongPress: () {
-
-                    },
-                    cursor: Text("|",style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500),),
-                    focusedPinTheme:  PinTheme(
+                    onLongPress: () {},
+                    cursor: Text(
+                      "|",
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                    ),
+                    focusedPinTheme: PinTheme(
                       width: 40,
                       height: 44,
                       textStyle: TextStyle(
                         fontSize: 18,
                       ),
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
-                          border: Border.all(color:primaryColor)
-                      ),
+                          border: Border.all(color: primaryColor)),
                     ),
                     toolbarEnabled: true,
                     useNativeKeyboard: true,
-                    defaultPinTheme:PinTheme(
+                    defaultPinTheme: PinTheme(
                       width: 40,
                       height: 44,
                       textStyle: TextStyle(
                         fontSize: 18,
                       ),
-                      decoration:  BoxDecoration(
+                      decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
-                          border: Border.all(color:dividerColor)
-                      ),
+                          border: Border.all(color: dividerColor)),
                     ),
                     isCursorAnimationEnabled: true,
                     showCursor: true,
@@ -356,9 +363,9 @@ class OTPDialogState extends State<OTPDialog> {
                     autofillHints: [],
                     controller: otpController,
                     onCompleted: (val) {
-                      otpController.text=val;
-                          verId = val;
-                          submit();
+                      otpController.text = val;
+                      verId = val;
+                      submit();
                     },
                   ),
                   // child: OtpTextField(

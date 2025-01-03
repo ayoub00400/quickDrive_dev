@@ -7,7 +7,7 @@ import '../../utils/Common.dart';
 import '../../utils/Constants.dart';
 import '../../utils/Extensions/app_common.dart';
 import '../../utils/var/var_app.dart';
-import 'DashboardScreen.dart';
+import 'dashboard/dashboard.dart';
 
 class RidesListScreen extends StatefulWidget {
   @override
@@ -27,11 +27,11 @@ class RidesListScreenState extends State<RidesListScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        if(Navigator.canPop(context)){
+      onWillPop: () async {
+        if (Navigator.canPop(context)) {
           return true;
-        }else{
-          launchScreen(getContext, DashboardScreen(),isNewTask: true);
+        } else {
+          launchScreen(getContext, DashboardScreen(), isNewTask: true);
           return false;
         }
       },
@@ -46,13 +46,17 @@ class RidesListScreenState extends State<RidesListScreen> {
               Container(
                 height: 40,
                 margin: EdgeInsets.only(right: 16, left: 16, top: 16),
-                decoration: BoxDecoration(color: Colors.transparent,border: Border.all(color: dividerColor), borderRadius: radius(defaultRadius+2)),
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: dividerColor),
+                    borderRadius: radius(defaultRadius + 2)),
                 child: TabBar(
                   dividerHeight: 0,
                   padding: EdgeInsets.all(2),
                   indicator: BoxDecoration(borderRadius: radius(), color: primaryColor),
                   labelColor: Colors.white,
-                  unselectedLabelColor: primaryColor,indicatorSize: TabBarIndicatorSize.tab,
+                  unselectedLabelColor: primaryColor,
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelStyle: boldTextStyle(color: Colors.white, size: 14),
                   tabs: riderStatus.map((e) {
                     return Tab(

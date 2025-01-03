@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taxi_driver/app/components/OTPDialog.dart';
 import 'package:taxi_driver/app/model/UserDetailModel.dart';
-import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import 'package:taxi_driver/app/view/screens/DocumentsScreen.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
@@ -41,7 +41,9 @@ class AuthServices {
         userCredential = _auth.currentUser;
       }
     } on FirebaseException catch (error) {
-      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE" || error.code == "account-exists-with-different-credential" || error.code == "email-already-in-use") {
+      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE" ||
+          error.code == "account-exists-with-different-credential" ||
+          error.code == "email-already-in-use") {
         await _auth.signInWithEmailAndPassword(email: email!, password: password!).then((value) {
           userCredential = value.user!;
         });
@@ -89,7 +91,7 @@ class AuthServices {
               "email": userModel.email,
               "password": password,
               "player_id": sharedPref.getString(PLAYER_ID).validate(),
-              'user_type':DRIVER,
+              'user_type': DRIVER,
             };
             if (isOtpLogin) {
               appStore.setLoading(false);
@@ -97,7 +99,8 @@ class AuthServices {
               if (sharedPref.getInt(IS_Verified_Driver) == 1) {
                 launchScreen(context, DashboardScreen());
               } else {
-                launchScreen(context, DocumentsScreen(isShow: true), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+                launchScreen(context, DocumentsScreen(isShow: true),
+                    pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
               }
             } else {
               await logInApi(request).then((res) async {
@@ -106,7 +109,8 @@ class AuthServices {
                 if (sharedPref.getInt(IS_Verified_Driver) == 1) {
                   launchScreen(context, DashboardScreen());
                 } else {
-                  launchScreen(context, DocumentsScreen(isShow: true), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+                  launchScreen(context, DocumentsScreen(isShow: true),
+                      pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
                 }
               }).catchError((e) {
                 appStore.setLoading(false);
@@ -150,7 +154,8 @@ class AuthServices {
     });
   }
 
-  Future<void> loginFromFirebaseUser(User currentUser, {LoginResponse? loginDetail, String? fullName, String? fName, String? lName}) async {
+  Future<void> loginFromFirebaseUser(User currentUser,
+      {LoginResponse? loginDetail, String? fullName, String? fName, String? lName}) async {
     UserData userModel = UserData();
 
     if (await userService.isUserExist(loginDetail!.data!.email)) {
@@ -218,7 +223,8 @@ class AuthServices {
         appStore.setLoading(false);
         await showDialog(
           context: context,
-          builder: (context) => AlertDialog(content: OTPDialog(verificationId: verificationId, isCodeSent: true, phoneNumber: phoneNumber)),
+          builder: (context) => AlertDialog(
+              content: OTPDialog(verificationId: verificationId, isCodeSent: true, phoneNumber: phoneNumber)),
           barrierDismissible: false,
         );
       },
@@ -338,12 +344,15 @@ Future<void> loginFromFirebase(User currentUser, String loginType, String? acces
 
   await logInApi(req, isSocialLogin: true).then((value) async {
     AuthServices authService = AuthServices();
-    authService.loginFromFirebaseUser(currentUser, loginDetail: value, fullName: (firstName + lastName).toLowerCase()).then((value) {});
+    authService
+        .loginFromFirebaseUser(currentUser, loginDetail: value, fullName: (firstName + lastName).toLowerCase())
+        .then((value) {});
     Navigator.pop(getContext);
     sharedPref.setString(UID, currentUser.uid);
     await appStore.setUserProfile(currentUser.photoURL.toString());
     if (value.data!.contactNumber.isEmptyOrNull) {
-      launchScreen(getContext, EditProfileScreen(isGoogle: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      launchScreen(getContext, EditProfileScreen(isGoogle: true),
+          isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
     } else {
       if (value.data!.uid.isEmptyOrNull) {
         await updateProfile(
@@ -353,7 +362,8 @@ Future<void> loginFromFirebase(User currentUser, String loginType, String? acces
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
             launchScreen(getContext, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           } else {
-            launchScreen(getContext, DocumentsScreen(isShow: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            launchScreen(getContext, DocumentsScreen(isShow: true),
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           }
         }).catchError((error) {
           log(error.toString());
@@ -363,7 +373,8 @@ Future<void> loginFromFirebase(User currentUser, String loginType, String? acces
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
             launchScreen(getContext, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           } else {
-            launchScreen(getContext, DocumentsScreen(isShow: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            launchScreen(getContext, DocumentsScreen(isShow: true),
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           }
         }).catchError((error) {
           log(error.toString());
@@ -372,7 +383,8 @@ Future<void> loginFromFirebase(User currentUser, String loginType, String? acces
         if (sharedPref.getInt(IS_Verified_Driver) == 1) {
           launchScreen(getContext, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
         } else {
-          launchScreen(getContext, DocumentsScreen(isShow: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          launchScreen(getContext, DocumentsScreen(isShow: true),
+              isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
         }
       }
     }

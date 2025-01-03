@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:taxi_driver/main.dart';
 import 'package:taxi_driver/app/view/screens/DetailScreen.dart';
-import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../Services/RideService.dart';
 import '../../components/RideForWidget.dart';
@@ -86,7 +86,7 @@ class ReviewScreenState extends State<ReviewScreen> {
     appStore.setLoading(false);
     await rideDetail(rideId: widget.rideId).then((value) {
       RideService rideService = RideService();
-      rideService.updateStatusOfRide(rideID:  widget.rideId,req: {'on_rider_stream_api_call': 0});
+      rideService.updateStatusOfRide(rideID: widget.rideId, req: {'on_rider_stream_api_call': 0});
       if (value.payment != null && value.payment!.paymentStatus == PENDING) {
         launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
       } else {
@@ -109,7 +109,7 @@ class ReviewScreenState extends State<ReviewScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(language.riderReview,maxLines: 1, style: boldTextStyle(color: Colors.white)),
+        title: Text(language.riderReview, maxLines: 1, style: boldTextStyle(color: Colors.white)),
       ),
       body: Stack(
         children: [
@@ -129,23 +129,29 @@ class ReviewScreenState extends State<ReviewScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(35),
-                        child: commonCachedNetworkImage(widget.currentData.rider!.profileImage.validate(), fit: BoxFit.fill, height: 70, width: 70),
+                        child: commonCachedNetworkImage(widget.currentData.rider!.profileImage.validate(),
+                            fit: BoxFit.fill, height: 70, width: 70),
                       ),
                       SizedBox(width: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // SizedBox(height: 8),
-                          Text('${widget.currentData.rider!.firstName.validate().capitalizeFirstLetter()} ${widget.currentData.rider!.lastName.validate().capitalizeFirstLetter()}', style: boldTextStyle()),
+                          Text(
+                              '${widget.currentData.rider!.firstName.validate().capitalizeFirstLetter()} ${widget.currentData.rider!.lastName.validate().capitalizeFirstLetter()}',
+                              style: boldTextStyle()),
                           Text(widget.currentData.rider!.email.validate(), style: secondaryTextStyle()),
                         ],
                       ),
                     ],
                   ),
-                  if(widget.currentData.onRideRequest!=null && widget.currentData.onRideRequest!.otherRiderData!=null)
+                  if (widget.currentData.onRideRequest != null &&
+                      widget.currentData.onRideRequest!.otherRiderData != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Rideforwidget(name:widget.currentData.onRideRequest!.otherRiderData!.name.validate(),contact:widget.currentData.onRideRequest!.otherRiderData!.conatctNumber.validate()),
+                      child: Rideforwidget(
+                          name: widget.currentData.onRideRequest!.otherRiderData!.name.validate(),
+                          contact: widget.currentData.onRideRequest!.otherRiderData!.conatctNumber.validate()),
                     ),
                   // Container(
                   //   padding: EdgeInsets.all(8),
@@ -231,7 +237,6 @@ class ReviewScreenState extends State<ReviewScreen> {
                   //     userSkipReviewData();
                   //   },
                   // ),
-
                 ],
               ),
             ),

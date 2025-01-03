@@ -4,7 +4,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import '../../components/ImageSourceDialog.dart';
 import '../../model/ServiceModel.dart';
 import '../../Services/network/RestApis.dart';
@@ -33,7 +33,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   XFile? imageProfile;
-  String? countryCode ;
+  String? countryCode;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -81,10 +81,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       addressController.text = value.data!.address.validate();
       contactNumberController.text = value.data!.contactNumber.validate();
       print("CountryCodeVAL::${value.data!.country_code}");
-      if(value.data!.country_code!=null && value.data!.country_code.toString()!="NULL"){
+      if (value.data!.country_code != null && value.data!.country_code.toString() != "NULL") {
         print("CountryCodeFound::${value.data!.country_code}");
-        countryCode=value.data!.country_code;
-      }else{
+        countryCode = value.data!.country_code;
+      } else {
         print("CountryCode-NOT-Found");
       }
       if (value.data!.userDetail != null) {
@@ -117,7 +117,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       return Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Image.file(File(imageProfile!.path), height: 100, width: 100, fit: BoxFit.fill, alignment: Alignment.center),
+          child: Image.file(File(imageProfile!.path),
+              height: 100, width: 100, fit: BoxFit.fill, alignment: Alignment.center),
         ),
       );
     } else {
@@ -149,7 +150,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> saveProfile() async {
-
     hideKeyboard(context);
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
@@ -158,7 +158,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       await updateProfile(
         uid: sharedPref.getString(UID).toString(),
         file: imageProfile != null ? File(imageProfile!.path.validate()) : null,
-        contactNumber: widget.isGoogle == true ? '${countryCode.validate()}${contactNumberController.text.trim()}' : contactNumberController.text.trim(),
+        contactNumber: widget.isGoogle == true
+            ? '${countryCode.validate()}${contactNumberController.text.trim()}'
+            : contactNumberController.text.trim(),
         address: addressController.text.trim(),
         firstName: firstNameController.text.trim(),
         lastName: lastNameController.text.trim(),
@@ -177,7 +179,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
             launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           } else {
-            launchScreen(context, DocumentsScreen(isShow: true), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+            launchScreen(context, DocumentsScreen(isShow: true),
+                pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           }
         } else {
           // Navigator.pop(context);
@@ -200,7 +203,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         title: Text(language.profile, style: boldTextStyle(color: appTextPrimaryColorWhite)),
       ),
       body: Stack(
@@ -227,19 +229,24 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                               onPressed: () {
                                 showModalBottomSheet(
                                   context: context,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(defaultRadius),
+                                          topRight: Radius.circular(defaultRadius))),
                                   builder: (_) {
                                     return Padding(
                                       padding: MediaQuery.of(context).viewInsets,
                                       child: ImageSourceDialog(
                                         onCamera: () async {
                                           Navigator.pop(context);
-                                          imageProfile = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100);
+                                          imageProfile = await ImagePicker()
+                                              .pickImage(source: ImageSource.camera, imageQuality: 100);
                                           setState(() {});
                                         },
                                         onGallery: () async {
                                           Navigator.pop(context);
-                                          imageProfile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
+                                          imageProfile = await ImagePicker()
+                                              .pickImage(source: ImageSource.gallery, imageQuality: 100);
                                           setState(() {});
                                         },
                                       ),
@@ -266,7 +273,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       toast(language.notChangeEmail);
                     },
                   ),
-                  if (sharedPref.getString(LOGIN_TYPE) != LoginTypeOTP && sharedPref.getString(LOGIN_TYPE) != null) SizedBox(height: 16),
+                  if (sharedPref.getString(LOGIN_TYPE) != LoginTypeOTP && sharedPref.getString(LOGIN_TYPE) != null)
+                    SizedBox(height: 16),
                   if (sharedPref.getString(LOGIN_TYPE) != LoginTypeOTP && sharedPref.getString(LOGIN_TYPE) != null)
                     AppTextField(
                       readOnly: true,
@@ -318,7 +326,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                     padding: EdgeInsets.zero,
                                     initialSelection: countryCode,
                                     showCountryOnly: false,
-                                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                                        MediaQuery.of(context).size.height * 0.6),
                                     showFlag: true,
                                     showFlagDialog: true,
                                     showOnlyCountryWhenClosed: false,
@@ -330,7 +339,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                     searchDecoration: InputDecoration(
                                       focusColor: primaryColor,
                                       iconColor: Theme.of(context).dividerColor,
-                                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                                       focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
                                     ),
                                     searchStyle: primaryTextStyle(),
@@ -357,7 +367,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                           focus: contactFocus,
                           nextFocus: addressFocus,
                           isValidationRequired: true,
-                          enabled: countryCode==null?true:false,
+                          enabled: countryCode == null ? true : false,
                           // readOnly: true,
                           decoration: inputDecoration(
                             context,
@@ -370,7 +380,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                     padding: EdgeInsets.zero,
                                     initialSelection: countryCode,
                                     showCountryOnly: false,
-                                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                                        MediaQuery.of(context).size.height * 0.6),
                                     showFlag: true,
                                     showFlagDialog: true,
                                     showOnlyCountryWhenClosed: false,
@@ -382,7 +393,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                     searchDecoration: InputDecoration(
                                       focusColor: primaryColor,
                                       iconColor: Theme.of(context).dividerColor,
-                                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                                       focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
                                     ),
                                     searchStyle: primaryTextStyle(),
@@ -409,7 +421,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     textFieldType: TextFieldType.ADDRESS,
                     textInputAction: TextInputAction.newline,
                     maxLength: 300,
-                    decoration: inputDecoration(context, label: language.address,counterText: ''),
+                    decoration: inputDecoration(context, label: language.address, counterText: ''),
                   ),
                   if (widget.isGoogle) SizedBox(height: 16),
                   if (widget.isGoogle)

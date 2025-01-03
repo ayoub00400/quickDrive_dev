@@ -2,7 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import 'package:taxi_driver/app/view/screens/SignInScreen.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -26,9 +26,7 @@ class UpdateAppDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return UpgradeAlert(
       barrierDismissible: true,
-      dialogStyle: Platform.isAndroid
-          ? UpgradeDialogStyle.material
-          : UpgradeDialogStyle.cupertino,
+      dialogStyle: Platform.isAndroid ? UpgradeDialogStyle.material : UpgradeDialogStyle.cupertino,
       upgrader: Upgrader(
         // debugLogging: true, // uncomment this line to see what the update process looks like
         // debugDisplayAlways: true, // uncomment this line to see what the update process looks like
@@ -86,16 +84,14 @@ class SplashScreenState extends State<SplashScreen> {
         );
       });
     } else {
-      if (sharedPref.getString(CONTACT_NUMBER).validate().isEmptyOrNull &&
-          appStore.isLoggedIn) {
+      if (sharedPref.getString(CONTACT_NUMBER).validate().isEmptyOrNull && appStore.isLoggedIn) {
         launchScreen(
           context,
           UpdateAppDialog(child: EditProfileScreen(isGoogle: true)),
           isNewTask: true,
           pageRouteAnimation: PageRouteAnimation.Slide,
         );
-      } else if (sharedPref.getString(UID).validate().isEmptyOrNull &&
-          appStore.isLoggedIn) {
+      } else if (sharedPref.getString(UID).validate().isEmptyOrNull && appStore.isLoggedIn) {
         updateProfileUid().then((value) {
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
             launchScreen(
@@ -113,16 +109,14 @@ class SplashScreenState extends State<SplashScreen> {
             );
           }
         });
-      } else if (sharedPref.getInt(IS_Verified_Driver) == 0 &&
-          appStore.isLoggedIn) {
+      } else if (sharedPref.getInt(IS_Verified_Driver) == 0 && appStore.isLoggedIn) {
         launchScreen(
           context,
           UpdateAppDialog(child: SignInScreen()),
           pageRouteAnimation: PageRouteAnimation.Slide,
           isNewTask: true,
         );
-      } else if (sharedPref.getInt(IS_Verified_Driver) == 1 &&
-          appStore.isLoggedIn) {
+      } else if (sharedPref.getInt(IS_Verified_Driver) == 1 && appStore.isLoggedIn) {
         launchScreen(
           context,
           UpdateAppDialog(child: DashboardScreen()),
@@ -142,13 +136,11 @@ class SplashScreenState extends State<SplashScreen> {
 
   Future<void> driverDetail() async {
     if (appStore.isLoggedIn) {
-      await getUserDetail(userId: sharedPref.getInt(USER_ID))
-          .then((value) async {
+      await getUserDetail(userId: sharedPref.getInt(USER_ID)).then((value) async {
         await sharedPref.setInt(IS_ONLINE, value.data!.isOnline!);
         // appStore.isAvailable = value.data!.isAvailable;
         if (value.data!.status == REJECT || value.data!.status == BANNED) {
-          toast(
-              '${language.yourAccountIs} ${value.data!.status}. ${language.pleaseContactSystemAdministrator}');
+          toast('${language.yourAccountIs} ${value.data!.status}. ${language.pleaseContactSystemAdministrator}');
           logout();
         }
         appStore.setUserEmail(value.data!.email.validate());
@@ -189,8 +181,7 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(ic_logo_white,
-                fit: BoxFit.contain, height: 150, width: 150),
+            Image.asset(ic_logo_white, fit: BoxFit.contain, height: 150, width: 150),
             AnimatedTextKit(
               animatedTexts: [
                 ColorizeAnimatedText(

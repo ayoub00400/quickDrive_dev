@@ -16,13 +16,13 @@ import '../../utils/Constants.dart';
 import '../../utils/Extensions/app_common.dart';
 import '../../components/ChatItemWidget.dart';
 import '../../utils/var/var_app.dart';
-import 'DashboardScreen.dart';
+import 'dashboard/dashboard.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserData? userData;
   final int? ride_id;
   final bool? show_history;
-  ChatScreen({this.userData,this.ride_id, this.show_history});
+  ChatScreen({this.userData, this.ride_id, this.show_history});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -37,20 +37,18 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    if(widget.show_history==true){
+    if (widget.show_history == true) {
       chatMessageService = ChatMessageService();
-    }else{
+    } else {
       init();
     }
   }
 
   @override
   void dispose() {
-   try{
-     chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
-   }catch(e){
-
-   }
+    try {
+      chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
+    } catch (e) {}
     super.dispose();
   }
 
@@ -61,13 +59,13 @@ class _ChatScreenState extends State<ChatScreen> {
   );
 
   init() async {
-    try{
+    try {
       id = sharedPref.getString(UID)!;
       mIsEnterKey = sharedPref.getBool(IS_ENTER_KEY).validate();
       // mSelectedImage = sharedPref.getString(SELECTED_WALLPAPER).validate();
       chatMessageService = ChatMessageService();
       chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
-    }catch(e){
+    } catch (e) {
       print("Exception-found-chat-screen->${e}");
     }
     setState(() {});
@@ -101,11 +99,12 @@ class _ChatScreenState extends State<ChatScreen> {
       data.messageType = MessageType.TEXT.name;
     }
 
-    String f_name=sharedPref.getString(FIRST_NAME)??'';
-    String l_name=sharedPref.getString(LAST_NAME)??'';
-    notificationService.sendPushNotifications(
-        f_name==''?
-        sharedPref.getString(USER_NAME)!:f_name+" $l_name", messageCont.text, receiverPlayerId: widget.userData!.playerId).catchError(log);
+    String f_name = sharedPref.getString(FIRST_NAME) ?? '';
+    String l_name = sharedPref.getString(LAST_NAME) ?? '';
+    notificationService
+        .sendPushNotifications(f_name == '' ? sharedPref.getString(USER_NAME)! : f_name + " $l_name", messageCont.text,
+            receiverPlayerId: widget.userData!.playerId)
+        .catchError(log);
     messageCont.clear();
     setState(() {});
     return await chatMessageService.addMessage(data).then((value) async {
@@ -151,11 +150,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        if(Navigator.canPop(context)){
+      onWillPop: () async {
+        if (Navigator.canPop(context)) {
           return true;
-        }else{
-          launchScreen(getContext, DashboardScreen(),isNewTask: true);
+        } else {
+          launchScreen(getContext, DashboardScreen(), isNewTask: true);
           return false;
         }
       },
@@ -166,10 +165,10 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  if(Navigator.canPop(context)){
+                  if (Navigator.canPop(context)) {
                     Navigator.pop(context);
-                  }else{
-                    launchScreen(getContext, DashboardScreen(),isNewTask: true);
+                  } else {
+                    launchScreen(getContext, DashboardScreen(), isNewTask: true);
                   }
                 },
                 child: Padding(
@@ -178,39 +177,44 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               SizedBox(width: 8),
-              if(widget.show_history!=true)
-              ClipRRect(
-                  borderRadius: BorderRadius.all(radiusCircular(20)),
-                  child: commonCachedNetworkImage(widget.userData!.profileImage.validate(),fit: BoxFit.cover,height: 40,width: 40)),
+              if (widget.show_history != true)
+                ClipRRect(
+                    borderRadius: BorderRadius.all(radiusCircular(20)),
+                    child: commonCachedNetworkImage(widget.userData!.profileImage.validate(),
+                        fit: BoxFit.cover, height: 40, width: 40)),
               SizedBox(width: 8),
-              if(widget.show_history!=true)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(widget.userData!.firstName.validate().capitalizeFirstLetter()+" ${widget.userData!.lastName.validate()}", style: TextStyle(color: Colors.white)),
-              ),
-              if(widget.show_history==true)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text("Ride #${widget.ride_id} Messages", style: boldTextStyle(color: Colors.white)),
-              ),
+              if (widget.show_history != true)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                      widget.userData!.firstName.validate().capitalizeFirstLetter() +
+                          " ${widget.userData!.lastName.validate()}",
+                      style: TextStyle(color: Colors.white)),
+                ),
+              if (widget.show_history == true)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text("Ride #${widget.ride_id} Messages", style: boldTextStyle(color: Colors.white)),
+                ),
             ],
           ),
           backgroundColor: primaryColor,
         ),
-        body:
-
-        Stack(
+        body: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: widget.show_history==true?20:76),
+              padding: EdgeInsets.only(bottom: widget.show_history == true ? 20 : 76),
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child:PaginateFirestore(
+              child: PaginateFirestore(
                 reverse: true,
                 isLive: true,
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
-                query: widget.show_history==true?chatMessageService.rideSpecificChatMessagesWithPagination(rideId: widget.ride_id.toString()):chatMessageService.chatMessagesWithPagination(currentUserId: sharedPref.getString(UID), receiverUserId: widget.userData!.uid!),
+                query: widget.show_history == true
+                    ? chatMessageService.rideSpecificChatMessagesWithPagination(rideId: widget.ride_id.toString())
+                    : chatMessageService.chatMessagesWithPagination(
+                        currentUserId: sharedPref.getString(UID), receiverUserId: widget.userData!.uid!),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,
                 onEmpty: Offstage(),
@@ -231,62 +235,62 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
             ),
-            if(widget.show_history!=true)
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Visibility(
-                visible: widget.show_history==true?false:true,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: radius(),
-                    color: Theme.of(context).cardColor,
-                    boxShadow: [
-                      BoxShadow(
-                        spreadRadius: 0.2,
-                        blurRadius: 0.2,
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: messageCont,
-                          decoration: InputDecoration(
-                            focusColor: primaryColor,
-                            border: InputBorder.none,
-                            hintText: language.writeMessage,
-                            hintStyle: secondaryTextStyle(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+            if (widget.show_history != true)
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: Visibility(
+                  visible: widget.show_history == true ? false : true,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: radius(),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          spreadRadius: 0.2,
+                          blurRadius: 0.2,
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: messageCont,
+                            decoration: InputDecoration(
+                              focusColor: primaryColor,
+                              border: InputBorder.none,
+                              hintText: language.writeMessage,
+                              hintStyle: secondaryTextStyle(),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            cursorColor: appStore.isDarkMode ? Colors.white : Colors.black,
+                            focusNode: messageFocus,
+                            textCapitalization: TextCapitalization.sentences,
+                            keyboardType: TextInputType.multiline,
+                            minLines: 1,
+                            style: primaryTextStyle(),
+                            textInputAction: mIsEnterKey ? TextInputAction.send : TextInputAction.newline,
+                            onSubmitted: (s) {
+                              sendMessage();
+                            },
+                            maxLines: 5,
                           ),
-                          cursorColor: appStore.isDarkMode ? Colors.white : Colors.black,
-                          focusNode: messageFocus,
-                          textCapitalization: TextCapitalization.sentences,
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          style: primaryTextStyle(),
-                          textInputAction: mIsEnterKey ? TextInputAction.send : TextInputAction.newline,
-                          onSubmitted: (s) {
+                        ),
+                        inkWellWidget(
+                          child: Icon(Icons.send, color: primaryColor, size: 25),
+                          onTap: () {
                             sendMessage();
                           },
-                          maxLines: 5,
-                        ),
-                      ),
-                      inkWellWidget(
-                        child: Icon(Icons.send, color: primaryColor,size: 25),
-                        onTap: () {
-                          sendMessage();
-                        },
-                      )
-                    ],
+                        )
+                      ],
+                    ),
+                    width: MediaQuery.of(context).size.width,
                   ),
-                  width: MediaQuery.of(context).size.width,
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),

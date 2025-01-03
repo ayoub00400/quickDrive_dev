@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import 'package:taxi_driver/app/view/screens/LanguageScreen.dart';
 import 'package:taxi_driver/app/utils/Constants.dart';
 import 'package:taxi_driver/app/utils/Extensions/LiveStream.dart';
@@ -98,8 +98,7 @@ class SignInScreenState extends State<SignInScreen> {
         await logInApi(req).then((value) async {
           _userModel = value.data!;
           await _auth
-              .signInWithEmailAndPassword(
-                  email: emailController.text, password: passController.text)
+              .signInWithEmailAndPassword(email: emailController.text, password: passController.text)
               .then((value) async {
             sharedPref.setString(UID, value.user!.uid);
             updateProfileUid();
@@ -110,15 +109,12 @@ class SignInScreenState extends State<SignInScreen> {
                   sharedPref.setDouble(LONGITUDE, value.longitude);
                 });
               });
-              launchScreen(context, DashboardScreen(),
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+              launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
               // if (sharedPref.getInt(IS_ONLINE) == 1) {
               // } else {}
             } else {
               launchScreen(context, DocumentsScreen(isShow: true),
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+                  isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
             }
             appStore.isLoading = false;
           }).catchError((e) async {
@@ -141,13 +137,10 @@ class SignInScreenState extends State<SignInScreen> {
                     sharedPref.setDouble(LONGITUDE, value.longitude);
                   });
                 });
-                launchScreen(context, DashboardScreen(),
-                    isNewTask: true,
-                    pageRouteAnimation: PageRouteAnimation.Slide);
+                launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
               } else {
                 launchScreen(context, DocumentsScreen(isShow: true),
-                    isNewTask: true,
-                    pageRouteAnimation: PageRouteAnimation.Slide);
+                    isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
               }
             }
             //toast(e.toString());
@@ -168,10 +161,8 @@ class SignInScreenState extends State<SignInScreen> {
 
   Future<void> appSetting() async {
     await getAppSettingApi().then((value) {
-      if (value.privacyPolicyModel!.value != null)
-        privacyPolicy = value.privacyPolicyModel!.value;
-      if (value.termsCondition!.value != null)
-        termsCondition = value.termsCondition!.value;
+      if (value.privacyPolicyModel!.value != null) privacyPolicy = value.privacyPolicyModel!.value;
+      if (value.termsCondition!.value != null) termsCondition = value.termsCondition!.value;
     }).catchError((error) {
       log(error.toString());
     });
@@ -214,9 +205,8 @@ class SignInScreenState extends State<SignInScreen> {
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.light,
-            statusBarBrightness: Brightness.dark),
+        systemOverlayStyle:
+            SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarBrightness: Brightness.dark),
       ),
       // appBar: AppBar(),
       body: Stack(
@@ -247,20 +237,14 @@ class SignInScreenState extends State<SignInScreen> {
                     ],
                   ),
                   SizedBox(height: context.statusBarHeight + 16),
-                  ClipRRect(
-                      borderRadius: radius(50),
-                      child:
-                          Image.asset(ic_taxi_logo, width: 100, height: 100)),
+                  ClipRRect(borderRadius: radius(50), child: Image.asset(ic_taxi_logo, width: 100, height: 100)),
                   SizedBox(height: 16),
                   Text(language.welcome, style: boldTextStyle(size: 22)),
                   RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(
-                            text: '${language.signcontinue}',
-                            style: primaryTextStyle(size: 14)),
-                        TextSpan(
-                            text: ' 🚚', style: primaryTextStyle(size: 20)),
+                        TextSpan(text: '${language.signcontinue}', style: primaryTextStyle(size: 14)),
+                        TextSpan(text: ' 🚚', style: primaryTextStyle(size: 20)),
                       ],
                     ),
                   ),
@@ -281,8 +265,7 @@ class SignInScreenState extends State<SignInScreen> {
                     autoFocus: false,
                     textFieldType: TextFieldType.PASSWORD,
                     errorThisFieldRequired: language.thisFieldRequired,
-                    decoration:
-                        inputDecoration(context, label: language.password),
+                    decoration: inputDecoration(context, label: language.password),
                   ),
                   SizedBox(height: 16),
                   Row(
@@ -294,23 +277,18 @@ class SignInScreenState extends State<SignInScreen> {
                             height: 18.0,
                             width: 18.0,
                             child: Checkbox(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               activeColor: primaryColor,
                               value: mIsCheck,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: radius(4)),
+                              shape: RoundedRectangleBorder(borderRadius: radius(4)),
                               onChanged: (v) async {
                                 mIsCheck = v!;
                                 if (!mIsCheck) {
                                   sharedPref.remove(REMEMBER_ME);
                                 } else {
-                                  await sharedPref.setBool(
-                                      REMEMBER_ME, mIsCheck);
-                                  await sharedPref.setString(
-                                      USER_EMAIL, emailController.text);
-                                  await sharedPref.setString(
-                                      USER_PASSWORD, passController.text);
+                                  await sharedPref.setBool(REMEMBER_ME, mIsCheck);
+                                  await sharedPref.setString(USER_EMAIL, emailController.text);
+                                  await sharedPref.setString(USER_PASSWORD, passController.text);
                                 }
 
                                 setState(() {});
@@ -323,19 +301,16 @@ class SignInScreenState extends State<SignInScreen> {
                               mIsCheck = !mIsCheck;
                               setState(() {});
                             },
-                            child: Text(language.rememberMe,
-                                style: primaryTextStyle(size: 14)),
+                            child: Text(language.rememberMe, style: primaryTextStyle(size: 14)),
                           ),
                         ],
                       ),
                       inkWellWidget(
                         onTap: () {
                           launchScreen(context, ForgotPasswordScreen(),
-                              pageRouteAnimation:
-                                  PageRouteAnimation.SlideBottomTop);
+                              pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                         },
-                        child: Text(language.forgotPassword,
-                            style: primaryTextStyle()),
+                        child: Text(language.forgotPassword, style: primaryTextStyle()),
                       ),
                     ],
                   ),
@@ -346,12 +321,10 @@ class SignInScreenState extends State<SignInScreen> {
                         height: 18,
                         width: 18,
                         child: Checkbox(
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           activeColor: primaryColor,
                           value: isAcceptedTc,
-                          shape:
-                              RoundedRectangleBorder(borderRadius: radius(4)),
+                          shape: RoundedRectangleBorder(borderRadius: radius(4)),
                           onChanged: (v) async {
                             isAcceptedTc = v!;
                             setState(() {});
@@ -363,48 +336,33 @@ class SignInScreenState extends State<SignInScreen> {
                         child: RichText(
                           text: TextSpan(
                             children: [
+                              TextSpan(text: language.iAgreeToThe + " ", style: primaryTextStyle(size: 12)),
                               TextSpan(
-                                  text: language.iAgreeToThe + " ",
-                                  style: primaryTextStyle(size: 12)),
-                              TextSpan(
-                                text:
-                                    language.termsConditions.splitBefore(' &'),
-                                style: boldTextStyle(
-                                    color: primaryColor, size: 14),
+                                text: language.termsConditions.splitBefore(' &'),
+                                style: boldTextStyle(color: primaryColor, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    if (termsCondition != null &&
-                                        termsCondition!.isNotEmpty) {
+                                    if (termsCondition != null && termsCondition!.isNotEmpty) {
                                       launchScreen(
                                           context,
                                           TermsConditionScreen(
-                                              title: language.termsConditions,
-                                              subtitle: termsCondition),
-                                          pageRouteAnimation:
-                                              PageRouteAnimation.Slide);
+                                              title: language.termsConditions, subtitle: termsCondition),
+                                          pageRouteAnimation: PageRouteAnimation.Slide);
                                     } else {
                                       toast(language.txtURLEmpty);
                                     }
                                   },
                               ),
-                              TextSpan(
-                                  text: ' & ',
-                                  style: primaryTextStyle(size: 12)),
+                              TextSpan(text: ' & ', style: primaryTextStyle(size: 12)),
                               TextSpan(
                                 text: language.privacyPolicy,
-                                style: boldTextStyle(
-                                    color: primaryColor, size: 14),
+                                style: boldTextStyle(color: primaryColor, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    if (privacyPolicy != null &&
-                                        privacyPolicy!.isNotEmpty) {
-                                      launchScreen(
-                                          context,
-                                          TermsConditionScreen(
-                                              title: language.privacyPolicy,
-                                              subtitle: privacyPolicy),
-                                          pageRouteAnimation:
-                                              PageRouteAnimation.Slide);
+                                    if (privacyPolicy != null && privacyPolicy!.isNotEmpty) {
+                                      launchScreen(context,
+                                          TermsConditionScreen(title: language.privacyPolicy, subtitle: privacyPolicy),
+                                          pageRouteAnimation: PageRouteAnimation.Slide);
                                     } else {
                                       toast(language.txtURLEmpty);
                                     }
@@ -456,10 +414,7 @@ class SignInScreenState extends State<SignInScreen> {
                   onTap: () {
                     hideKeyboard(context);
                     launchScreen(
-                        context,
-                        SignUpScreen(
-                            privacyPolicyUrl: privacyPolicy,
-                            termsConditionUrl: termsCondition));
+                        context, SignUpScreen(privacyPolicyUrl: privacyPolicy, termsConditionUrl: termsCondition));
                   },
                   child: Text(language.signUp, style: boldTextStyle()),
                 ),
@@ -515,11 +470,8 @@ class SignInScreenState extends State<SignInScreen> {
               },
               child: Container(
                 padding: EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    border: Border.all(color: dividerColor),
-                    borderRadius: radius(defaultRadius)),
-                child: Image.asset(ic_mobile,
-                    fit: BoxFit.cover, height: 30, width: 30),
+                decoration: BoxDecoration(border: Border.all(color: dividerColor), borderRadius: radius(defaultRadius)),
+                child: Image.asset(ic_mobile, fit: BoxFit.cover, height: 30, width: 30),
               ),
             ),
             if (Platform.isIOS) SizedBox(width: 12),
@@ -528,9 +480,7 @@ class SignInScreenState extends State<SignInScreen> {
                 onTap: () async {
                   appleLoginApi();
                 },
-                child: Padding(
-                    padding: EdgeInsets.only(bottom: 4.0),
-                    child: socialWidgetComponent(img: ic_apple)),
+                child: Padding(padding: EdgeInsets.only(bottom: 4.0), child: socialWidgetComponent(img: ic_apple)),
               ),
           ],
         ),
@@ -541,9 +491,7 @@ class SignInScreenState extends State<SignInScreen> {
   Widget socialWidgetComponent({required String img, bool? isMobile = false}) {
     return Container(
       padding: EdgeInsets.all(6),
-      decoration: BoxDecoration(
-          border: Border.all(color: dividerColor),
-          borderRadius: radius(defaultRadius)),
+      decoration: BoxDecoration(border: Border.all(color: dividerColor), borderRadius: radius(defaultRadius)),
       child: Image.asset(img, fit: BoxFit.cover, height: 30, width: 30),
     );
   }

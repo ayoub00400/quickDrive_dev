@@ -22,7 +22,7 @@ import '../model/RideDetailModel.dart';
 import '../model/UserDetailModel.dart';
 import '../Services/network/RestApis.dart';
 import '../view/screens/ChatScreen.dart';
-import '../view/screens/DashboardScreen.dart';
+import '../view/screens/dashboard/dashboard.dart';
 import '../view/screens/DocumentsScreen.dart';
 import '../view/screens/RidesListScreen.dart';
 import 'Colors.dart';

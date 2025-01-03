@@ -21,7 +21,7 @@ import '../../utils/Common.dart';
 import '../../utils/Extensions/ConformationDialog.dart';
 import '../../utils/Images.dart';
 import '../../utils/var/var_app.dart';
-import 'DashboardScreen.dart';
+import 'dashboard/dashboard.dart';
 import 'RideHistoryScreen.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -100,9 +100,7 @@ class DetailScreenState extends State<DetailScreen> {
   Future<void> orderDetailApi() async {
     appStore.setLoading(true);
     await rideDetail(
-            rideId: currentData!.payment != null
-                ? currentData!.payment!.rideRequestId
-                : currentData!.onRideRequest!.id)
+            rideId: currentData!.payment != null ? currentData!.payment!.rideRequestId : currentData!.onRideRequest!.id)
         .then((value) {
       appStore.setLoading(false);
       riderModel = value.data;
@@ -120,8 +118,7 @@ class DetailScreenState extends State<DetailScreen> {
             Duration(seconds: 3),
             () {
               launchScreen(context, DashboardScreen(),
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                  isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               isPaymentDone = false;
               // setState(() {});
             },
@@ -213,8 +210,7 @@ class DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.detailScreen,
-            style: boldTextStyle(color: Colors.white)),
+        title: Text(language.detailScreen, style: boldTextStyle(color: Colors.white)),
       ),
       body: StreamBuilder(
           stream: rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
@@ -231,10 +227,8 @@ class DetailScreenState extends State<DetailScreen> {
                   },
                 );
               }
-              List<FRideBookingModel> data = snap.data!.docs
-                  .map((e) => FRideBookingModel.fromJson(
-                      e.data() as Map<String, dynamic>))
-                  .toList();
+              List<FRideBookingModel> data =
+                  snap.data!.docs.map((e) => FRideBookingModel.fromJson(e.data() as Map<String, dynamic>)).toList();
               if (data.length != 0) {
                 if (data[0].paymentType == CASH &&
                     currentData != null &&
@@ -244,12 +238,10 @@ class DetailScreenState extends State<DetailScreen> {
                   currentRideRequest();
                 }
                 if (data[0].tips == 1 && data[0].onStreamApiCall == 0) {
-                  rideService.updateStatusOfRide(
-                      rideID: data[0].rideId, req: {"on_stream_api_call": 1});
+                  rideService.updateStatusOfRide(rideID: data[0].rideId, req: {"on_stream_api_call": 1});
                   currentRideRequest();
                 }
-                if (data[0].paymentStatus == PAYMENT_PAID &&
-                    data[0].status == COMPLETED) {
+                if (data[0].paymentStatus == PAYMENT_PAID && data[0].status == COMPLETED) {
                   if (isPaymentDone != true) {
                     isPaymentDone = true;
                     paymentSuccessShown = true;
@@ -258,9 +250,7 @@ class DetailScreenState extends State<DetailScreen> {
                       () {
                         isPaymentDone = false;
                         launchScreen(context, DashboardScreen(),
-                            isNewTask: true,
-                            pageRouteAnimation:
-                                PageRouteAnimation.SlideBottomTop);
+                            isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                         // if(currentScreen==false) return;
                         // currentScreen=false;
                         // orderDetailApi();
@@ -282,10 +272,8 @@ class DetailScreenState extends State<DetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               addressComponent(),
-                              if (riderModel!.otherRiderData != null)
-                                SizedBox(height: 12),
-                              if (riderModel!.otherRiderData != null)
-                                riderDataComponent(),
+                              if (riderModel!.otherRiderData != null) SizedBox(height: 12),
+                              if (riderModel!.otherRiderData != null) riderDataComponent(),
                               SizedBox(height: 12),
                               paymentDetail(),
                               SizedBox(height: 12),
@@ -304,8 +292,7 @@ class DetailScreenState extends State<DetailScreen> {
                                   padding: EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.circular(defaultRadius),
+                                    borderRadius: BorderRadius.circular(defaultRadius),
                                     boxShadow: [
                                       BoxShadow(
                                           color: primaryColor.withOpacity(0.4),
@@ -316,18 +303,13 @@ class DetailScreenState extends State<DetailScreen> {
                                   ),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Lottie.asset(paymentSuccessful,
-                                          width: 120,
-                                          height: 120,
-                                          fit: BoxFit.contain),
+                                      Lottie.asset(paymentSuccessful, width: 120, height: 120, fit: BoxFit.contain),
                                       Text(
                                         "${language.paymentSuccess}",
-                                        style: boldTextStyle(
-                                            color: Colors.green, size: 24),
+                                        style: boldTextStyle(color: Colors.green, size: 24),
                                       )
                                     ],
                                   )),
@@ -383,9 +365,7 @@ class DetailScreenState extends State<DetailScreen> {
   Widget addressComponent() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.transparent,
-          border: Border.all(color: dividerColor.withOpacity(0.5)),
-          borderRadius: radius()),
+          color: Colors.transparent, border: Border.all(color: dividerColor.withOpacity(0.5)), borderRadius: radius()),
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,8 +377,7 @@ class DetailScreenState extends State<DetailScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Ionicons.calendar,
-                        color: textSecondaryColorGlobal, size: 16),
+                    Icon(Ionicons.calendar, color: textSecondaryColorGlobal, size: 16),
                     SizedBox(width: 4),
                     Expanded(
                       child: Padding(
@@ -442,14 +421,10 @@ class DetailScreenState extends State<DetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (riderModel!.startTime != null)
-                          Text(
-                              riderModel!.startTime != null
-                                  ? printDate(riderModel!.startTime!)
-                                  : '',
+                          Text(riderModel!.startTime != null ? printDate(riderModel!.startTime!) : '',
                               style: secondaryTextStyle(size: 12)),
                         if (riderModel!.startTime != null) SizedBox(height: 4),
-                        Text(riderModel!.startAddress.validate(),
-                            style: primaryTextStyle(size: 14)),
+                        Text(riderModel!.startAddress.validate(), style: primaryTextStyle(size: 14)),
                       ],
                     ),
                   ),
@@ -479,14 +454,10 @@ class DetailScreenState extends State<DetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (riderModel!.endTime != null)
-                          Text(
-                              riderModel!.endTime != null
-                                  ? printDate(riderModel!.endTime!)
-                                  : '',
+                          Text(riderModel!.endTime != null ? printDate(riderModel!.endTime!) : '',
                               style: secondaryTextStyle(size: 12)),
                         if (riderModel!.endTime != null) SizedBox(height: 4),
-                        Text(riderModel!.endAddress.validate(),
-                            style: primaryTextStyle(size: 14)),
+                        Text(riderModel!.endAddress.validate(), style: primaryTextStyle(size: 14)),
                       ],
                     ),
                   ),
@@ -531,8 +502,7 @@ class DetailScreenState extends State<DetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border:
-            Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+        border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
         borderRadius: radius(),
       ),
       padding: EdgeInsets.all(12),
@@ -545,8 +515,7 @@ class DetailScreenState extends State<DetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.via, style: secondaryTextStyle()),
-              Text(paymentStatus(riderModel!.paymentType.validate()),
-                  style: boldTextStyle()),
+              Text(paymentStatus(riderModel!.paymentType.validate()), style: boldTextStyle()),
             ],
           ),
           SizedBox(height: 8),
@@ -555,9 +524,7 @@ class DetailScreenState extends State<DetailScreen> {
             children: [
               Text(language.status, style: secondaryTextStyle()),
               Text(paymentStatus(riderModel!.paymentStatus.validate()),
-                  style: boldTextStyle(
-                      color: paymentStatusColor(
-                          riderModel!.paymentStatus.validate()))),
+                  style: boldTextStyle(color: paymentStatusColor(riderModel!.paymentStatus.validate()))),
             ],
           ),
         ],
@@ -569,8 +536,7 @@ class DetailScreenState extends State<DetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border:
-            Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+        border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
         borderRadius: radius(),
       ),
       padding: EdgeInsets.all(12),
@@ -655,31 +621,26 @@ class DetailScreenState extends State<DetailScreen> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.transparent,
-            border: Border.all(
-                color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+            border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
             borderRadius: radius(),
           ),
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(language.riderInformation.capitalizeFirstLetter(),
-                  style: boldTextStyle()),
+              Text(language.riderInformation.capitalizeFirstLetter(), style: boldTextStyle()),
               SizedBox(height: 12),
               Row(
                 children: [
                   Icon(Ionicons.person_outline, size: 18),
                   SizedBox(width: 8),
-                  Text(riderModel!.otherRiderData!.name.validate(),
-                      style: primaryTextStyle()),
+                  Text(riderModel!.otherRiderData!.name.validate(), style: primaryTextStyle()),
                 ],
               ),
               SizedBox(height: 10),
               InkWell(
                 onTap: () {
-                  launchUrl(
-                      Uri.parse(
-                          'tel:${riderModel!.otherRiderData!.conatctNumber.validate()}'),
+                  launchUrl(Uri.parse('tel:${riderModel!.otherRiderData!.conatctNumber.validate()}'),
                       mode: LaunchMode.externalApplication);
                 },
                 child: Row(
@@ -687,8 +648,7 @@ class DetailScreenState extends State<DetailScreen> {
                   children: [
                     Icon(Icons.call_sharp, size: 18, color: Colors.green),
                     SizedBox(width: 8),
-                    Text(riderModel!.otherRiderData!.conatctNumber.validate(),
-                        style: primaryTextStyle())
+                    Text(riderModel!.otherRiderData!.conatctNumber.validate(), style: primaryTextStyle())
                   ],
                 ),
               ),
@@ -699,11 +659,9 @@ class DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget totalCountString(
-      {String? title, String? amount, bool? isTotal = false, double? space}) {
-    String totalAmount = appStore.currencyPosition == LEFT
-        ? '${appStore.currencyCode} $amount'
-        : '$amount ${appStore.currencyCode}';
+  Widget totalCountString({String? title, String? amount, bool? isTotal = false, double? space}) {
+    String totalAmount =
+        appStore.currencyPosition == LEFT ? '${appStore.currencyCode} $amount' : '$amount ${appStore.currencyCode}';
     return Padding(
       padding: EdgeInsets.only(bottom: space ?? 0),
       child: Row(
@@ -712,13 +670,9 @@ class DetailScreenState extends State<DetailScreen> {
         children: [
           Expanded(
               child: Text(title!,
-                  style: isTotal == true
-                      ? boldTextStyle(color: Colors.green, size: 18)
-                      : secondaryTextStyle())),
+                  style: isTotal == true ? boldTextStyle(color: Colors.green, size: 18) : secondaryTextStyle())),
           Text(totalAmount,
-              style: isTotal == true
-                  ? boldTextStyle(color: Colors.green, size: 18)
-                  : boldTextStyle(size: 14)),
+              style: isTotal == true ? boldTextStyle(color: Colors.green, size: 18) : boldTextStyle(size: 14)),
         ],
       ),
     );
