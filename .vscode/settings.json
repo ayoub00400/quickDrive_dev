@@ -2,7 +2,8 @@
     "conventionalCommits.scopes": [
         "background service ",
         "all app",
-        "controller"
+        "controller",
+        "dashboardScreen"
     ],
     "cSpell.words": [
         "Dachboard"

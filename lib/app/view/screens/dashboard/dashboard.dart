@@ -52,6 +52,7 @@ import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:taxi_driver/app/utils/Extensions/app_textfield.dart';
 
 import 'package:taxi_driver/app/utils/Extensions/context_extensions.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/widgets/top_widget.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -2100,7 +2101,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               top: context.statusBarHeight + 8,
               right: 14,
               left: 14,
-              child: topWidget(),
+              child: topWidget( context, scaffoldKey: scaffoldKey, onTap: () => scaffoldKey.currentState!.openDrawer()),
             ),
 
             // myLocationWidget(),
@@ -2151,172 +2152,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     Placemark place = placemarks[0];
 
     endLocationAddress = '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
-  }
-
-  Widget topWidget() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            inkWellWidget(
-              onTap: () => scaffoldKey.currentState!.openDrawer(),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 4,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                      height: 4,
-                      width: 16,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                      height: 4,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Text(
-              'Quick Cargoo , ${sharedPref.getString(FIRST_NAME).validate().capitalizeFirstLetter()}!',
-              style: boldTextStyle(size: 20),
-            ),
-            inkWellWidget(
-              onTap: () {
-                launchScreen(
-                  context,
-                  EditProfileScreen(isGoogle: false),
-                  pageRouteAnimation: PageRouteAnimation.Slide,
-                );
-              },
-              child: ClipOval(
-                child: commonCachedNetworkImage(
-                  appStore.userProfile.validate(),
-                  height: 55,
-                  width: 55,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        Row(
-          children: [
-            // HNA TA3 EARNING
-
-            // inkWellWidget(
-
-            //   onTap: () => launchScreen(getContext, EarningScreen()),
-
-            //   child: Container(
-
-            //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-
-            //     decoration: BoxDecoration(
-
-            //       color: Colors.white,
-
-            //       border: Border.all(color: primaryColor),
-
-            //       borderRadius: BorderRadius.circular(50),
-
-            //       boxShadow: defaultBoxShadow(),
-
-            //     ),
-
-            //     child: Text(
-
-            //       printAmount(totalEarnings.toString()),
-
-            //       textAlign: TextAlign.center,
-
-            //       style: boldTextStyle(size: 16, color: primaryColor),
-
-            //     ),
-
-            //   ),
-
-            // ),
-
-            Spacer(),
-
-            inkWellWidget(
-              onTap: () => launchScreen(getContext, NotificationScreen()),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: primaryColor),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Icon(
-                  Ionicons.notifications_outline,
-                  color: primaryColor,
-                  size: 26,
-                ),
-              ),
-            ),
-
-            SizedBox(width: 8),
-          ],
-        ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            inkWellWidget(
-              onTap: () {
-                moveMap(
-                  context,
-                  Prediction(
-                    lat: driverLocation!.latitude.toString(),
-                    lng: driverLocation!.longitude.toString(),
-                  ),
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: primaryColor),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Icon(
-                  Icons.my_location_sharp,
-                  color: primaryColor,
-                  size: 26,
-                ),
-              ),
-            ),
-            SizedBox(width: 8),
-          ],
-        ),
-      ],
-    );
   }
 
   Widget myLocationWidget() {
@@ -2396,7 +2231,6 @@ class DashboardScreenState extends State<DashboardScreen> {
                     await NotificationWithSoundService.initializeService();
                   }
                   isOnLine = !isOnLine;
-
                   setState(() {});
                 });
               },
