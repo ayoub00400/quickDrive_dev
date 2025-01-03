@@ -13,7 +13,7 @@ import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../main.dart';
 import '../model/LoginResponse.dart';
-import '../network/RestApis.dart';
+import 'network/RestApis.dart';
 import '../utils/var/var_app.dart';
 import '../view/screens/EditProfileScreen.dart';
 import '../utils/Common.dart';

@@ -3,7 +3,7 @@ import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../main.dart';
 import '../model/AdditionalFeesList.dart';
 import '../model/ExtraChargeRequestModel.dart';
-import '../network/RestApis.dart';
+import '../Services/network/RestApis.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/Extensions/AppButtonWidget.dart';

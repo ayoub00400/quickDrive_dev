@@ -9,7 +9,7 @@ import '../../Services/UserServices.dart';
 import '../../language/BaseLanguage.dart';
 import '../../model/FileModel.dart';
 import '../../model/LanguageDataModel.dart';
-import '../../store/AppStore.dart';
+import '../store/AppStore.dart';
 import '../Colors.dart';
 
 AppStore appStore = AppStore();

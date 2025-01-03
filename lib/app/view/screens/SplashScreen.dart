@@ -8,7 +8,7 @@ import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:upgrader/upgrader.dart';
 import '../../../main.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Constants.dart';
 import '../../utils/Extensions/app_common.dart';
 import '../../utils/var/var_app.dart';

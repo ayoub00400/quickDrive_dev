@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:taxi_driver/app/view/screens/DashboardScreen.dart';
 import '../../components/ImageSourceDialog.dart';
 import '../../model/ServiceModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Extensions/AppButtonWidget.dart';
 import '../../utils/Extensions/StringExtensions.dart';

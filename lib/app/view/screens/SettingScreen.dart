@@ -5,7 +5,7 @@ import 'package:taxi_driver/app/utils/Common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../main.dart';
 import '../../model/SettingModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Constants.dart';
 import '../../utils/Extensions/LiveStream.dart';

@@ -7,7 +7,7 @@ import 'package:taxi_driver/app/Services/AuthService.dart';
 import 'package:taxi_driver/main.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../model/ServiceModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Common.dart';
 import '../../utils/Constants.dart';

@@ -20,7 +20,7 @@ import 'package:taxi_driver/app/utils/Images.dart';
 import '../../main.dart';
 import '../model/RideDetailModel.dart';
 import '../model/UserDetailModel.dart';
-import '../network/RestApis.dart';
+import '../Services/network/RestApis.dart';
 import '../view/screens/ChatScreen.dart';
 import '../view/screens/DashboardScreen.dart';
 import '../view/screens/DocumentsScreen.dart';

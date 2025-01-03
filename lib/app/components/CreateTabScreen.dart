@@ -7,7 +7,7 @@ import 'package:taxi_driver/app/model/RiderModel.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
 import '../../main.dart';
-import '../network/RestApis.dart';
+import '../Services/network/RestApis.dart';
 import '../utils/var/var_app.dart';
 import '../view/screens/RideDetailScreen.dart';
 import '../utils/Colors.dart';

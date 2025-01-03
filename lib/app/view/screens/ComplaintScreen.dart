@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:taxi_driver/app/network/RestApis.dart';
+import 'package:taxi_driver/app/Services/network/RestApis.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
 import '../../../main.dart';

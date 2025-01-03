@@ -133,6 +133,7 @@ dependencies:
   flutter_foreground_task: ^3.0.0
   audioplayers: ^6.1.0
   flutter_local_notifications: ^18.0.1
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:

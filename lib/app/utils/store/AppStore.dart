@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-import '../language/AppLocalizations.dart';
-import '../language/BaseLanguage.dart';
-import '../../main.dart';
-import '../model/CurrentRequestModel.dart';
-import '../model/LanguageDataModel.dart';
-import '../model/SettingModel.dart';
-import '../utils/Colors.dart';
-import '../utils/Constants.dart';
-import '../utils/Extensions/app_common.dart';
-import '../utils/var/var_app.dart';
+import '../../language/AppLocalizations.dart';
+import '../../language/BaseLanguage.dart';
+import '../../../main.dart';
+import '../../model/CurrentRequestModel.dart';
+import '../../model/LanguageDataModel.dart';
+import '../../model/SettingModel.dart';
+import '../Colors.dart';
+import '../Constants.dart';
+import '../Extensions/app_common.dart';
+import '../var/var_app.dart';
 
 part 'AppStore.g.dart';
 

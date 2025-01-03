@@ -5,11 +5,11 @@ import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
-import '../../main.dart';
-import '../utils/Common.dart';
-import '../utils/Constants.dart';
-import '../utils/Extensions/app_common.dart';
-import '../utils/var/var_app.dart';
+import '../../../main.dart';
+import '../../utils/Common.dart';
+import '../../utils/Constants.dart';
+import '../../utils/Extensions/app_common.dart';
+import '../../utils/var/var_app.dart';
 import 'RestApis.dart';
 
 final _chuckerHttpClient = ChuckerHttpClient(http.Client());

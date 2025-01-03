@@ -70,7 +70,6 @@ import '../../components/ExtraChargesWidget.dart';
 
 import '../../components/RideForWidget.dart';
 
-import '../../../main.dart';
 
 import '../../model/CurrentRequestModel.dart';
 
@@ -84,7 +83,7 @@ import '../../model/UserDetailModel.dart';
 
 import '../../model/WalletDetailModel.dart';
 
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 
 import '../../utils/Colors.dart';
 

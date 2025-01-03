@@ -17,7 +17,7 @@ import '../../Services/AuthService.dart';
 import '../../Services/bg_notification_service.dart';
 import '../../components/OTPDialog.dart';
 import '../../model/UserDetailModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Common.dart';
 import '../../utils/Extensions/AppButtonWidget.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../main.dart';
-import '../network/RestApis.dart';
+import '../Services/network/RestApis.dart';
 import '../utils/var/var_app.dart';
 import '../view/screens/BankInfoScreen.dart';
 import '../view/screens/EarningScreen.dart';

@@ -16,7 +16,7 @@ import '../../model/CurrentRequestModel.dart';
 import '../../model/FRideBookingModel.dart';
 import '../../model/RideHistory.dart';
 import '../../model/RiderModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Common.dart';
 import '../../utils/Extensions/ConformationDialog.dart';
 import '../../utils/Images.dart';

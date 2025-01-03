@@ -7,7 +7,7 @@ import 'package:taxi_driver/app/view/screens/WithDrawScreen.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
 import '../../../../main.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../model/UserDetailModel.dart';
 import '../../model/WalletListModel.dart';
 import '../../utils/Colors.dart';

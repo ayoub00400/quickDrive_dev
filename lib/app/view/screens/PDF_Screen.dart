@@ -10,7 +10,7 @@ import 'package:pdfx/pdfx.dart';
 import 'package:pdfx/pdfx.dart' as pdf;
 import '../../../main.dart';
 import 'package:http/http.dart' as http;
-import '../../network/NetworkUtils.dart';
+import '../../Services/network/NetworkUtils.dart';
 import '../../utils/Common.dart';
 import '../../utils/Extensions/app_common.dart';
 import '../../utils/var/var_app.dart';

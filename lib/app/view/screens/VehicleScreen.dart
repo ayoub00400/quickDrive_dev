@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:taxi_driver/main.dart';
 import 'package:taxi_driver/app/model/UserDetailModel.dart';
-import 'package:taxi_driver/app/network/RestApis.dart';
+import 'package:taxi_driver/app/Services/network/RestApis.dart';
 import 'package:taxi_driver/app/utils/Colors.dart';
 import 'package:taxi_driver/app/utils/Extensions/AppButtonWidget.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';

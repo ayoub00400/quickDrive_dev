@@ -9,9 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:taxi_driver/main.dart';
 
-import '../../../utils/constants.dart';
-import '../../Services/bg_notification_service.dart';
+ import '../../Services/bg_notification_service.dart';
 import '../../model/LanguageDataModel.dart';
+import '../Constants.dart';
 import '../DataProvider.dart';
 import '../FirebaseOption.dart';
 import '../var/var_app.dart';

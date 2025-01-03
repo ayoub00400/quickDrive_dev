@@ -17,9 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_driver/app/Services/sound_service.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
-import '../../../utils/constants.dart';
 import '../../main.dart';
 import '../model/FRideBookingModel.dart';
+import '../utils/Constants.dart';
 import '../utils/FirebaseOption.dart';
 import 'RideService.dart';
 

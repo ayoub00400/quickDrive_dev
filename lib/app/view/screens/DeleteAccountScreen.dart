@@ -4,7 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 import '../../Services/AuthService.dart';
 import '../../../main.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Common.dart';
 import '../../utils/Constants.dart';

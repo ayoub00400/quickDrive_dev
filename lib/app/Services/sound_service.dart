@@ -16,12 +16,11 @@ import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_driver/app/Services/RideService.dart';
 import 'package:taxi_driver/app/Services/bg_notification_service.dart';
-import 'package:taxi_driver/app/network/RestApis.dart';
+import 'package:taxi_driver/app/Services/network/RestApis.dart';
 
-import '../../../utils/constants.dart';
-import '../../main.dart';
+ import '../../main.dart';
 import '../model/RideDetailModel.dart';
-import '../network/NetworkUtils.dart';
+import 'network/NetworkUtils.dart';
 import '../utils/Common.dart';
 import '../utils/Extensions/app_common.dart';
 

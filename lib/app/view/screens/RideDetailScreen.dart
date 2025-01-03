@@ -6,7 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:taxi_driver/app/model/ComplaintModel.dart';
 import 'package:taxi_driver/app/model/DriverRatting.dart';
 import 'package:taxi_driver/app/model/RideHistory.dart';
-import 'package:taxi_driver/app/network/RestApis.dart';
+import 'package:taxi_driver/app/Services/network/RestApis.dart';
 import 'package:taxi_driver/app/view/screens/RideHistoryScreen.dart';
 import 'package:taxi_driver/app/utils/Colors.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
@@ -14,7 +14,6 @@ import 'package:taxi_driver/app/utils/Extensions/app_common.dart';
 import 'package:taxi_driver/app/utils/Images.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../components/AboutWidget.dart';
 import '../../components/GenerateInvoice.dart';
 import '../../../main.dart';
 import '../../model/CurrentRequestModel.dart';

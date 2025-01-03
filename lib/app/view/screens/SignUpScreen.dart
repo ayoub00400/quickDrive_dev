@@ -12,7 +12,7 @@ import 'package:taxi_driver/app/model/state_model.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import 'package:taxi_driver/app/utils/Extensions/context_extensions.dart';
 import '../../model/ServiceModel.dart';
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Common.dart';
 import '../../utils/Constants.dart';

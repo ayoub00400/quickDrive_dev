@@ -4,7 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../main.dart';
 import '../model/EarningListModelWeek.dart';
-import '../network/RestApis.dart';
+import '../Services/network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Extensions/app_common.dart';

@@ -5,7 +5,7 @@ import 'package:taxi_driver/app/model/ContactNumberListModel.dart';
 import 'package:taxi_driver/app/utils/Constants.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
-import '../../network/RestApis.dart';
+import '../../Services/network/RestApis.dart';
 import '../../../main.dart';
 import '../../utils/Colors.dart';
 import '../../utils/Common.dart';
