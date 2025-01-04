@@ -48,6 +48,7 @@ class DashboardController  extends   GetxController{
   num totalEarnings = 0;
   num extraChargeAmount = 0;
   double totalDistance = 0.0;
+   int countdown = 0;
 
 // String
   String? otpCheck;
@@ -63,6 +64,8 @@ class DashboardController  extends   GetxController{
   Timer? timerUpdateLocation;
 
   Timer? timerData;
+  Timer? countdownTimer;
+
 
 
 //  LatLng
@@ -227,6 +230,11 @@ emitStateInt(tag ,  valu){
      totalDistance = valu;
      update();
      break;
+   case "countdown":
+     countdown = valu;
+     update();
+     break;
+ 
  }
 
 }
@@ -269,6 +277,10 @@ emitStateTime(tag ,  valu){
      break;
    case "timerData":
      timerData = valu;
+     update();
+     break;
+   case "countdownTimer":
+     countdownTimer = valu;
      update();
      break;
    

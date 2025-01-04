@@ -287,6 +287,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
     init();
   }
+  
 
   void init() async {
    var _messageSubscription =_dashboardController.messageController.stream.listen((message) {
@@ -1291,7 +1292,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
     // FlutterRingtonePlayer().stop();
 
-    countdownTimer?.cancel(); // Clean up timer
+   _dashboardController. countdownTimer?.cancel(); // Clean up timer
 
     if (_dashboardController.timerData != null) {
      _dashboardController. timerData!.cancel();
@@ -1463,7 +1464,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                               ? Builder(builder: (context) {
                                   // if (sendPrice == true && countdown == 0)
                                   //   return SizedBox();
-                                  double progress = countdown / 60;
+                                  double progress = controller. countdown / 60;
               
                                   return SizedBox.expand(
                                     child: Stack(
@@ -1607,7 +1608,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                                                                   ),
                                                                 _bookingForView( controller ),
                                                                 SizedBox(height: 8),
-                                                                (countdown > 0)
+                                                                (controller. countdown > 0)
                                                                     ? Stack(
                                                                         alignment: Alignment.center,
                                                                         children: [
@@ -1631,7 +1632,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                                                                           ),
                                                                           Center(
                                                                             child: Text(
-                                                                              'تم ارسال العرض (${countdown}s)',
+                                                                              'تم ارسال العرض (${controller. countdown}s)',
                                                                               style: boldTextStyle(
                                                                                 size: 16,
                                                                                 color: Colors.black, // Ensure text contrast
@@ -2040,37 +2041,38 @@ DashboardController _dashboardController=  Get.put(DashboardController());
           );
   }
 
-  int countdown = 0;
-  Timer? countdownTimer;
-
+ 
   // Method to start the countdown
 
 
   //  TODO remove setState
   void startCountdown() {
     developer.log("startCountdown");
-    developer.log("countdown $countdown");
-    setState(() {
-      countdown = 60; // Start from 60 seconds
-    });
+    developer.log("countdown ${_dashboardController. countdown}");
+      // countdown = 60; // Start from 60 seconds
+      _dashboardController.emitStateInt( "countdown" , 60); 
 
-    countdownTimer?.cancel(); // Cancel any existing timer
+  _dashboardController.  countdownTimer?.cancel(); // Cancel any existing timer
 
-    countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (countdown == 0) {
+  var  countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_dashboardController.countdown == 0) {
         timer.cancel();
         cancelRideTimeOut();
       } else {
-        setState(() {
-          countdown--;
-        });
+        // setState(() {
+          // countdown--;
+          _dashboardController.emitStateInt( "countdown" , _dashboardController. countdown -1);
+        // });
       }
     });
+
+    _dashboardController.emitStateTime( "countdownTimer" , countdownTimer);
   }
 
   void cancelTimer() {
-    countdownTimer?.cancel();
-    countdown = 0;
+   _dashboardController. countdownTimer?.cancel();
+    // countdown = 0;
+    _dashboardController.emitStateInt( "countdown" , 0);
   }
 
   Future<void> getUserLocation() async {
