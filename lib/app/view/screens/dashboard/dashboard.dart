@@ -105,6 +105,14 @@ import '../../../utils/Images.dart';
 
 import '../../../utils/var/var_app.dart';
 import '../LocationPermissionScreen.dart';
+import 'function/cancelTimer.dart';
+import 'function/fetchTotalEarning.dart';
+import 'function/initPusher.dart';
+import 'function/init_dashboard.dart';
+import 'function/setPolyLines.dart';
+import 'function/startLocationTracking.dart';
+import 'function/stop_audio.dart';
+import 'function/userDetail.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -145,111 +153,14 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
  
 
-  void stopAudio() async {
-    await  _dashboardController.player.stop(); // Stops the sound immediately
  
-  }
 
 
-  void fetchTotalEarning() async {
-    await totalEarning().then((value) {
-      developer.log('value.toString() = ${value.toString()}');
-
-      // totalEarnings = value.totalEarnings!;
-               _dashboardController.emitStateInt( "totalEarnings" , value.totalEarnings!); 
-
-      setState(() {});
-    }).catchError((error) {
-      log(error.toString());
-    });
-  }
-
-  PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
 
   // init pusher
 
-  void initPusher() async {
-    try {
-      await pusher.init(
-        apiKey: '5ceccff5f1a761c6b515',
-        cluster: 'ap2',
-        onConnectionStateChange: onConnectionStateChange,
-        onError: onError,
-        onSubscriptionSucceeded: onSubscriptionSucceeded,
-        onEvent: onEvent,
-        onSubscriptionError: onSubscriptionError,
-        onDecryptionFailure: onDecryptionFailure,
-        onMemberAdded: onMemberAdded,
-        onMemberRemoved: onMemberRemoved,
-      );
-
-      await pusher.subscribe(channelName: 'ride');
-
-      await pusher.connect();
-
-      developer.log('connected');
-    } catch (e) {
-      developer.log("ERROR: $e");
-    }
-  }
-
-  void onEvent(PusherEvent event) {
-    if (event.data != null) {
-      Map<String, dynamic> data = jsonDecode(event.data.toString());
-      if (data['action'] != null && data['action'] == 'acceptOffer') {
-        if (data['data'] != null &&
-            data['data'] != {} &&
-            data['data'].isNotEmpty &&
-            int.parse(data['data'][0]['driver_id'].toString()) == sharedPref.getInt(USER_ID)) getCurrentRequest();
-
-        {
-          getCurrentRequest();
-        }
-      }
-
-      if (data['action'] != null && data['action']['action'] == 'new_ride_request') {
-        if (data['action']['drivers_id'] != null) {
-          if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
-            developer.log('Audio play condition met.');
-            // audioPlayWithLimit();
-            cancelTimer();
-               _dashboardController.emitStateBool( "sendPrice" , false); 
-            setState(() {});
-          }
-        }
-      }
-    } else {
-      developer.log('condition false');
-    }
-  }
-
-  void onConnectionStateChange(dynamic currentState, dynamic previousState) {
-    developer.log("Connection: $currentState");
-  }
-
-  void onError(String message, int? code, dynamic e) {
-    developer.log("onError: $message code: $code exception: $e");
-  }
-
-  void onSubscriptionSucceeded(String channelName, dynamic data) {
-    developer.log("onSubscriptionSucceeded: $channelName data: $data");
-  }
-
-  void onSubscriptionError(String message, dynamic e) {
-    developer.log("onSubscriptionError: $message Exception: $e");
-  }
-
-  void onDecryptionFailure(String event, String reason) {
-    developer.log("onDecryptionFailure: $event reason: $reason");
-  }
-
-  void onMemberAdded(String channelName, PusherMember member) {
-    developer.log("onMemberAdded: $channelName member: $member");
-  }
-
-  void onMemberRemoved(String channelName, PusherMember member) {
-    developer.log("onMemberRemoved: $channelName member: $member");
-  }
+  
+ 
 
   @override
   void initState() {
@@ -288,60 +199,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     init();
   }
   
-
-  void init() async {
-   var _messageSubscription =_dashboardController.messageController.stream.listen((message) {
-      getCurrentRequest();
-    });
-
-        Get.put( DashboardController()).emitStateLatLng( "messageSubscription" ,_messageSubscription);
-
-
-    await checkPermission();
-
-    Geolocator.getPositionStream().listen((event) {
-      // driverLocation = LatLng(event.latitude, event.longitude);
-      Get.put( DashboardController()).emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
- 
-      setState(() {});
-    });
-
-    LiveStream().on(CHANGE_LANGUAGE, (p0) {
-      setState(() {});
-    });
-
-    walletCheckApi();
-
-  //  var _driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
-  _dashboardController.emitStateBitmap( "driverIcon" ,  await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
-
-    getCurrentRequest();
-
-    // mqttForUser();
-
-    // setTimeData();
-
-    // polylinePoints = PolylinePoints();
-
-      _dashboardController.emitStatePolyline( "polylinePoints" ,   PolylinePoints());
-
-
-    getSettings();
-
-    // driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
-  _dashboardController.emitStateBitmap( "driverIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
-    // sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
-  _dashboardController.emitStateBitmap( "sourceIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon));
-
-    // destinationIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
-  _dashboardController.emitStateBitmap( "destinationIcon" ,  await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon));
-
-    if (appStore.isLoggedIn) {
-      startLocationTracking();
-    }
-
-    setSourceAndDestinationIcons();
-  }
 
   Future<void> locationPermission() async {
     var serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
@@ -576,116 +433,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     );
               _dashboardController.emitStateTime( "timerData" , timerDataValue ); 
 
-  }
-
-  getSettings() async {
-    return await getAppSetting().then((value) {
-      if (value.walletSetting != null) {
-        developer.log("walletSetting:::${value.walletSetting}");
-
-        value.walletSetting!.forEach((element) {
-          if (element.key == PRESENT_TOPUP_AMOUNT) {
-            appStore.setWalletPresetTopUpAmount(element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
-          }
-
-          if (element.key == MIN_AMOUNT_TO_ADD) {
-            if (element.value != null) appStore.setMinAmountToAdd(int.parse(element.value!));
-          }
-
-          if (element.key == MAX_AMOUNT_TO_ADD) {
-            if (element.value != null) appStore.setMaxAmountToAdd(int.parse(element.value!));
-          }
-        });
-      }
-
-      if (value.rideSetting != null) {
-        developer.log("rideSetting:::${value.rideSetting}");
-
-        value.rideSetting!.forEach((element) {
-          if (element.key == PRESENT_TIP_AMOUNT) {
-            appStore.setWalletTipAmount(element.value ?? PRESENT_TOP_UP_AMOUNT_CONST);
-          }
-
-          if (element.key == MAX_TIME_FOR_DRIVER_SECOND) {
-            // startTime = int.parse(element.value ?? '60');
-              _dashboardController.emitStateInt( "startTime" ,int.parse(element.value ?? '60')); 
-
-          }
-
-          if (element.key == APPLY_ADDITIONAL_FEE) {
-            appStore.setExtraCharges(element.value ?? '0');
-          }
-        });
-      }
-
-      if (value.currencySetting != null) {
-        developer.log("currencySetting:::${value.currencySetting}");
-
-        appStore.setCurrencyCode(value.currencySetting!.symbol ?? currencySymbol);
-
-        appStore.setCurrencyName(value.currencySetting!.code ?? currencyNameConst);
-
-        appStore.setCurrencyPosition(value.currencySetting!.position ?? LEFT);
-      }
-
-      if (value.settingModel != null) {
-        developer.log("settingModel:::${value.settingModel}");
-
-        appStore.settingModel = value.settingModel!;
-      }
-
-      if (value.settingModel!.helpSupportUrl != null) {
-        developer.log("settingModel:::${value.settingModel!.helpSupportUrl}");
-
-        appStore.mHelpAndSupport = value.settingModel!.helpSupportUrl!;
-      }
-
-      if (value.privacyPolicyModel!.value != null) {
-        developer.log("settingModel:::${value.privacyPolicyModel!.value}");
-
-        appStore.privacyPolicy = value.privacyPolicyModel!.value!;
-      }
-
-      if (value.termsCondition!.value != null) {
-        developer.log("settingModel:::${value.termsCondition!.value}");
-
-        appStore.termsCondition = value.termsCondition!.value!;
-      }
-
-      if (value.walletSetting != null && value.walletSetting!.isNotEmpty) {
-        developer.log("walletSetting:::${value.walletSetting}");
-
-        appStore.setWalletPresetTopUpAmount(
-            value.walletSetting!.firstWhere((element) => element.key == PRESENT_TOPUP_AMOUNT).value ??
-                PRESENT_TOP_UP_AMOUNT_CONST);
-      }
-
-     _dashboardController. mapAdd(
-        Marker(
-          markerId: MarkerId("driver"),
-          position:_dashboardController. driverLocation!,
-          icon:  _dashboardController.driverIcon,
-          infoWindow: InfoWindow(title: ''),
-        ),
-      );
-
-      setState(() {});
-    }).catchError((error, stack) {
-      FirebaseCrashlytics.instance.recordError("setting_update_issue::" + error.toString(), stack, fatal: true);
-
-      log('${error.toString()}');
-    });
-  }
-
-  Future<void> setSourceAndDestinationIcons() async {
-    // driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
-    _dashboardController.emitStateBitmap( "driverIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
-
-    if ( _dashboardController.servicesListData != null)
-     _dashboardController. servicesListData!.status != IN_PROGRESS
-          ?  _dashboardController.sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon)
-          :  _dashboardController.destinationIcon =
-              await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
   }
 
   onMapCreated(GoogleMapController controller) {
@@ -1078,50 +825,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     });
   }
 
-  Future<void> setPolyLines() async {
-    // if (servicesListData != null) _polyLines.clear();
-
-    try {
-      var result = await  _dashboardController.polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey: GOOGLE_MAP_API_KEY,
-
-        request: PolylineRequest(
-            origin: PointLatLng(_dashboardController.driverLocation!.latitude, _dashboardController.driverLocation!.longitude),
-            destination:_dashboardController. servicesListData!.status != IN_PROGRESS
-                ? PointLatLng(double.parse(_dashboardController.servicesListData!.startLatitude.validate()),
-                    double.parse(_dashboardController.servicesListData!.startLongitude.validate()))
-                : PointLatLng(double.parse(_dashboardController.servicesListData!.endLatitude.validate()),
-                    double.parse(_dashboardController.servicesListData!.endLongitude.validate())),
-            mode: TravelMode.driving),
  
-      );
-
-      if (result.points.isNotEmpty) {
-     _dashboardController.   polylineCoordinates.clear();
-
-        result.points.forEach((element) {
-        _dashboardController.  polylineCoordinatesAdd(LatLng(element.latitude, element.longitude));
-        });
-
-       _dashboardController.  polyLines.clear();
-
-       _dashboardController.  polyLines.add(
-          Polyline(
-            visible: true,
-            width: 5,
-            startCap: Cap.roundCap,
-            endCap: Cap.roundCap,
-            polylineId: PolylineId('poly'),
-            color: polyLineColor,
-            points:   _dashboardController.polylineCoordinates,
-          ),
-        );
-         _dashboardController. update();
-
-        setState(() {});
-      }
-    } catch (e) {}
-  }
 
   Future<void> setMapPins() async {
     try {
@@ -1179,107 +883,9 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
   /// Get Current Location
 
-  Future<void> startLocationTracking() async {
-     _dashboardController. polyLines.clear();
-
-     _dashboardController. polylineCoordinates.clear();
-
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) async {
-      log("=====Location:::${value.latitude}:::${value.longitude}");
-      await Geolocator.isLocationServiceEnabled().then((value) async {
-        log("======Location:::${value}");
-        if (_dashboardController.  locationEnable) {
-          final LocationSettings locationSettings =
-              LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 100, timeLimit: Duration(seconds: 30));
-
-       var   positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((event) async {
-            DateTime? d = DateTime.tryParse(sharedPref.getString("UPDATE_CALL").toString());
-
-            if (d != null && DateTime.now().difference(d).inSeconds > 30) {
-              if (appStore.isLoggedIn) {
-                // driverLocation = LatLng(event.latitude, event.longitude);
-                 _dashboardController.emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
-                Map req = {
-                  "latitude":  _dashboardController.driverLocation!.latitude.toString(),
-                  "longitude": _dashboardController. driverLocation!.longitude.toString(),
-                };
-
-                sharedPref.setDouble(LATITUDE,  _dashboardController.driverLocation!.latitude);
-
-                sharedPref.setDouble(LONGITUDE, _dashboardController. driverLocation!.longitude);
-
-                await updateStatus(req).then((value) {
-                  setState(() {});
-                }).catchError((error) {
-                  log(error);
-                });
-
-                stutasCount = 0;
-
-                setMapPins();
-
-                if (_dashboardController.servicesListData != null) setPolyLines();
-              }
-
-              sharedPref.setString("UPDATE_CALL", DateTime.now().toString());
-            } else if (d == null) {
-              sharedPref.setString("UPDATE_CALL", DateTime.now().toString());
-            }
-
-            
-          }
-          
-          , onError: (error) {
-           _dashboardController. positionStream.cancel();
-          });
-                 _dashboardController.emitStateStream( "positionStream" , positionStream);
-
-        }
-      });
-    }).catchError((error) {
-      Future.delayed(
-        Duration(seconds: 1),
-        () {
-          launchScreen(navigatorKey.currentState!.overlay!.context, LocationPermissionScreen());
-
-          // Navigator.push(context, MaterialPageRoute(builder: (_) => LocationPermissionScreen()));
-        },
-      );
-    });
-  }
-
-  Future<void> userDetail({int? driverId}) async {
-    await getUserDetail(userId: driverId).then((value) {
-      appStore.setLoading(false);
-
-      // riderData = value.data!;
-      _dashboardController.emitStateUser( "riderData" , value.data!);
-
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-    });
-  }
 
   /// WalletCheck
 
-  Future<void> walletCheckApi() async {
-    await walletDetailApi().then((value) async {
-      if (value.totalAmount! >= value.minAmountToGetRide!) {
-        //
-      } else {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return emptyWalletAlertDialog();
-          },
-        );
-      }
-    }).catchError((e) {
-      log("Error $e");
-    });
-  }
 
   @override
   void setState(fn) {
@@ -2069,11 +1675,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     _dashboardController.emitStateTime( "countdownTimer" , countdownTimer);
   }
 
-  void cancelTimer() {
-   _dashboardController. countdownTimer?.cancel();
-    // countdown = 0;
-    _dashboardController.emitStateInt( "countdown" , 0);
-  }
+
 
   Future<void> getUserLocation() async {
     List<Placemark> placemarks = await placemarkFromCoordinates( _dashboardController. driverLocation!.latitude,_dashboardController. driverLocation!.longitude);
@@ -2506,55 +2108,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
           ],
         ),
       ],
-    );
-  }
-
-  Widget emptyWalletAlertDialog() {
-    return AlertDialog(
-      content: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(walletGIF, height: 150, fit: BoxFit.contain),
-            SizedBox(height: 8),
-            Text(language.lessWalletAmountMsg, style: primaryTextStyle(), textAlign: TextAlign.justify),
-            SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: AppButtonWidget(
-                    padding: EdgeInsets.zero,
-                    color: Colors.red,
-                    text: language.no,
-                    textColor: Colors.white,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: AppButtonWidget(
-                    padding: EdgeInsets.zero,
-                    text: language.yes,
-                    onTap: () {
-                      if (appStore.mHelpAndSupport != null) {
-                        Navigator.pop(context);
-
-                        launchUrl(Uri.parse(appStore.mHelpAndSupport!));
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
     );
   }
 

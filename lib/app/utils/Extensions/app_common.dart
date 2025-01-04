@@ -77,7 +77,7 @@ void toast(String? value, {ToastGravity? gravity, length = Toast.LENGTH_SHORT, C
 }
 
 /// Launch a new screen
-Future<T?> launchScreen<T>(BuildContext context, Widget child, {bool isNewTask = false, PageRouteAnimation? pageRouteAnimation, Duration? duration}) async {
+Future<T?> launchScreen<T>(  context, Widget child, {bool isNewTask = false, PageRouteAnimation? pageRouteAnimation, Duration? duration}) async {
   if (isNewTask) {
     return await Navigator.of(context).pushAndRemoveUntil(
       buildPageRoute(child, pageRouteAnimation, duration),

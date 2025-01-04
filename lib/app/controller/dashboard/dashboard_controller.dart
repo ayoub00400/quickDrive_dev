@@ -232,7 +232,7 @@ emitStateInt(tag ,  valu){
      break;
    case "countdown":
      countdown = valu;
-     update();
+    //  update();
      break;
  
  }
