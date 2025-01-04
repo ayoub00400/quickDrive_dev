@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 // import 'package:just_audio/just_audio.dart';
 
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
@@ -71,6 +72,7 @@ import '../../../components/ExtraChargesWidget.dart';
 
 import '../../../components/RideForWidget.dart';
 
+import '../../../controller/dashboard/dashboard_controller.dart';
 import '../../../model/CurrentRequestModel.dart';
 
 import '../../../model/ExtraChargeRequestModel.dart';
@@ -148,7 +150,6 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   List<ExtraChargeRequestModel> extraChargeList = [];
 
-  num extraChargeAmount = 0;
 
   late StreamSubscription<Position> positionStream;
 
@@ -162,23 +163,22 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   // bool timerRunning = false;
 // TODO: TO STATE CUBt
-  bool timeSetCalled = false;
+  // bool timeSetCalled = false;
 
-  bool isOnLine = true;
+  // bool isOnLine = true;
 
-  bool locationEnable = true;
+  // bool locationEnable = true;
 
-  bool current_screen = true;
+  // bool current_screen = true;
 
-  // bool requestDataFetching = false;
+  // // bool requestDataFetching = false;
 
-  bool sendPrice = false;
+  // bool sendPrice = false;
 
   String? otpCheck;
 
   String endLocationAddress = '';
 
-  double totalDistance = 0.0;
 
   late BitmapDescriptor driverIcon;
 
@@ -186,17 +186,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   late BitmapDescriptor sourceIcon;
 
-  int reqCheckCounter = 0;
-
-  int startTime = 60;
-
-  int end = 0;
-
-  int duration = 0;
-
-  int count = 0;
-
-  int riderId = 0;
+ 
 
   var estimatedTotalPrice;
 
@@ -210,11 +200,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   Timer? timerData;
 
-  bool rideCancelDetected = false;
 
-  bool rideDetailsFetching = false;
-
-  bool requestDataFetching = false;
 
   // CountdownController? timerController;
 
@@ -247,13 +233,13 @@ class DashboardScreenState extends State<DashboardScreen> {
     // _timer?.cancel(); // Cancel the timer if it's still active
   }
 
-  num totalEarnings = 0;
 
   void fetchTotalEarning() async {
     await totalEarning().then((value) {
       developer.log('value.toString() = ${value.toString()}');
 
-      totalEarnings = value.totalEarnings!;
+      // totalEarnings = value.totalEarnings!;
+               Get.put(DashboardController()).changeStateInt( "totalEarnings" , value.totalEarnings!); 
 
       setState(() {});
     }).catchError((error) {
@@ -310,7 +296,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             developer.log('Audio play condition met.');
             // audioPlayWithLimit();
             cancelTimer();
-            sendPrice = false;
+               Get.put(DashboardController()).changeStateBool( "sendPrice" , false); 
             setState(() {});
           }
         }
@@ -356,12 +342,16 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     if (sharedPref.getInt(IS_ONLINE) == 1) {
       setState(() {
-        isOnLine = true;
+               Get.put(DashboardController()).changeStateBool( "isOnLine" , true); 
+
+        // isOnLine = true;
       });
     } else {
-      setState(() {
-        isOnLine = false;
-      });
+               Get.put(DashboardController()).changeStateBool( "isOnLine" , false); 
+
+      // setState(() {
+      //   isOnLine = false;
+      // });
     }
 
     locationPermission();
@@ -428,7 +418,8 @@ class DashboardScreenState extends State<DashboardScreen> {
   Future<void> locationPermission() async {
     serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       if (status == ServiceStatus.disabled) {
-        locationEnable = false;
+        // locationEnable = false;
+               Get.put(DashboardController()).changeStateBool( "locationEnable" , false); 
 
         Future.delayed(
           Duration(seconds: 1),
@@ -437,8 +428,8 @@ class DashboardScreenState extends State<DashboardScreen> {
           },
         );
       } else if (status == ServiceStatus.enabled) {
-        locationEnable = true;
-
+        // locationEnable = true;
+                Get.put(DashboardController()).changeStateBool( "locationEnable" , true); 
         startLocationTracking();
 
         if (locationScreenKey.currentContext != null) {
@@ -461,9 +452,11 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         sharedPref.remove(IS_TIME2);
 
-        duration = startTime;
+        // duration = startTime;
+               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
 
-        timeSetCalled = false;
+
+     Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false);  
 
         servicesListData = null;
 
@@ -483,12 +476,13 @@ class DashboardScreenState extends State<DashboardScreen> {
       } catch (e) {}
 
       Map req = {
-        "id": riderId,
+        "id":      Get.put(DashboardController()).riderId,
         "driver_id": sharedPref.getInt(USER_ID),
         "is_accept": "0",
       };
 
-      duration = startTime;
+      // duration = startTime;
+               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
 
       rideRequestResPond(request: req).then((value) {
         stopAudio();
@@ -506,25 +500,29 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> setTimeData() async {
     if (sharedPref.getString(IS_TIME2) == null) {
-      duration = startTime;
+      // duration = startTime;
+               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: startTime)).toString());
+      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds:  Get.put(DashboardController()).startTime)).toString());
 
       startTimer(tag: "line222");
     } else {
-      duration = DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds;
+               Get.put(DashboardController()).changeStateInt( "duration" ,DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds); 
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: duration)).toString());
+      // duration = DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds;
 
-      if (duration < 0) {
+      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: Get.put(DashboardController()). duration)).toString());
+
+      if (Get.put(DashboardController()).duration < 0) {
         await sharedPref.remove(IS_TIME2);
 
         sharedPref.remove(ON_RIDE_MODEL);
 
-        if (sharedPref.getString("RIDE_ID_IS") == null || sharedPref.getString("RIDE_ID_IS") == "$riderId") {
+        if (sharedPref.getString("RIDE_ID_IS") == null || sharedPref.getString("RIDE_ID_IS") == "${Get.put(DashboardController()).riderId}") {
           return cancelRideTimeOut();
         } else {
-          duration = startTime;
+          // duration = startTime;
+               Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).startTime); 
 
           // setState(() {});
 
@@ -536,9 +534,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         // return cancelRideTimeOut();
       }
 
-      sharedPref.setString("RIDE_ID_IS", "$riderId");
+      sharedPref.setString("RIDE_ID_IS", "${Get.put(DashboardController()).riderId}");
 
-      if (duration > 0) {
+      if (Get.put(DashboardController()).duration > 0) {
         if (sharedPref.getString(ON_RIDE_MODEL) != null) {
           servicesListData = OnRideRequest.fromJson(jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
 
@@ -580,9 +578,9 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         // timer.tick>=duration
 
-        print("CheckTimerValues::duration${duration} : timer:${timer.tick}");
+        // print("CheckTimerValues::duration${duration} : timer:${timer.tick}");
 
-        if (duration == 0) {
+        if (Get.put(DashboardController()).duration == 0) {
           // timerRunning=false;
 
           try {
@@ -592,7 +590,8 @@ class DashboardScreenState extends State<DashboardScreen> {
           // if (duration == 0) {
 
           Future.delayed(Duration(seconds: 1)).then((value) {
-            duration = startTime;
+            // duration = startTime;
+               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()).startTime); 
 
             try {
               // FlutterRingtonePlayer().stop();
@@ -600,7 +599,8 @@ class DashboardScreenState extends State<DashboardScreen> {
               timer.cancel();
             } catch (e) {}
 
-            timeSetCalled = false;
+            // timeSetCalled = false;
+                Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false); 
 
             sharedPref.remove(ON_RIDE_MODEL);
 
@@ -615,9 +615,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             // isOnLine=false;
 
             setState(() {});
+              //  Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).startTime); 
 
             Map req = {
-              "id": riderId,
+              "id": Get.put(DashboardController()). riderId,
               "driver_id": sharedPref.getInt(USER_ID),
               "is_accept": "0",
             };
@@ -633,7 +634,8 @@ class DashboardScreenState extends State<DashboardScreen> {
         } else {
           if (timerData != null && timerData!.isActive) {
             setState(() {
-              duration--;
+              Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).duration-1); 
+              // duration--;
             });
           }
         }
@@ -670,7 +672,9 @@ class DashboardScreenState extends State<DashboardScreen> {
           }
 
           if (element.key == MAX_TIME_FOR_DRIVER_SECOND) {
-            startTime = int.parse(element.value ?? '60');
+            // startTime = int.parse(element.value ?? '60');
+              Get.put(DashboardController()).changeStateInt( "startTime" ,int.parse(element.value ?? '60')); 
+
           }
 
           if (element.key == APPLY_ADDITIONAL_FEE) {
@@ -813,27 +817,34 @@ class DashboardScreenState extends State<DashboardScreen> {
           }
 
           if (servicesListData!.status == COMPLETED && servicesListData!.isDriverRated == 0) {
-            if (current_screen == false) return;
+            if (Get.put(DashboardController()).current_screen == false) 
+            
+            
+            return;
+ 
+            // current_screen = false;
+                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
 
-            current_screen = false;
 
             // value.onRideRequest.otherRiderData
 
             launchScreen(context, ReviewScreen(rideId: value.onRideRequest!.id!, currentData: value),
                 pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           } else if (value.payment != null && value.payment!.paymentStatus == PENDING) {
-            if (current_screen == false) return;
+            if (Get.put(DashboardController()).current_screen == false) return;
 
-            current_screen = false;
+            // current_screen = false;
+                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
 
             launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           }
         }
       } else {
         if (value.payment != null && value.payment!.paymentStatus == PENDING) {
-          if (current_screen == false) return;
+          if (Get.put(DashboardController()).current_screen == false) return;
 
-          current_screen = false;
+          // current_screen = false;
+                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
 
           launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         }
@@ -859,7 +870,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     print("TEST3::${servicesListData}");
     //if (requestDataFetching == true) return;
 
-    requestDataFetching = true;
+    // requestDataFetching = true;
+                Get.put(DashboardController()).changeStateBool( "requestDataFetching" , true); 
+    
 
     if (servicesListData != null && servicesListData!.status == NEW_RIDE_REQUESTED) {
       return;
@@ -919,7 +932,9 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         servicesListData = ride;
 
-        rideDetailsFetching = false;
+        // rideDetailsFetching = false;
+                Get.put(DashboardController()).changeStateBool( "rideDetailsFetching" , false); 
+
 
         ride.otherRiderData;
 
@@ -928,19 +943,23 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
 
-        riderId = servicesListData!.id!;
+        // riderId = servicesListData!.id!;
+              Get.put(DashboardController()).changeStateInt( "riderId" ,servicesListData!.id!); 
+
 
         setState(() {});
 
         setTimeData();
       }
 
-      requestDataFetching = false;
+      // requestDataFetching = false;
+                Get.put(DashboardController()).changeStateBool( "requestDataFetching" , false); 
 
       setMapPins();
     }).catchError((error, stack) {
       print("TEST981");
-      rideDetailsFetching = false;
+      // rideDetailsFetching = false;
+                Get.put(DashboardController()).changeStateBool( "rideDetailsFetching" , false); 
 
       FirebaseCrashlytics.instance.recordError("pop_up_issue::" + error.toString(), stack, fatal: true);
 
@@ -994,7 +1013,9 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     await sendTripPriceToRider(request: req).then((value) {
       stopAudio();
-      sendPrice = true;
+      // sendPrice = true;
+         Get.put(DashboardController()).changeStateBool( "sendPrice" ,true); 
+      // Get.put(dependency)
       startCountdown();
       appStore.setLoading(false);
 
@@ -1005,7 +1026,9 @@ class DashboardScreenState extends State<DashboardScreen> {
       getCurrentRequest();
     }).catchError((error) {
       stopAudio();
-      sendPrice = true;
+                Get.put(DashboardController()).changeStateBool( "sendPrice" , true); 
+
+      // sendPrice = true;
       startCountdown();
       appStore.setLoading(false);
 
@@ -1024,8 +1047,8 @@ class DashboardScreenState extends State<DashboardScreen> {
       "is_accept": deCline ? "0" : "1",
     };
 
-    timeSetCalled = false;
-
+    // timeSetCalled = false;
+   Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false); 
     await rideRequestResPond(request: req).then((value) async {
       stopAudio();
       appStore.setLoading(false);
@@ -1070,9 +1093,9 @@ class DashboardScreenState extends State<DashboardScreen> {
       "end_latitude": driverLocation!.latitude,
       "end_longitude": driverLocation!.longitude,
       "end_address": endLocationAddress,
-      "distance": totalDistance,
+      "distance": Get.put(DashboardController()).totalDistance,
       if (extraChargeList.isNotEmpty) "extra_charges": extraChargeList,
-      if (extraChargeList.isNotEmpty) "extra_charges_amount": extraChargeAmount,
+      if (extraChargeList.isNotEmpty) "extra_charges_amount": Get.put(DashboardController()).extraChargeAmount,
     };
 
     log(req);
@@ -1216,7 +1239,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       log("=====Location:::${value.latitude}:::${value.longitude}");
       await Geolocator.isLocationServiceEnabled().then((value) async {
         log("======Location:::${value}");
-        if (locationEnable) {
+        if (Get.put(DashboardController()).  locationEnable) {
           final LocationSettings locationSettings =
               LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 100, timeLimit: Duration(seconds: 30));
 
@@ -1392,710 +1415,10 @@ class DashboardScreenState extends State<DashboardScreen> {
                 mapType: MapType.normal,
                 polylines: _polyLines,
               ),
-
-            // const Center(
-
-            //   child: Padding(
-
-            //     padding: EdgeInsets.only(bottom: 25.0),
-
-            //     child: Icon(
-
-            //       size: 50,
-
-            //       Icons.location_pin,
-
-            //     ),
-
-            //   ),
-
-            // ),
-
+ 
             onlineOfflineSwitch(),
 
-            StreamBuilder<QuerySnapshot>(
-              stream: rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
-              builder: (c, snapshot) {
-                if (snapshot.hasData) {
-                  List<FRideBookingModel> data = snapshot.data!.docs
-                      .map((e) => FRideBookingModel.fromJson(e.data() as Map<String, dynamic>))
-                      .toList();
-
-                  if (data.length == 2) {
-                    //here old ride of this driver remove if completed and payment is done code set
-
-                    rideService.removeOldRideEntry(
-                      userId: sharedPref.getInt(USER_ID),
-                    );
-                  }
-
-                  if (data.length != 0) {
-                    rideCancelDetected = false;
-                    if (data[0].onStreamApiCall == 0) {
-                      rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 1});
-                      if (data[0].status == NEW_RIDE_REQUESTED) {
-                        print("TEST1");
-                        getNewRideReq(data[0].rideId);
-                      } else {
-                        print("TEST2");
-                        getCurrentRequest();
-                      }
-                    }
-                    if (servicesListData == null &&
-                        data[0].status == NEW_RIDE_REQUESTED &&
-                        data[0].onStreamApiCall == 1) {
-                      reqCheckCounter++;
-                      if (reqCheckCounter < 1) {
-                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
-                      }
-                    }
-                    if ((servicesListData != null &&
-                            servicesListData!.status != NEW_RIDE_REQUESTED &&
-                            data[0].status == NEW_RIDE_REQUESTED &&
-                            data[0].onStreamApiCall == 1) ||
-                        (servicesListData == null &&
-                            data[0].status == NEW_RIDE_REQUESTED &&
-                            data[0].onStreamApiCall == 1)) {
-                      if (rideDetailsFetching != true) {
-                        rideDetailsFetching = true;
-                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
-                      }
-                    }
-
-                    return servicesListData != null
-                        ? servicesListData!.status != null && servicesListData!.status == NEW_RIDE_REQUESTED
-                            ? Builder(builder: (context) {
-                                // if (sendPrice == true && countdown == 0)
-                                //   return SizedBox();
-                                double progress = countdown / 60;
-
-                                return SizedBox.expand(
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      servicesListData != null && duration >= 0
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(2 * defaultRadius),
-                                                    topRight: Radius.circular(2 * defaultRadius)),
-                                              ),
-                                              child: SingleChildScrollView(
-                                                // controller: scrollController,
-
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Align(
-                                                      alignment: Alignment.center,
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: 16),
-                                                        height: 6,
-                                                        width: 60,
-                                                        decoration: BoxDecoration(
-                                                            color: primaryColor,
-                                                            borderRadius: BorderRadius.circular(defaultRadius)),
-                                                        alignment: Alignment.center,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 8),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(left: 16),
-                                                      child: Text(language.requests, style: primaryTextStyle(size: 18)),
-                                                    ),
-                                                    SizedBox(height: 8),
-                                                    Padding(
-                                                      padding: EdgeInsets.all(16),
-                                                      child: Column(
-                                                        children: [
-                                                          Row(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius: BorderRadius.circular(defaultRadius),
-                                                                child: commonCachedNetworkImage(
-                                                                    servicesListData!.riderProfileImage.validate(),
-                                                                    height: 35,
-                                                                    width: 35,
-                                                                    fit: BoxFit.cover),
-                                                              ),
-                                                              SizedBox(width: 12),
-                                                              Expanded(
-                                                                child: Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  children: [
-                                                                    Text(
-                                                                        '${servicesListData!.riderName.capitalizeFirstLetter()}',
-                                                                        maxLines: 1,
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: boldTextStyle(size: 14)),
-                                                                    SizedBox(height: 4),
-                                                                    Text('${servicesListData!.riderEmail.validate()}',
-                                                                        maxLines: 1,
-                                                                        overflow: TextOverflow.ellipsis,
-                                                                        style: secondaryTextStyle()),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              if (duration > 0)
-                                                                Container(
-                                                                  decoration: BoxDecoration(
-                                                                      color: primaryColor,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(defaultRadius)),
-                                                                  padding: EdgeInsets.all(6),
-                                                                  child: Text("$duration".padLeft(2, "0"),
-                                                                      style: boldTextStyle(color: Colors.white)),
-                                                                )
-                                                            ],
-                                                          ),
-                                                          if (estimatedTotalPrice != null && estimatedDistance != null)
-                                                            Container(
-                                                              padding: EdgeInsets.symmetric(vertical: 8),
-                                                              decoration: BoxDecoration(
-                                                                  color: !appStore.isDarkMode
-                                                                      ? scaffoldColorLight
-                                                                      : scaffoldColorDark,
-                                                                  borderRadius: BorderRadius.all(radiusCircular(8)),
-                                                                  border: Border.all(width: 1, color: dividerColor)),
-                                                              child: Row(
-                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                mainAxisSize: MainAxisSize.max,
-                                                                children: [
-                                                                  // Expanded(
-                                                                  //   child: Row(
-                                                                  //     children: [
-                                                                  //       // Text(
-                                                                  //       //     '${language.estAmount}:',
-                                                                  //       //     style:
-                                                                  //       //         secondaryTextStyle(size: 16)),
-                                                                  //       SizedBox(
-                                                                  //           width:
-                                                                  //               4),
-                                                                  //       Text(
-                                                                  //           '${printAmount(estimatedTotalPrice.toStringAsFixed(digitAfterDecimal))}',
-                                                                  //           style:
-                                                                  //               boldTextStyle(size: 14)),
-                                                                  //     ],
-                                                                  //   ),
-                                                                  // ),
-
-                                                                  // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
-
-                                                                  Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                                    mainAxisSize: MainAxisSize.max,
-                                                                    children: [
-                                                                      Text('${language.distance}:',
-                                                                          style: secondaryTextStyle(size: 16)),
-                                                                      SizedBox(width: 4),
-                                                                      Text('${estimatedDistance} ${distance_unit}',
-                                                                          maxLines: 1,
-                                                                          overflow: TextOverflow.ellipsis,
-                                                                          style: boldTextStyle(size: 14)),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              width: context.width(),
-                                                            ),
-                                                          addressDisplayWidget(
-                                                              endLatLong: LatLng(
-                                                                  servicesListData!.endLatitude.toDouble(),
-                                                                  servicesListData!.endLongitude.toDouble()),
-                                                              endAddress: servicesListData!.endAddress,
-                                                              startLatLong: LatLng(
-                                                                  servicesListData!.startLatitude.toDouble(),
-                                                                  servicesListData!.startLongitude.toDouble()),
-                                                              startAddress: servicesListData!.startAddress),
-                                                          Align(
-                                                            alignment: AlignmentDirectional.centerStart,
-                                                            child: Text(
-                                                              '${language.shipmentType}: ${servicesListData!.shipmentType}',
-                                                              style: primaryTextStyle(),
-                                                              textAlign: TextAlign.start,
-                                                            ),
-                                                          ),
-                                                          if (servicesListData != null &&
-                                                              servicesListData!.otherRiderData != null)
-                                                            Divider(
-                                                              color: Colors.grey.shade300,
-                                                              thickness: 0.7,
-                                                              height: 8,
-                                                            ),
-                                                          _bookingForView(),
-                                                          SizedBox(height: 8),
-                                                          (countdown > 0)
-                                                              ? Stack(
-                                                                  alignment: Alignment.center,
-                                                                  children: [
-                                                                    Container(
-                                                                      width: MediaQuery.of(context).size.width,
-                                                                      height: 48,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius.circular(8),
-                                                                        border: Border.all(
-                                                                            color: Colors.grey.withOpacity(0.5)),
-                                                                        gradient: LinearGradient(
-                                                                          colors: [
-                                                                            const Color(0xFF417CFF),
-                                                                            Colors.white
-                                                                          ],
-                                                                          stops: [progress, progress + 0.01],
-                                                                          begin: Alignment.centerLeft,
-                                                                          end: Alignment.centerRight,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Center(
-                                                                      child: Text(
-                                                                        'تم ارسال العرض (${countdown}s)',
-                                                                        style: boldTextStyle(
-                                                                          size: 16,
-                                                                          color: Colors.black, // Ensure text contrast
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              : AppTextField(
-                                                                  controller: priceController,
-                                                                  textFieldType: TextFieldType.PHONE,
-                                                                  decoration: InputDecoration(
-                                                                    hintText: language.enterPrice,
-                                                                    hintStyle: primaryTextStyle(),
-                                                                    contentPadding:
-                                                                        EdgeInsets.symmetric(horizontal: 16),
-                                                                    border: OutlineInputBorder(),
-                                                                  ),
-                                                                  inputFormatters: [
-                                                                    FilteringTextInputFormatter.digitsOnly
-                                                                  ],
-                                                                ),
-                                                          SizedBox(height: 8),
-                                                          Row(
-                                                            children: [
-                                                              Expanded(
-                                                                child: inkWellWidget(
-                                                                  onTap: () {
-                                                                    showConfirmDialogCustom(
-                                                                        dialogType: DialogType.DELETE,
-                                                                        primaryColor: primaryColor,
-                                                                        title: language
-                                                                            .areYouSureYouWantToCancelThisRequest,
-                                                                        positiveText: language.yes,
-                                                                        negativeText: language.no,
-                                                                        context, onAccept: (v) {
-                                                                      try {
-                                                                        // FlutterRingtonePlayer()
-                                                                        // .stop();
-
-                                                                        timerData!.cancel();
-                                                                      } catch (e) {}
-
-                                                                      sharedPref.remove(IS_TIME2);
-
-                                                                      sharedPref.remove(ON_RIDE_MODEL);
-
-                                                                      rideRequestAccept(deCline: true);
-                                                                    }).then(
-                                                                      (value) {
-                                                                        _polyLines.clear();
-
-                                                                        setState;
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child: Container(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        vertical: 10, horizontal: 8),
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(defaultRadius),
-                                                                        border: Border.all(color: Colors.red)),
-                                                                    child: Text(language.decline,
-                                                                        style: boldTextStyle(color: Colors.red),
-                                                                        textAlign: TextAlign.center),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              if (!sendPrice) SizedBox(width: 16),
-                                                              if (!sendPrice)
-                                                                Expanded(
-                                                                  child: AppButtonWidget(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        vertical: 12, horizontal: 8),
-                                                                    text: language.accept,
-                                                                    shapeBorder: RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(defaultRadius)),
-                                                                    color: primaryColor,
-                                                                    textStyle: boldTextStyle(color: Colors.white),
-                                                                    onTap: () {
-                                                                      if (sendPrice == true) return;
-                                                                      showConfirmDialogCustom(
-                                                                          primaryColor: primaryColor,
-                                                                          dialogType: DialogType.ACCEPT,
-                                                                          positiveText: language.yes,
-                                                                          negativeText: language.no,
-                                                                          title: language
-                                                                              .areYouSureYouWantToAcceptThisRequest,
-                                                                          context, onAccept: (v) {
-                                                                        if (double.tryParse(priceController.text) ==
-                                                                            null) {
-                                                                          toast(language.pleaseEnterValidPrice);
-
-                                                                          return;
-                                                                        } else if (int.parse(priceController.text) <
-                                                                            estimatedTotalPrice) {
-                                                                          toast(
-                                                                              "${language.pleaseEnterPriceGreaterThan} ${printAmount(estimatedTotalPrice.toStringAsFixed(2))}");
-
-                                                                          return;
-                                                                        }
-
-                                                                        try {
-                                                                          // FlutterRingtonePlayer()
-                                                                          //     .stop();
-
-                                                                          timerData!.cancel();
-                                                                        } catch (e) {}
-
-                                                                        // sharedPref
-
-                                                                        //     .remove(
-
-                                                                        //         IS_TIME2);
-
-                                                                        // sharedPref
-
-                                                                        //     .remove(
-
-                                                                        //         ON_RIDE_MODEL);
-
-                                                                        sendTripPrice(
-                                                                          price: priceController.text,
-                                                                          rideId: servicesListData!.id.toString(),
-                                                                        );
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox(),
-                                      Observer(builder: (context) {
-                                        return appStore.isLoading ? loaderWidget() : SizedBox();
-                                      })
-                                    ],
-                                  ),
-                                );
-                              })
-                            : Positioned(
-                                bottom: 0,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(2 * defaultRadius),
-                                        topRight: Radius.circular(2 * defaultRadius)),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(defaultRadius),
-                                            child: commonCachedNetworkImage(servicesListData!.riderProfileImage,
-                                                height: 48, width: 48, fit: BoxFit.cover),
-                                          ),
-                                          SizedBox(width: 12),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('${servicesListData!.riderName.capitalizeFirstLetter()}',
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: boldTextStyle(size: 18)),
-                                                SizedBox(height: 4),
-                                                Text('${servicesListData!.riderEmail.validate()}',
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: secondaryTextStyle()),
-                                              ],
-                                            ),
-                                          ),
-                                          inkWellWidget(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return AlertDialog(
-                                                    contentPadding: EdgeInsets.all(0),
-                                                    content: AlertScreen(
-                                                        rideId: servicesListData!.id,
-                                                        regionId: servicesListData!.regionId),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: chatCallWidget(Icons.sos),
-                                          ),
-                                          SizedBox(width: 8),
-                                          inkWellWidget(
-                                            onTap: () {
-                                              launchUrl(Uri.parse('tel:${servicesListData!.riderContactNumber}'),
-                                                  mode: LaunchMode.externalApplication);
-                                            },
-                                            child: chatCallWidget(Icons.call),
-                                          ),
-                                          SizedBox(width: 8),
-                                          inkWellWidget(
-                                            onTap: () {
-                                              if (riderData == null || (riderData != null && riderData!.uid == null)) {
-                                                init();
-
-                                                return;
-                                              }
-
-                                              if (riderData != null) {
-                                                launchScreen(
-                                                    context,
-                                                    ChatScreen(
-                                                      userData: riderData,
-                                                      ride_id: riderId,
-                                                    ));
-                                              }
-                                            },
-                                            child: chatCallWidget(Icons.chat_bubble_outline, data: riderData),
-                                          ),
-                                        ],
-                                      ),
-                                      if (estimatedTotalPrice != null && estimatedDistance != null)
-                                        Container(
-                                          padding: EdgeInsets.symmetric(vertical: 8),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              // Expanded(
-                                              //   child: Row(
-                                              //     children: [
-                                              //       Text(
-                                              //           '${language.estAmount}:',
-                                              //           style:
-                                              //               secondaryTextStyle(
-                                              //                   size: 16)),
-                                              //       SizedBox(width: 4),
-                                              //       Text(
-                                              //           '${printAmount(estimatedTotalPrice.toStringAsFixed(2))}',
-                                              //           style: boldTextStyle(
-                                              //               size: 14)),
-                                              //     ],
-                                              //   ),
-                                              // ),
-
-                                              // Container(decoration:BoxDecoration(color: dividerColor),width: 1,height: 15,),
-
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text('${language.distance}:', style: secondaryTextStyle(size: 16)),
-                                                  SizedBox(width: 4),
-                                                  Text('${estimatedDistance} ${distance_unit}',
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: boldTextStyle(size: 14)),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          width: context.width(),
-                                        ),
-                                      Divider(
-                                        color: Colors.grey.shade300,
-                                        thickness: 0.7,
-                                        height: 4,
-                                      ),
-                                      SizedBox(height: 8),
-                                      addressDisplayWidget(
-                                          endLatLong: LatLng(servicesListData!.endLatitude.toDouble(),
-                                              servicesListData!.endLongitude.toDouble()),
-                                          endAddress: servicesListData!.endAddress,
-                                          startLatLong: LatLng(servicesListData!.startLatitude.toDouble(),
-                                              servicesListData!.startLongitude.toDouble()),
-                                          startAddress: servicesListData!.startAddress),
-                                      SizedBox(height: 8),
-                                      servicesListData!.status != NEW_RIDE_REQUESTED
-                                          ? Padding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: servicesListData!.status == IN_PROGRESS ? 0 : 8),
-                                              child: _bookingForView(),
-                                            )
-                                          : SizedBox(),
-                                      if (servicesListData!.status == IN_PROGRESS &&
-                                          servicesListData != null &&
-                                          servicesListData!.otherRiderData != null)
-
-                                        // Divider(color: Colors.grey.shade300,thickness: 0.7,height: 8,),
-
-                                        SizedBox(height: 8),
-                                      if (servicesListData!.status == IN_PROGRESS)
-                                        if (appStore.extraChargeValue != null)
-                                          Observer(builder: (context) {
-                                            return Visibility(
-                                              visible: int.parse(appStore.extraChargeValue!) != 0,
-                                              child: inkWellWidget(
-                                                onTap: () async {
-                                                  List<ExtraChargeRequestModel>? extraChargeListData =
-                                                      await showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.only(
-                                                            topLeft: Radius.circular(defaultRadius),
-                                                            topRight: Radius.circular(defaultRadius))),
-                                                    context: context,
-                                                    builder: (_) {
-                                                      return Padding(
-                                                        padding: EdgeInsets.only(
-                                                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                        child: ExtraChargesWidget(data: extraChargeList),
-                                                      );
-                                                    },
-                                                  );
-
-                                                  if (extraChargeListData != null) {
-                                                    log("extraChargeListData   $extraChargeListData");
-
-                                                    extraChargeAmount = 0;
-
-                                                    extraChargeList.clear();
-
-                                                    extraChargeListData.forEach((element) {
-                                                      extraChargeAmount = extraChargeAmount + element.value!;
-
-                                                      extraChargeList = extraChargeListData;
-                                                    });
-                                                  }
-                                                },
-                                                child: Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(bottom: 8),
-
-                                                      // padding: EdgeInsets.symmetric(vertical: 8),
-
-                                                      child: Container(
-                                                        // decoration: BoxDecoration(
-
-                                                        //   borderRadius: BorderRadius.circular(defaultRadius),
-
-                                                        //   color: Colors.white,
-
-                                                        //   border: Border.all(color: primaryColor.withOpacity(0.3),width: 1,strokeAlign: BorderSide.strokeAlignInside)
-
-                                                        // ),
-
-                                                        // padding: EdgeInsets.all(4),
-
-                                                        // color: Colors.red,
-
-                                                        child: Row(
-                                                          mainAxisSize: MainAxisSize.max,
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            // Row(
-
-                                                            //   mainAxisSize: MainAxisSize.min,
-
-                                                            //   mainAxisAlignment: MainAxisAlignment.start,
-
-                                                            //   children: [
-
-                                                            //     Icon(Icons.add, size: 22),
-
-                                                            //     SizedBox(width: 4),
-
-                                                            //     Text(language.extraFees, style: boldTextStyle()),
-
-                                                            //   ],
-
-                                                            // ),
-
-                                                            if (extraChargeAmount != 0)
-                                                              Text(
-                                                                  '${language.extraCharges} ${printAmount(extraChargeAmount.toString())}',
-                                                                  style: secondaryTextStyle(color: Colors.green)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                      buttonWidget()
-                                    ],
-                                  ),
-                                ),
-                              )
-                        : SizedBox();
-                  } else {
-                    if (data.isEmpty) {
-                      try {
-                        // FlutterRingtonePlayer().stop();
-
-                        if (timerData != null) {
-                          timerData!.cancel();
-                        }
-                      } catch (e) {}
-                    }
-
-                    if (servicesListData != null) {
-                      checkRideCancel();
-                    }
-
-                    if (riderId != 0) {
-                      riderId = 0;
-
-                      try {
-                        sharedPref.remove(IS_TIME2);
-
-                        timerData!.cancel();
-                      } catch (e) {}
-                    }
-
-                    servicesListData = null;
-
-                    _polyLines.clear();
-
-                    return SizedBox();
-                  }
-                } else {
-                  return snapWidgetHelper(
-                    snapshot,
-                    loadingWidget: loaderWidget(),
-                  );
-                }
-              },
-            ),
+            newMethod(context),
 
             Positioned(
               top: context.statusBarHeight + 8,
@@ -2116,10 +1439,652 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  GetBuilder<DashboardController> newMethod(BuildContext context) {
+    return GetBuilder<DashboardController>(
+            init: DashboardController(),
+            builder: ( controller) {
+              return StreamBuilder<QuerySnapshot>(
+                stream: rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
+                builder: (c, snapshot) {
+                  if (snapshot.hasData) {
+                    List<FRideBookingModel> data = snapshot.data!.docs
+                        .map((e) => FRideBookingModel.fromJson(e.data() as Map<String, dynamic>))
+                        .toList();
+              
+                    if (data.length == 2) {
+                      //here old ride of this driver remove if completed and payment is done code set
+              
+                      rideService.removeOldRideEntry(
+                        userId: sharedPref.getInt(USER_ID),
+                      );
+                    }
+              
+                    if (data.length != 0) {
+                      // rideCancelDetected = false;
+                           controller.changeStateBool( "rideCancelDetected" , false);      
+                      if (data[0].onStreamApiCall == 0) {
+                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 1});
+                        if (data[0].status == NEW_RIDE_REQUESTED) {
+                          print("TEST1");
+                          getNewRideReq(data[0].rideId);
+                        } else {
+                          print("TEST2");
+                          getCurrentRequest();
+                        }
+                      }
+                      if (servicesListData == null &&
+                          data[0].status == NEW_RIDE_REQUESTED &&
+                          data[0].onStreamApiCall == 1) {
+                        // reqCheckCounter++;
+              
+             controller.changeStateInt( "reqCheckCounter"  , Get.put(DashboardController()).reqCheckCounter + 1);
+              
+                        if (controller.reqCheckCounter < 1) {
+                          rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                        }
+                      }
+                      if ((servicesListData != null &&
+                              servicesListData!.status != NEW_RIDE_REQUESTED &&
+                              data[0].status == NEW_RIDE_REQUESTED &&
+                              data[0].onStreamApiCall == 1) ||
+                          (servicesListData == null &&
+                              data[0].status == NEW_RIDE_REQUESTED &&
+                              data[0].onStreamApiCall == 1)) {
+                        if (    controller.rideDetailsFetching != true) {
+                          // rideDetailsFetching = true;
+                 controller.changeStateBool( "rideDetailsFetching" , true) ;
+              
+                          rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                        }
+                      }
+              
+                      if (servicesListData != null) {
+                        return servicesListData!.status != null && servicesListData!.status == NEW_RIDE_REQUESTED
+                              ? Builder(builder: (context) {
+                                  // if (sendPrice == true && countdown == 0)
+                                  //   return SizedBox();
+                                  double progress = countdown / 60;
+              
+                                  return SizedBox.expand(
+                                    child: Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+              
+                                        servicesListData != null && controller. duration >= 0
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(2 * defaultRadius),
+                                                          topRight: Radius.circular(2 * defaultRadius)),
+                                                    ),
+                                                    child: SingleChildScrollView(
+                                                      // controller: scrollController,
+                                            
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment.center,
+                                                            child: Container(
+                                                              margin: EdgeInsets.only(top: 16),
+                                                              height: 6,
+                                                              width: 60,
+                                                              decoration: BoxDecoration(
+                                                                  color: primaryColor,
+                                                                  borderRadius: BorderRadius.circular(defaultRadius)),
+                                                              alignment: Alignment.center,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 8),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 16),
+                                                            child: Text(language.requests, style: primaryTextStyle(size: 18)),
+                                                          ),
+                                                          SizedBox(height: 8),
+                                                          Padding(
+                                                            padding: EdgeInsets.all(16),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    ClipRRect(
+                                                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                                                      child: commonCachedNetworkImage(
+                                                                          servicesListData!.riderProfileImage.validate(),
+                                                                          height: 35,
+                                                                          width: 35,
+                                                                          fit: BoxFit.cover),
+                                                                    ),
+                                                                    SizedBox(width: 12),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                              '${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: boldTextStyle(size: 14)),
+                                                                          SizedBox(height: 4),
+                                                                          Text('${servicesListData!.riderEmail.validate()}',
+                                                                              maxLines: 1,
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: secondaryTextStyle()),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    if (controller.duration > 0)
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                            color: primaryColor,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(defaultRadius)),
+                                                                        padding: EdgeInsets.all(6),
+                                                                        
+                                                                        child: Text("${controller. duration}".padLeft(2, "0"),
+                                                                            style: boldTextStyle(color: Colors.white)),
+                                                                      )
+                                                                  ],
+                                                                ),
+                                                                if (estimatedTotalPrice != null && estimatedDistance != null)
+                                                                  Container(
+                                                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                                                    decoration: BoxDecoration(
+                                                                        color: !appStore.isDarkMode
+                                                                            ? scaffoldColorLight
+                                                                            : scaffoldColorDark,
+                                                                        borderRadius: BorderRadius.all(radiusCircular(8)),
+                                                                        border: Border.all(width: 1, color: dividerColor)),
+                                                                    child: Row(
+                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                      mainAxisSize: MainAxisSize.max,
+                                                                      children: [
+                                                                     
+                                            
+                                                                        Row(
+                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                          mainAxisSize: MainAxisSize.max,
+                                                                          children: [
+                                                                            Text('${language.distance}:',
+                                                                                style: secondaryTextStyle(size: 16)),
+                                                                            SizedBox(width: 4),
+                                                                            Text('${estimatedDistance} ${distance_unit}',
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: boldTextStyle(size: 14)),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    width:   MediaQuery.of(context).size.width,
+                                                                  ),
+                                                                addressDisplayWidget(
+                                                                    endLatLong: LatLng(
+                                                                        servicesListData!.endLatitude.toDouble(),
+                                                                        servicesListData!.endLongitude.toDouble()),
+                                                                    endAddress: servicesListData!.endAddress,
+                                                                    startLatLong: LatLng(
+                                                                        servicesListData!.startLatitude.toDouble(),
+                                                                        servicesListData!.startLongitude.toDouble()),
+                                                                    startAddress: servicesListData!.startAddress),
+                                                                Align(
+                                                                  alignment: AlignmentDirectional.centerStart,
+                                                                  child: Text(
+                                                                    '${language.shipmentType}: ${servicesListData!.shipmentType}',
+                                                                    style: primaryTextStyle(),
+                                                                    textAlign: TextAlign.start,
+                                                                  ),
+                                                                ),
+                                                                if (servicesListData != null &&
+                                                                    servicesListData!.otherRiderData != null)
+                                                                  Divider(
+                                                                    color: Colors.grey.shade300,
+                                                                    thickness: 0.7,
+                                                                    height: 8,
+                                                                  ),
+                                                                _bookingForView(),
+                                                                SizedBox(height: 8),
+                                                                (countdown > 0)
+                                                                    ? Stack(
+                                                                        alignment: Alignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width: MediaQuery.of(context).size.width,
+                                                                            height: 48,
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(8),
+                                                                              border: Border.all(
+                                                                                  color: Colors.grey.withOpacity(0.5)),
+                                                                              gradient: LinearGradient(
+                                                                                colors: [
+                                                                                  const Color(0xFF417CFF),
+                                                                                  Colors.white
+                                                                                ],
+                                                                                stops: [progress, progress + 0.01],
+                                                                                begin: Alignment.centerLeft,
+                                                                                end: Alignment.centerRight,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Center(
+                                                                            child: Text(
+                                                                              'تم ارسال العرض (${countdown}s)',
+                                                                              style: boldTextStyle(
+                                                                                size: 16,
+                                                                                color: Colors.black, // Ensure text contrast
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    : AppTextField(
+                                                                        controller: priceController,
+                                                                        textFieldType: TextFieldType.PHONE,
+                                                                        decoration: InputDecoration(
+                                                                          hintText: language.enterPrice,
+                                                                          hintStyle: primaryTextStyle(),
+                                                                          contentPadding:
+                                                                              EdgeInsets.symmetric(horizontal: 16),
+                                                                          border: OutlineInputBorder(),
+                                                                        ),
+                                                                        inputFormatters: [
+                                                                          FilteringTextInputFormatter.digitsOnly
+                                                                        ],
+                                                                      ),
+                                                                SizedBox(height: 8),
+                                                                GetBuilder<DashboardController>(
+                                                                  init: DashboardController(),
+                                                                  builder: (controller) {
+                                                                    return Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: inkWellWidget(
+                                                                            onTap: () {
+                                                                              showConfirmDialogCustom(
+                                                                                  dialogType: DialogType.DELETE,
+                                                                                  primaryColor: primaryColor,
+                                                                                  title: language
+                                                                                      .areYouSureYouWantToCancelThisRequest,
+                                                                                  positiveText: language.yes,
+                                                                                  negativeText: language.no,
+                                                                                  context, onAccept: (v) {
+                                                                                try {
+                                                                                  // FlutterRingtonePlayer()
+                                                                                  // .stop();
+                                                                    
+                                                                                  timerData!.cancel();
+                                                                                } catch (e) {}
+                                                                    
+                                                                                sharedPref.remove(IS_TIME2);
+                                                                    
+                                                                                sharedPref.remove(ON_RIDE_MODEL);
+                                                                    
+                                                                                rideRequestAccept(deCline: true);
+                                                                              }).then(
+                                                                                (value) {
+                                                                                  _polyLines.clear();
+                                                                    
+                                                                                  setState;
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                            child: Container(
+                                                                              padding: EdgeInsets.symmetric(
+                                                                                  vertical: 10, horizontal: 8),
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius:
+                                                                                      BorderRadius.circular(defaultRadius),
+                                                                                  border: Border.all(color: Colors.red)),
+                                                                              child: Text(language.decline,
+                                                                                  style: boldTextStyle(color: Colors.red),
+                                                                                  textAlign: TextAlign.center),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        if (!controller.sendPrice) SizedBox(width: 16),
+                                                                        if (!controller.sendPrice)
+                                                                          Expanded(
+                                                                            child: AppButtonWidget(
+                                                                              padding: EdgeInsets.symmetric(
+                                                                                  vertical: 12, horizontal: 8),
+                                                                              text: language.accept,
+                                                                              shapeBorder: RoundedRectangleBorder(
+                                                                                  borderRadius:
+                                                                                      BorderRadius.circular(defaultRadius)),
+                                                                              color: primaryColor,
+                                                                              textStyle: boldTextStyle(color: Colors.white),
+                                                                              onTap: () {
+                                                                                if (controller.sendPrice == true) return;
+                                                                                showConfirmDialogCustom(
+                                                                                    primaryColor: primaryColor,
+                                                                                    dialogType: DialogType.ACCEPT,
+                                                                                    positiveText: language.yes,
+                                                                                    negativeText: language.no,
+                                                                                    title: language
+                                                                                        .areYouSureYouWantToAcceptThisRequest,
+                                                                                    context, onAccept: (v) {
+                                                                                  if (double.tryParse(priceController.text) ==
+                                                                                      null) {
+                                                                                    toast(language.pleaseEnterValidPrice);
+                                                                    
+                                                                                    return;
+                                                                                  } else if (int.parse(priceController.text) <
+                                                                                      estimatedTotalPrice) {
+                                                                                    toast(
+                                                                                        "${language.pleaseEnterPriceGreaterThan} ${printAmount(estimatedTotalPrice.toStringAsFixed(2))}");
+                                                                    
+                                                                                    return;
+                                                                                  }
+                                                                    
+                                                                                  try {
+                                                                              
+                                                                    
+                                                                                    timerData!.cancel();
+                                                                                  } catch (e) {}
+                                                                    
+                                                                                  
+                                                                    
+                                                                                  sendTripPrice(
+                                                                                    price: priceController.text,
+                                                                                    rideId: servicesListData!.id.toString(),
+                                                                                  );
+                                                                                });
+                                                                              },
+                                                                            ),
+                                                                          ),
+                                                                      ],
+                                                                    );
+                                                                  }
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                : SizedBox(),
+                                        Observer(builder: (context) {
+                                          return appStore.isLoading ? loaderWidget() : SizedBox();
+                                        })
+                                      ],
+                                    ),
+                                  );
+                                })
+                              : Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    padding: EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(2 * defaultRadius),
+                                          topRight: Radius.circular(2 * defaultRadius)),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(defaultRadius),
+                                              child: commonCachedNetworkImage(servicesListData!.riderProfileImage,
+                                                  height: 48, width: 48, fit: BoxFit.cover),
+                                            ),
+                                            SizedBox(width: 12),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text('${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: boldTextStyle(size: 18)),
+                                                  SizedBox(height: 4),
+                                                  Text('${servicesListData!.riderEmail.validate()}',
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: secondaryTextStyle()),
+                                                ],
+                                              ),
+                                            ),
+                                            inkWellWidget(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return AlertDialog(
+                                                      contentPadding: EdgeInsets.all(0),
+                                                      content: AlertScreen(
+                                                          rideId: servicesListData!.id,
+                                                          regionId: servicesListData!.regionId),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: chatCallWidget(Icons.sos),
+                                            ),
+                                            SizedBox(width: 8),
+                                            inkWellWidget(
+                                              onTap: () {
+                                                launchUrl(Uri.parse('tel:${servicesListData!.riderContactNumber}'),
+                                                    mode: LaunchMode.externalApplication);
+                                              },
+                                              child: chatCallWidget(Icons.call),
+                                            ),
+                                            SizedBox(width: 8),
+                                            inkWellWidget(
+                                              onTap: () {
+                                                if (riderData == null || (riderData != null && riderData!.uid == null)) {
+                                                  init();
+              
+                                                  return;
+                                                }
+              
+                                                if (riderData != null) {
+                                                  launchScreen(
+                                                      context,
+                                                      ChatScreen(
+                                                        userData: riderData,
+                                                        ride_id: Get.put(DashboardController()). riderId,
+                                                      ));
+                                                }
+                                              },
+                                              child: chatCallWidget(Icons.chat_bubble_outline, data: riderData),
+                                            ),
+                                          ],
+                                        ),
+                                        if (estimatedTotalPrice != null && estimatedDistance != null)
+                                          Container(
+                                            padding: EdgeInsets.symmetric(vertical: 8),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                               
+              
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: [
+                                                    Text('${language.distance}:', style: secondaryTextStyle(size: 16)),
+                                                    SizedBox(width: 4),
+                                                    Text('${estimatedDistance} ${distance_unit}',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: boldTextStyle(size: 14)),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            // width: context.width(),
+                                             width:  MediaQuery.of(context).size.width,
+                                          ),
+                                        Divider(
+                                          color: Colors.grey.shade300,
+                                          thickness: 0.7,
+                                          height: 4,
+                                        ),
+                                        SizedBox(height: 8),
+                                        addressDisplayWidget(
+                                            endLatLong: LatLng(servicesListData!.endLatitude.toDouble(),
+                                                servicesListData!.endLongitude.toDouble()),
+                                            endAddress: servicesListData!.endAddress,
+                                            startLatLong: LatLng(servicesListData!.startLatitude.toDouble(),
+                                                servicesListData!.startLongitude.toDouble()),
+                                            startAddress: servicesListData!.startAddress),
+                                        SizedBox(height: 8),
+                                        servicesListData!.status != NEW_RIDE_REQUESTED
+                                            ? Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: servicesListData!.status == IN_PROGRESS ? 0 : 8),
+                                                child: _bookingForView(),
+                                              )
+                                            : SizedBox(),
+                                        if (servicesListData!.status == IN_PROGRESS &&
+                                            servicesListData != null &&
+                                            servicesListData!.otherRiderData != null)
+              
+                                   
+              
+                                          SizedBox(height: 8),
+                                        if (servicesListData!.status == IN_PROGRESS)
+                                          if (appStore.extraChargeValue != null)
+                                            Observer(builder: (context) {
+                                              return Visibility(
+                                                visible: int.parse(appStore.extraChargeValue!) != 0,
+                                                child: inkWellWidget(
+                                                  onTap: () async {
+                                                    List<ExtraChargeRequestModel>? extraChargeListData =
+                                                        await showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(defaultRadius),
+                                                              topRight: Radius.circular(defaultRadius))),
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return Padding(
+                                                          padding: EdgeInsets.only(
+                                                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                          child: ExtraChargesWidget(data: extraChargeList),
+                                                        );
+                                                      },
+                                                    );
+              
+                                                    if (extraChargeListData != null) {
+                                                      log("extraChargeListData   $extraChargeListData");
+              
+                                                      // extraChargeAmount = 0;
+                controller.changeStateInt( "extraChargeAmount"  , 0); 
+              
+                                                      extraChargeList.clear();
+              
+                                                      extraChargeListData.forEach((element) {
+                controller.changeStateInt( "extraChargeAmount"  , controller. extraChargeAmount + element.value!); 
+              
+                                                        // extraChargeAmount = extraChargeAmount + element.value!;
+              
+                                                        extraChargeList = extraChargeListData;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(bottom: 8),
+              
+                                                         
+              
+                                                        child: Container(
+                                                       
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                           
+                                                                GetBuilder<DashboardController>(
+                                                                  init:  DashboardController(),
+                                                                  builder: (controller) {
+                                                                    return  controller.extraChargeAmount != 0 ?  Text(
+                                                                        '${language.extraCharges} ${printAmount(controller.extraChargeAmount.toString())}',
+                                                                        style: secondaryTextStyle(color: Colors.green)) : SizedBox.shrink();
+                                                                  }
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                        buttonWidget()
+                                      ],
+                                    ),
+                                  ),
+                                );
+                      } else {
+                        return SizedBox();
+                      }
+                    } else {
+                      if (data.isEmpty) {
+                        try {
+                          // FlutterRingtonePlayer().stop();
+              
+                          if (timerData != null) {
+                            timerData!.cancel();
+                          }
+                        } catch (e) {}
+                      }
+              
+                      if (servicesListData != null) {
+                        checkRideCancel();
+                      }
+              
+                      if (  Get.put(DashboardController()).riderId != 0) {
+                        // riderId = 0;
+                controller..changeStateInt( "riderId" , 0) ;
+              
+                        try {
+                          sharedPref.remove(IS_TIME2);
+              
+                          timerData!.cancel();
+                        } catch (e) {}
+                      }
+              
+                      servicesListData = null;
+              
+                      _polyLines.clear();
+              
+                      return SizedBox();
+                    }
+                  } else {
+                    return snapWidgetHelper(
+                      snapshot,
+                      loadingWidget: loaderWidget(),
+                    );
+                  }
+                },
+              );
+            }
+          );
+  }
+
   int countdown = 0;
   Timer? countdownTimer;
 
   // Method to start the countdown
+
+
+  //  TODO remove setState
   void startCountdown() {
     developer.log("startCountdown");
     developer.log("countdown $countdown");
@@ -2154,48 +2119,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     endLocationAddress = '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
   }
 
-  Widget myLocationWidget() {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 30,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                moveMap(
-                  context,
-                  Prediction(
-                    lat: driverLocation!.latitude.toString(),
-                    lng: driverLocation!.longitude.toString(),
-                  ),
-                );
-              },
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 600),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(color: primaryColor),
-                ),
-                padding: EdgeInsets.all(8),
-                child: Icon(
-                  Icons.my_location_sharp,
-                  color: primaryColor,
-                  size: 32,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
 //TODO:Hossam hadi kharajha fi widgets
   Widget onlineOfflineSwitch() {
     return Positioned(
@@ -2208,48 +2131,66 @@ class DashboardScreenState extends State<DashboardScreen> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              isOnLine ? language.online : language.offLine,
-              style: boldTextStyle(
-                color: isOnLine ? Colors.green : Colors.red,
-                size: 18,
-                weight: FontWeight.w700,
-              ),
+            GetBuilder< DashboardController>(
+              init:  DashboardController(), 
+              builder: (controller) {
+                return Text(
+                controller.  isOnLine ? language.online : language.offLine,
+                  style: boldTextStyle(
+                    color: controller. isOnLine ? Colors.green : Colors.red,
+                    size: 18,
+                    weight: FontWeight.w700,
+                  ),
+                );
+              }
             ),
             SizedBox(width: 8),
-            GestureDetector(
-              onTap: () async {
-                await showConfirmDialogCustom(
-                    dialogType: DialogType.CONFIRMATION,
-                    primaryColor: primaryColor,
-                    title: isOnLine ? language.areYouCertainOffline : language.areYouCertainOnline,
-                    context, onAccept: (v) async {
-                  driverStatus(status: isOnLine ? 0 : 1);
-                  if (isOnLine) {
-                    NotificationWithSoundService.service.invoke('stopService');
-                  } else {
-                    await NotificationWithSoundService.initializeService();
-                  }
-                  isOnLine = !isOnLine;
-                  setState(() {});
-                });
-              },
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 600),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                    color: isOnLine ? Colors.green : Colors.red,
+            GetBuilder<DashboardController>(
+              init:  DashboardController(),
+              builder: (controller) {
+                return GestureDetector(
+                  onTap: () async {
+                    await showConfirmDialogCustom(
+                        dialogType: DialogType.CONFIRMATION,
+                        primaryColor: primaryColor,
+                        title:controller. isOnLine ? language.areYouCertainOffline : language.areYouCertainOnline,
+                        context, onAccept: (v) async {
+                      driverStatus(status: controller. isOnLine ? 0 : 1);
+                      if (controller. isOnLine) {
+                        NotificationWithSoundService.service.invoke('stopService');
+                      } else {
+                        await NotificationWithSoundService.initializeService();
+                      }
+
+   WidgetsBinding.instance.addPostFrameCallback((_)  => Get.put(DashboardController()).changeStateBool( "isOnLine" ,!controller. isOnLine) ); 
+
+                      // isOnLine = !isOnLine;
+                      setState(() {});
+                    });
+                  },
+                  child: GetBuilder <DashboardController>(
+                    init:  DashboardController(),
+                    builder: (controller) {
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 600),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color:controller. isOnLine ? Colors.green : Colors.red,
+                          ),
+                        ),
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                         controller. isOnLine ? Icons.power_settings_new_outlined : Icons.power_settings_new_sharp,
+                          color:controller. isOnLine ? Colors.green : Colors.red,
+                          size: 32,
+                        ),
+                      );
+                    }
                   ),
-                ),
-                padding: EdgeInsets.all(8),
-                child: Icon(
-                  isOnLine ? Icons.power_settings_new_outlined : Icons.power_settings_new_sharp,
-                  color: isOnLine ? Colors.green : Colors.red,
-                  size: 32,
-                ),
-              ),
+                );
+              }
             ),
           ],
         ),
@@ -2270,18 +2211,11 @@ class DashboardScreenState extends State<DashboardScreen> {
             child: Padding(
               padding: EdgeInsets.only(right: 8),
               child: AppButtonWidget(
-
-                  // width: MediaQuery.of(context).size.width,
-
                   text: language.cancel,
                   textColor: primaryColor,
                   color: Colors.white,
                   shapeBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: primaryColor)),
-
-                  // color: Colors.grey,
-
-                  // textStyle: boldTextStyle(color: Colors.white),
 
                   onTap: () {
                     showModalBottomSheet(
@@ -2354,12 +2288,14 @@ class DashboardScreenState extends State<DashboardScreen> {
                     if (extraChargeListData != null) {
                       log("extraChargeListData   $extraChargeListData");
 
-                      extraChargeAmount = 0;
+                      // extraChargeAmount = 0;
+                Get.put(DashboardController()).changeStateInt( "extraChargeAmount" , 0); 
 
                       extraChargeList.clear();
 
                       extraChargeListData.forEach((element) {
-                        extraChargeAmount = extraChargeAmount + element.value!;
+                        // extraChargeAmount = extraChargeAmount + element.value!;
+                Get.put(DashboardController()).changeStateInt( "extraChargeAmount" ,   Get.put(DashboardController()).extraChargeAmount + element.value!); 
 
                         extraChargeList = extraChargeListData;
                       });
@@ -2367,195 +2303,200 @@ class DashboardScreenState extends State<DashboardScreen> {
                   }),
             ),
           ),
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: AppButtonWidget(
-              // width: MediaQuery.of(context).size.width,
-
-              text: buttonText(status: servicesListData!.status),
-
-              color: primaryColor,
-
-              textStyle: boldTextStyle(color: Colors.white),
-
-              onTap: () async {
-                if (await checkPermission()) {
-                  if (servicesListData!.status == ACCEPTED) {
-                    showConfirmDialogCustom(
-                        primaryColor: primaryColor,
-                        positiveText: language.yes,
-                        negativeText: language.no,
-                        dialogType: DialogType.CONFIRMATION,
-                        title: language.areYouSureYouWantToArriving,
-                        context, onAccept: (v) {
-                      rideRequest(status: ARRIVING);
-                    });
-                  } else if (servicesListData!.status == ARRIVING) {
-                    showConfirmDialogCustom(
-                        primaryColor: primaryColor,
-                        positiveText: language.yes,
-                        negativeText: language.no,
-                        dialogType: DialogType.CONFIRMATION,
-                        title: language.areYouSureYouWantToArrived,
-                        context, onAccept: (v) {
-                      rideRequest(status: ARRIVED);
-                    });
-                  } else if (servicesListData!.status == ARRIVED) {
-                    otpController.clear();
-
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return AlertDialog(
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        GetBuilder<DashboardController>(
+          init:  DashboardController(),
+          builder: (  controller) {
+            return Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: AppButtonWidget(
+                  // width: MediaQuery.of(context).size.width,
+            
+                  text: buttonText(status: servicesListData!.status),
+            
+                  color: primaryColor,
+            
+                  textStyle: boldTextStyle(color: Colors.white),
+            
+                  onTap: () async {
+                    if (await checkPermission()) {
+                      if (servicesListData!.status == ACCEPTED) {
+                        showConfirmDialogCustom(
+                            primaryColor: primaryColor,
+                            positiveText: language.yes,
+                            negativeText: language.no,
+                            dialogType: DialogType.CONFIRMATION,
+                            title: language.areYouSureYouWantToArriving,
+                            context, onAccept: (v) {
+                          rideRequest(status: ARRIVING);
+                        });
+                      } else if (servicesListData!.status == ARRIVING) {
+                        showConfirmDialogCustom(
+                            primaryColor: primaryColor,
+                            positiveText: language.yes,
+                            negativeText: language.no,
+                            dialogType: DialogType.CONFIRMATION,
+                            title: language.areYouSureYouWantToArrived,
+                            context, onAccept: (v) {
+                          rideRequest(status: ARRIVED);
+                        });
+                      } else if (servicesListData!.status == ARRIVED) {
+                        otpController.clear();
+            
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return AlertDialog(
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(language.enterOtp, style: boldTextStyle(), textAlign: TextAlign.center),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: inkWellWidget(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(4),
-                                        decoration: BoxDecoration(color: primaryColor, shape: BoxShape.circle),
-                                        child: Icon(Icons.close, size: 20, color: Colors.white),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(language.enterOtp, style: boldTextStyle(), textAlign: TextAlign.center),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: inkWellWidget(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(color: primaryColor, shape: BoxShape.circle),
+                                            child: Icon(Icons.close, size: 20, color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(language.startRideAskOTP,
+                                      style: secondaryTextStyle(size: 12), textAlign: TextAlign.center),
+                                  SizedBox(height: 16),
+                                  Directionality(
+                                    textDirection: TextDirection.ltr,
+                                    child: Center(
+                                      child: Pinput(
+                                        keyboardType: TextInputType.number,
+            
+                                        readOnly: false,
+            
+                                        autofocus: true,
+            
+                                        length: 4,
+            
+                                        onTap: () {},
+            
+                                        // onClipboardFound: (value) {
+            
+                                        // otpController.text=value;
+            
+                                        // },
+            
+                                        onLongPress: () {},
+            
+                                        cursor: Text(
+                                          "|",
+                                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                                        ),
+            
+                                        focusedPinTheme: PinTheme(
+                                          width: 40,
+                                          height: 44,
+                                          textStyle: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: primaryColor)),
+                                        ),
+            
+                                        toolbarEnabled: true,
+            
+                                        useNativeKeyboard: true,
+            
+                                        defaultPinTheme: PinTheme(
+                                          width: 40,
+                                          height: 44,
+                                          textStyle: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: dividerColor)),
+                                        ),
+            
+                                        isCursorAnimationEnabled: true,
+            
+                                        showCursor: true,
+            
+                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            
+                                        closeKeyboardWhenCompleted: false,
+            
+                                        enableSuggestions: false,
+            
+                                        autofillHints: [],
+            
+                                        controller: otpController,
+            
+                                        onCompleted: (val) {
+                                          otpCheck = val;
+                                        },
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: 16),
+                                  AppButtonWidget(
+                                    width: MediaQuery.of(context).size.width,
+                                    text: language.confirm,
+                                    onTap: () {
+                                      if (otpCheck == null || otpCheck != servicesListData!.otp) {
+                                        return toast(language.pleaseEnterValidOtp);
+                                      } else {
+                                        Navigator.pop(context);
+            
+                                        rideRequest(status: IN_PROGRESS);
+                                      }
+                                    },
+                                  )
                                 ],
                               ),
-                              SizedBox(height: 16),
-                              Text(language.startRideAskOTP,
-                                  style: secondaryTextStyle(size: 12), textAlign: TextAlign.center),
-                              SizedBox(height: 16),
-                              Directionality(
-                                textDirection: TextDirection.ltr,
-                                child: Center(
-                                  child: Pinput(
-                                    keyboardType: TextInputType.number,
-
-                                    readOnly: false,
-
-                                    autofocus: true,
-
-                                    length: 4,
-
-                                    onTap: () {},
-
-                                    // onClipboardFound: (value) {
-
-                                    // otpController.text=value;
-
-                                    // },
-
-                                    onLongPress: () {},
-
-                                    cursor: Text(
-                                      "|",
-                                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                                    ),
-
-                                    focusedPinTheme: PinTheme(
-                                      width: 40,
-                                      height: 44,
-                                      textStyle: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: primaryColor)),
-                                    ),
-
-                                    toolbarEnabled: true,
-
-                                    useNativeKeyboard: true,
-
-                                    defaultPinTheme: PinTheme(
-                                      width: 40,
-                                      height: 44,
-                                      textStyle: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: dividerColor)),
-                                    ),
-
-                                    isCursorAnimationEnabled: true,
-
-                                    showCursor: true,
-
-                                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-
-                                    closeKeyboardWhenCompleted: false,
-
-                                    enableSuggestions: false,
-
-                                    autofillHints: [],
-
-                                    controller: otpController,
-
-                                    onCompleted: (val) {
-                                      otpCheck = val;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 16),
-                              AppButtonWidget(
-                                width: MediaQuery.of(context).size.width,
-                                text: language.confirm,
-                                onTap: () {
-                                  if (otpCheck == null || otpCheck != servicesListData!.otp) {
-                                    return toast(language.pleaseEnterValidOtp);
-                                  } else {
-                                    Navigator.pop(context);
-
-                                    rideRequest(status: IN_PROGRESS);
-                                  }
-                                },
-                              )
-                            ],
-                          ),
+                            );
+                          },
                         );
-                      },
-                    );
-                  } else if (servicesListData!.status == IN_PROGRESS) {
-                    showConfirmDialogCustom(
-                        primaryColor: primaryColor,
-                        dialogType: DialogType.ACCEPT,
-                        title: language.finishMsg,
-                        context,
-                        positiveText: language.yes,
-                        negativeText: language.no, onAccept: (v) {
-                      appStore.setLoading(true);
-
-                      getUserLocation().then((value2) async {
-                        totalDistance = calculateDistance(
-                            double.parse(servicesListData!.startLatitude.validate()),
-                            double.parse(servicesListData!.startLongitude.validate()),
-                            driverLocation!.latitude,
-                            driverLocation!.longitude);
-
-                        await completeRideRequest();
-                      });
-                    });
-                  }
-                }
-              },
-            ),
-          ),
+                      } else if (servicesListData!.status == IN_PROGRESS) {
+                        showConfirmDialogCustom(
+                            primaryColor: primaryColor,
+                            dialogType: DialogType.ACCEPT,
+                            title: language.finishMsg,
+                            context,
+                            positiveText: language.yes,
+                            negativeText: language.no, onAccept: (v) {
+                          appStore.setLoading(true);
+            
+                          getUserLocation().then((value2) async {
+                          controller.  totalDistance = calculateDistance(
+                                double.parse(servicesListData!.startLatitude.validate()),
+                                double.parse(servicesListData!.startLongitude.validate()),
+                                driverLocation!.latitude,
+                                driverLocation!.longitude);
+            
+                            await completeRideRequest();
+                          });
+                        });
+                      }
+                    }
+                  },
+                ),
+              ),
+            );
+          }
         ),
       ],
     );
@@ -2701,9 +2642,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   void checkRideCancel() async {
-    if (rideCancelDetected) return;
+    if (Get.put(DashboardController()).rideCancelDetected) return;
 
-    rideCancelDetected = true;
+    // rideCancelDetected = true;
+             WidgetsBinding.instance.addPostFrameCallback((_)  =>    Get.put(DashboardController()).changeStateBool( "rideCancelDetected" , false)  ); 
 
     appStore.setLoading(true);
 
