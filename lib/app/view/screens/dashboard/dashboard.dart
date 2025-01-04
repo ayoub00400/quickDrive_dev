@@ -42,8 +42,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     init();
   }
 
-  // method to send trip price to rider
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -51,10 +49,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
   @override
   void dispose() {
-    // positionStream.cancel();
-
-    // FlutterRingtonePlayer().stop();
-
    _dashboardController. countdownTimer?.cancel(); // Clean up timer
 
     if (_dashboardController.timerData != null) {
@@ -62,13 +56,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     }
 
    _dashboardController. positionStream.cancel();
-
-    // if (timerData == null) {
-
-    //   sharedPref.getString(IS_TIME2);
-
-    // }
-
+ 
     super.dispose();
   }
 
@@ -76,7 +64,6 @@ DashboardController _dashboardController=  Get.put(DashboardController());
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvoked: (v) async {
-   
         return Future.value(true);
       },
       child: Scaffold(
@@ -101,8 +88,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
  
             onlineOfflineSwitch(),
 
-            fetchRideView(context),
-
+            FetchRideView(  dashboardController: _dashboardController,),
             Positioned(
               top: context.statusBarHeight + 8,
               right: 14,

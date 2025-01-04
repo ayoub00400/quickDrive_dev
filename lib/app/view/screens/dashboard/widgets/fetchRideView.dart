@@ -22,27 +22,12 @@ import '../function/init_dashboard.dart';
 import '../function/rideRequestAccept.dart';
 import '../function/sendTripPrice.dart';
 import 'addressDisplayWidget.dart';
-// Notice : This problem is on your default app also
-
-import 'dart:async';
-
-
-
-import 'package:get/get.dart';
-// import 'package:just_audio/just_audio.dart';
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-
-
-import 'package:flutter/material.dart';
+ 
 
 import 'package:flutter/services.dart';
 
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'package:google_places_flutter/model/prediction.dart';
 
 
 // import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
@@ -59,9 +44,7 @@ import 'package:taxi_driver/app/view/screens/ChatScreen.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
 import 'package:taxi_driver/app/utils/Extensions/app_textfield.dart';
-
-import 'package:taxi_driver/app/utils/Extensions/context_extensions.dart';
-import 'package:taxi_driver/app/view/screens/dashboard/widgets/top_widget.dart';
+ 
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -75,10 +58,17 @@ import 'buttonWidget.dart';
 
 
  
+ 
+class FetchRideView extends StatelessWidget {
+  const FetchRideView({
+    super.key,
+    required DashboardController dashboardController,
+  }) : _dashboardController = dashboardController;
 
-GetBuilder<DashboardController> fetchRideView(BuildContext context) {
-DashboardController _dashboardController=  Get.put(DashboardController());
+  final DashboardController _dashboardController;
 
+  @override
+  Widget build(BuildContext context) {
     return GetBuilder<DashboardController>(
             init: DashboardController(),
             builder: ( controller) {
@@ -633,7 +623,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
               
                                                         // extraChargeList = extraChargeListData;
                         controller.extraChargeListChange( extraChargeListData);
-
+    
                                                       });
                                                     }
                                                   },
@@ -719,4 +709,5 @@ DashboardController _dashboardController=  Get.put(DashboardController());
             }
           );
   }
+}
   
