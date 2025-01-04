@@ -112,125 +112,42 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class DashboardScreenState extends State<DashboardScreen> {
-  StreamController _messageController = StreamController.broadcast();
-
-  late StreamSubscription _messageSubscription;
-
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  RideService rideService = RideService();
-
-  Completer<GoogleMapController> _controller = Completer();
-
-  // OtpFieldController otpController = OtpFieldController();
-
-  final otpController = TextEditingController();
-
-  final priceController = TextEditingController();
-
-  late StreamSubscription<ServiceStatus> serviceStatusStream;
-
-  List<RiderModel> riderList = [];
-
-  OnRideRequest? servicesListData;
-
-  UserData? riderData;
-
-  WalletDetailModel? walletDetailModel;
-
-  LatLng? userLatLong;
-
-  final Set<Marker> markers = {};
-
-  Set<Polyline> _polyLines = Set<Polyline>();
-
-  late PolylinePoints polylinePoints;
-
-  List<LatLng> polylineCoordinates = [];
-
-  List<ExtraChargeRequestModel> extraChargeList = [];
 
 
-  late StreamSubscription<Position> positionStream;
-
-  LocationPermission? permissionData;
-
-  LatLng? driverLocation;
-
-  LatLng? sourceLocation;
-
-  LatLng? destinationLocation;
-
-  // bool timerRunning = false;
-// TODO: TO STATE CUBt
-  // bool timeSetCalled = false;
-
-  // bool isOnLine = true;
-
-  // bool locationEnable = true;
-
-  // bool current_screen = true;
-
-  // // bool requestDataFetching = false;
-
-  // bool sendPrice = false;
-
-  String? otpCheck;
-
-  String endLocationAddress = '';
+DashboardController _dashboardController=  Get.put(DashboardController());
 
 
-  late BitmapDescriptor driverIcon;
 
-  late BitmapDescriptor destinationIcon;
 
-  late BitmapDescriptor sourceIcon;
+
+
 
  
 
-  var estimatedTotalPrice;
-
-  var estimatedDistance;
-
-  var distance_unit;
-
-  // int onStreamApiCall = 0;
-
-  Timer? timerUpdateLocation;
-
-  Timer? timerData;
+  
 
 
 
-  // CountdownController? timerController;
 
-  final player = AudioPlayer();
 
-  // Timer? _timer;
 
-  Future<void> audioPlayWithLimit() async {
-    try {
-      await player.setReleaseMode(ReleaseMode.loop);
-      await player.play(AssetSource('sounds/request_sound.aac'));
-      developer.log('Sound playback started.');
-    } catch (e) {
-      developer.log('Error in audio playback: $e');
-    }
-    // Start playing the audio
 
-    stopAudio();
 
-    await player.setReleaseMode(ReleaseMode.loop);
 
-    await player.play(AssetSource('sounds/request_sound.aac'));
-  }
+   
 
-  // To stop immediately if needed
+
+
+ 
+
+
+
+
+ 
 
   void stopAudio() async {
-    await player.stop(); // Stops the sound immediately
-
-    // _timer?.cancel(); // Cancel the timer if it's still active
+    await  _dashboardController.player.stop(); // Stops the sound immediately
+ 
   }
 
 
@@ -239,7 +156,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       developer.log('value.toString() = ${value.toString()}');
 
       // totalEarnings = value.totalEarnings!;
-               Get.put(DashboardController()).changeStateInt( "totalEarnings" , value.totalEarnings!); 
+               _dashboardController.emitStateInt( "totalEarnings" , value.totalEarnings!); 
 
       setState(() {});
     }).catchError((error) {
@@ -296,7 +213,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             developer.log('Audio play condition met.');
             // audioPlayWithLimit();
             cancelTimer();
-               Get.put(DashboardController()).changeStateBool( "sendPrice" , false); 
+               _dashboardController.emitStateBool( "sendPrice" , false); 
             setState(() {});
           }
         }
@@ -342,12 +259,12 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     if (sharedPref.getInt(IS_ONLINE) == 1) {
       setState(() {
-               Get.put(DashboardController()).changeStateBool( "isOnLine" , true); 
+               _dashboardController.emitStateBool( "isOnLine" , true); 
 
         // isOnLine = true;
       });
     } else {
-               Get.put(DashboardController()).changeStateBool( "isOnLine" , false); 
+               _dashboardController.emitStateBool( "isOnLine" , false); 
 
       // setState(() {
       //   isOnLine = false;
@@ -372,15 +289,19 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   void init() async {
-    _messageSubscription = _messageController.stream.listen((message) {
+   var _messageSubscription =_dashboardController.messageController.stream.listen((message) {
       getCurrentRequest();
     });
+
+        Get.put( DashboardController()).emitStateLatLng( "messageSubscription" ,_messageSubscription);
+
 
     await checkPermission();
 
     Geolocator.getPositionStream().listen((event) {
-      driverLocation = LatLng(event.latitude, event.longitude);
-
+      // driverLocation = LatLng(event.latitude, event.longitude);
+      Get.put( DashboardController()).emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
+ 
       setState(() {});
     });
 
@@ -390,7 +311,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     walletCheckApi();
 
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+  //  var _driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+  _dashboardController.emitStateBitmap( "driverIcon" ,  await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
 
     getCurrentRequest();
 
@@ -398,15 +320,20 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     // setTimeData();
 
-    polylinePoints = PolylinePoints();
+    // polylinePoints = PolylinePoints();
+
+      _dashboardController.emitStatePolyline( "polylinePoints" ,   PolylinePoints());
+
 
     getSettings();
 
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    // driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+  _dashboardController.emitStateBitmap( "driverIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
+    // sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
+  _dashboardController.emitStateBitmap( "sourceIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon));
 
-    sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
-
-    destinationIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
+    // destinationIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
+  _dashboardController.emitStateBitmap( "destinationIcon" ,  await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon));
 
     if (appStore.isLoggedIn) {
       startLocationTracking();
@@ -416,10 +343,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> locationPermission() async {
-    serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
+    var serviceStatusStream = Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
       if (status == ServiceStatus.disabled) {
         // locationEnable = false;
-               Get.put(DashboardController()).changeStateBool( "locationEnable" , false); 
+               _dashboardController.emitStateBool( "locationEnable" , false); 
 
         Future.delayed(
           Duration(seconds: 1),
@@ -429,7 +356,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         );
       } else if (status == ServiceStatus.enabled) {
         // locationEnable = true;
-                Get.put(DashboardController()).changeStateBool( "locationEnable" , true); 
+                _dashboardController.emitStateBool( "locationEnable" , true); 
         startLocationTracking();
 
         if (locationScreenKey.currentContext != null) {
@@ -439,6 +366,9 @@ class DashboardScreenState extends State<DashboardScreen> {
         }
       }
     });
+
+      _dashboardController.emitStateStream( "serviceStatusStream" , serviceStatusStream );
+
   }
 
   cancelRideTimeOut() {
@@ -453,14 +383,15 @@ class DashboardScreenState extends State<DashboardScreen> {
         sharedPref.remove(IS_TIME2);
 
         // duration = startTime;
-               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
+               _dashboardController.emitStateInt( "duration" , _dashboardController. startTime); 
 
 
-     Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false);  
+     _dashboardController.emitStateBool( "timeSetCalled" , false);  
 
-        servicesListData = null;
+        // servicesListData = null;
+        _dashboardController.emitStateService( "servicesListData" , null);
 
-        _polyLines.clear();
+        _dashboardController. polyLines.clear();
 
         setMapPins();
 
@@ -476,13 +407,13 @@ class DashboardScreenState extends State<DashboardScreen> {
       } catch (e) {}
 
       Map req = {
-        "id":      Get.put(DashboardController()).riderId,
+        "id":      _dashboardController.riderId,
         "driver_id": sharedPref.getInt(USER_ID),
         "is_accept": "0",
       };
 
       // duration = startTime;
-               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
+               _dashboardController.emitStateInt( "duration" , _dashboardController. startTime); 
 
       rideRequestResPond(request: req).then((value) {
         stopAudio();
@@ -501,28 +432,28 @@ class DashboardScreenState extends State<DashboardScreen> {
   Future<void> setTimeData() async {
     if (sharedPref.getString(IS_TIME2) == null) {
       // duration = startTime;
-               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()). startTime); 
+               _dashboardController.emitStateInt( "duration" , _dashboardController. startTime); 
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds:  Get.put(DashboardController()).startTime)).toString());
+      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds:  _dashboardController.startTime)).toString());
 
       startTimer(tag: "line222");
     } else {
-               Get.put(DashboardController()).changeStateInt( "duration" ,DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds); 
+               _dashboardController.emitStateInt( "duration" ,DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds); 
 
       // duration = DateTime.parse(sharedPref.getString(IS_TIME2)!).difference(DateTime.now()).inSeconds;
 
-      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: Get.put(DashboardController()). duration)).toString());
+      await sharedPref.setString(IS_TIME2, DateTime.now().add(Duration(seconds: _dashboardController. duration)).toString());
 
-      if (Get.put(DashboardController()).duration < 0) {
+      if (_dashboardController.duration < 0) {
         await sharedPref.remove(IS_TIME2);
 
         sharedPref.remove(ON_RIDE_MODEL);
 
-        if (sharedPref.getString("RIDE_ID_IS") == null || sharedPref.getString("RIDE_ID_IS") == "${Get.put(DashboardController()).riderId}") {
+        if (sharedPref.getString("RIDE_ID_IS") == null || sharedPref.getString("RIDE_ID_IS") == "${_dashboardController.riderId}") {
           return cancelRideTimeOut();
         } else {
           // duration = startTime;
-               Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).startTime); 
+               _dashboardController.emitStateInt( "duration" ,_dashboardController.startTime); 
 
           // setState(() {});
 
@@ -534,11 +465,12 @@ class DashboardScreenState extends State<DashboardScreen> {
         // return cancelRideTimeOut();
       }
 
-      sharedPref.setString("RIDE_ID_IS", "${Get.put(DashboardController()).riderId}");
+      sharedPref.setString("RIDE_ID_IS", "${_dashboardController.riderId}");
 
-      if (Get.put(DashboardController()).duration > 0) {
+      if (_dashboardController.duration > 0) {
         if (sharedPref.getString(ON_RIDE_MODEL) != null) {
-          servicesListData = OnRideRequest.fromJson(jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
+          // servicesListData = OnRideRequest.fromJson(jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
+        _dashboardController.emitStateService( "servicesListData" , OnRideRequest.fromJson(jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!)));
 
           // setState(() {});
         }
@@ -549,7 +481,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> startTimer({required String tag}) async {
-    timerData?.cancel();
+   _dashboardController .timerData?.cancel();
     print("timer Call :::${tag}");
 
     // if(timerRunning==true)return;
@@ -571,7 +503,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     const oneSec = const Duration(seconds: 1);
 
-    timerData = new Timer.periodic(
+  var  timerDataValue = new Timer.periodic(
       oneSec,
       (Timer timer) {
         // count
@@ -580,18 +512,18 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         // print("CheckTimerValues::duration${duration} : timer:${timer.tick}");
 
-        if (Get.put(DashboardController()).duration == 0) {
+        if (_dashboardController.duration == 0) {
           // timerRunning=false;
 
           try {
-            timerData!.cancel();
+           _dashboardController. timerData!.cancel();
           } catch (e) {}
 
           // if (duration == 0) {
 
           Future.delayed(Duration(seconds: 1)).then((value) {
             // duration = startTime;
-               Get.put(DashboardController()).changeStateInt( "duration" , Get.put(DashboardController()).startTime); 
+               _dashboardController.emitStateInt( "duration" , _dashboardController.startTime); 
 
             try {
               // FlutterRingtonePlayer().stop();
@@ -600,25 +532,26 @@ class DashboardScreenState extends State<DashboardScreen> {
             } catch (e) {}
 
             // timeSetCalled = false;
-                Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false); 
+                _dashboardController.emitStateBool( "timeSetCalled" , false); 
 
             sharedPref.remove(ON_RIDE_MODEL);
 
             sharedPref.remove(IS_TIME2);
 
-            servicesListData = null;
+            // servicesListData = null;
+        _dashboardController.emitStateService( "servicesListData" , null);
 
-            _polyLines.clear();
+            _dashboardController. polyLines.clear();
 
             setMapPins();
 
             // isOnLine=false;
 
             setState(() {});
-              //  Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).startTime); 
+              //  _dashboardController.changeStateInt( "duration" ,_dashboardController.startTime); 
 
             Map req = {
-              "id": Get.put(DashboardController()). riderId,
+              "id": _dashboardController. riderId,
               "driver_id": sharedPref.getInt(USER_ID),
               "is_accept": "0",
             };
@@ -632,15 +565,16 @@ class DashboardScreenState extends State<DashboardScreen> {
             });
           });
         } else {
-          if (timerData != null && timerData!.isActive) {
-            setState(() {
-              Get.put(DashboardController()).changeStateInt( "duration" ,Get.put(DashboardController()).duration-1); 
-              // duration--;
-            });
+          if (_dashboardController.timerData != null && _dashboardController.timerData!.isActive) {
+        
+              _dashboardController.emitStateInt( "duration" ,_dashboardController.duration-1); 
+      
           }
         }
       },
     );
+              _dashboardController.emitStateTime( "timerData" , timerDataValue ); 
+
   }
 
   getSettings() async {
@@ -673,7 +607,7 @@ class DashboardScreenState extends State<DashboardScreen> {
 
           if (element.key == MAX_TIME_FOR_DRIVER_SECOND) {
             // startTime = int.parse(element.value ?? '60');
-              Get.put(DashboardController()).changeStateInt( "startTime" ,int.parse(element.value ?? '60')); 
+              _dashboardController.emitStateInt( "startTime" ,int.parse(element.value ?? '60')); 
 
           }
 
@@ -725,11 +659,11 @@ class DashboardScreenState extends State<DashboardScreen> {
                 PRESENT_TOP_UP_AMOUNT_CONST);
       }
 
-      markers.add(
+     _dashboardController. mapAdd(
         Marker(
           markerId: MarkerId("driver"),
-          position: driverLocation!,
-          icon: driverIcon,
+          position:_dashboardController. driverLocation!,
+          icon:  _dashboardController.driverIcon,
           infoWindow: InfoWindow(title: ''),
         ),
       );
@@ -743,17 +677,18 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> setSourceAndDestinationIcons() async {
-    driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    // driverIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon);
+    _dashboardController.emitStateBitmap( "driverIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DriverIcon));
 
-    if (servicesListData != null)
-      servicesListData!.status != IN_PROGRESS
-          ? sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon)
-          : destinationIcon =
+    if ( _dashboardController.servicesListData != null)
+     _dashboardController. servicesListData!.status != IN_PROGRESS
+          ?  _dashboardController.sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon)
+          :  _dashboardController.destinationIcon =
               await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), DestinationIcon);
   }
 
   onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+   _dashboardController. controllerCompleter.complete(controller);
   }
 
   Future<void> driverStatus({int? status}) async {
@@ -779,7 +714,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   Future<void> getCurrentRequest() async {
     await getCurrentRideRequest().then((value) async {
       try {
-        await rideService.updateStatusOfRide(rideID: value.onRideRequest!.id, req: {'on_rider_stream_api_call': 0});
+        await   _dashboardController. rideService.updateStatusOfRide(rideID: value.onRideRequest!.id, req: {'on_rider_stream_api_call': 0});
       } catch (e) {
         print("Error Found:::$e");
       }
@@ -793,37 +728,44 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         if (value.estimated_price != null && value.estimated_price.isNotEmpty) {
           try {
-            estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            // estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            _dashboardController.emitStatePolyline( "estimatedTotalPrice" ,num.tryParse(value.estimated_price[0]['total_amount'].toString()));
 
-            estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            // estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            _dashboardController.emitStatePolyline( "estimatedDistance" ,num.tryParse(value.estimated_price[0]['distance'].toString()));
 
-            distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            // distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            _dashboardController.emitStatePolyline( "distance_unit" ,value.estimated_price[0]['distance_unit'].toString());
+
           } catch (e) {}
         } else {
-          estimatedDistance = null;
+          // estimatedDistance = null;
+          _dashboardController.emitStatePolyline( "estimatedDistance" ,null);
 
-          estimatedTotalPrice = null;
+          // estimatedTotalPrice = null;
+          Get. put(DashboardController()).emitStatePolyline( "estimatedTotalPrice" ,null);
         }
 
-        servicesListData = value.onRideRequest;
+        // servicesListData = value.onRideRequest;
+        _dashboardController.emitStateService( "servicesListData" , value.onRideRequest);
 
         userDetail(driverId: value.onRideRequest!.riderId);
 
         setState(() {});
 
-        if (servicesListData != null) {
-          if (servicesListData!.status != COMPLETED) {
+        if (_dashboardController.servicesListData != null) {
+          if (_dashboardController.servicesListData!.status != COMPLETED) {
             setMapPins();
           }
 
-          if (servicesListData!.status == COMPLETED && servicesListData!.isDriverRated == 0) {
-            if (Get.put(DashboardController()).current_screen == false) 
+          if (_dashboardController.servicesListData!.status == COMPLETED && _dashboardController.servicesListData!.isDriverRated == 0) {
+            if (_dashboardController.current_screen == false) 
             
             
             return;
  
             // current_screen = false;
-                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
+                _dashboardController.emitStateBool( "current_screen" , false); 
 
 
             // value.onRideRequest.otherRiderData
@@ -831,20 +773,20 @@ class DashboardScreenState extends State<DashboardScreen> {
             launchScreen(context, ReviewScreen(rideId: value.onRideRequest!.id!, currentData: value),
                 pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           } else if (value.payment != null && value.payment!.paymentStatus == PENDING) {
-            if (Get.put(DashboardController()).current_screen == false) return;
+            if (_dashboardController.current_screen == false) return;
 
             // current_screen = false;
-                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
+                _dashboardController.emitStateBool( "current_screen" , false); 
 
             launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
           }
         }
       } else {
         if (value.payment != null && value.payment!.paymentStatus == PENDING) {
-          if (Get.put(DashboardController()).current_screen == false) return;
+          if (_dashboardController.current_screen == false) return;
 
           // current_screen = false;
-                Get.put(DashboardController()).changeStateBool( "current_screen" , false); 
+                _dashboardController.emitStateBool( "current_screen" , false); 
 
           launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         }
@@ -858,7 +800,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
       appStore.setLoading(false);
 
-      servicesListData = null;
+      // servicesListData = null;
+        _dashboardController.emitStateService( "servicesListData" , null);
 
       setState(() {});
     });
@@ -867,14 +810,14 @@ class DashboardScreenState extends State<DashboardScreen> {
   getNewRideReq(int? riderID) async {
     print("Check Function Call Count::472");
 
-    print("TEST3::${servicesListData}");
+    print("TEST3::${_dashboardController. servicesListData}");
     //if (requestDataFetching == true) return;
 
     // requestDataFetching = true;
-                Get.put(DashboardController()).changeStateBool( "requestDataFetching" , true); 
+                _dashboardController.emitStateBool( "requestDataFetching" , true); 
     
 
-    if (servicesListData != null && servicesListData!.status == NEW_RIDE_REQUESTED) {
+    if (_dashboardController. servicesListData != null &&_dashboardController. servicesListData!.status == NEW_RIDE_REQUESTED) {
       return;
     }
 
@@ -918,33 +861,37 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         if (value.estimated_price != null && value.estimated_price.isNotEmpty) {
           try {
-            estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            // estimatedTotalPrice = num.tryParse(value.estimated_price[0]['total_amount'].toString());
+            Get. put(DashboardController()).emitStatePolyline( "estimatedTotalPrice" ,num.tryParse(value.estimated_price[0]['total_amount'].toString()));
 
-            estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            // estimatedDistance = num.tryParse(value.estimated_price[0]['distance'].toString());
+            Get. put(DashboardController()).emitStatePolyline( "estimatedDistance" ,num.tryParse(value.estimated_price[0]['distance'].toString()));
 
-            distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            // distance_unit = value.estimated_price[0]['distance_unit'].toString();
+            Get. put(DashboardController()).emitStatePolyline( "distance_unit" ,value.estimated_price[0]['distance_unit'].toString());
           } catch (e) {}
         } else {
-          estimatedDistance = null;
-
-          estimatedTotalPrice = null;
+          // estimatedDistance = null;
+ _dashboardController. emitStatePolyline( "estimatedDistance" ,null);
+          // estimatedTotalPrice = null;
+           _dashboardController. emitStatePolyline( "estimatedTotalPrice" ,null);
         }
 
-        servicesListData = ride;
+         _dashboardController.emitStateService( "servicesListData" ,  ride);
 
         // rideDetailsFetching = false;
-                Get.put(DashboardController()).changeStateBool( "rideDetailsFetching" , false); 
+                _dashboardController.emitStateBool( "rideDetailsFetching" , false); 
 
 
         ride.otherRiderData;
 
-        if (servicesListData != null)
-          await rideService.updateStatusOfRide(rideID: servicesListData!.id, req: {'on_rider_stream_api_call': 0});
+        if (_dashboardController.servicesListData != null)
+          await _dashboardController.rideService.updateStatusOfRide(rideID: _dashboardController.servicesListData!.id, req: {'on_rider_stream_api_call': 0});
 
-        sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
+        sharedPref.setString(ON_RIDE_MODEL, jsonEncode(_dashboardController.servicesListData));
 
         // riderId = servicesListData!.id!;
-              Get.put(DashboardController()).changeStateInt( "riderId" ,servicesListData!.id!); 
+              _dashboardController.emitStateInt( "riderId" ,_dashboardController.servicesListData!.id!); 
 
 
         setState(() {});
@@ -953,13 +900,13 @@ class DashboardScreenState extends State<DashboardScreen> {
       }
 
       // requestDataFetching = false;
-                Get.put(DashboardController()).changeStateBool( "requestDataFetching" , false); 
+                _dashboardController.emitStateBool( "requestDataFetching" , false); 
 
       setMapPins();
     }).catchError((error, stack) {
       print("TEST981");
       // rideDetailsFetching = false;
-                Get.put(DashboardController()).changeStateBool( "rideDetailsFetching" , false); 
+                _dashboardController.emitStateBool( "rideDetailsFetching" , false); 
 
       FirebaseCrashlytics.instance.recordError("pop_up_issue::" + error.toString(), stack, fatal: true);
 
@@ -973,16 +920,16 @@ class DashboardScreenState extends State<DashboardScreen> {
     appStore.setLoading(true);
 
     Map req = {
-      "id": servicesListData!.id,
+      "id":_dashboardController. servicesListData!.id,
       "status": status,
     };
 
-    await rideRequestUpdate(request: req, rideId: servicesListData!.id).then((value) async {
+    await rideRequestUpdate(request: req, rideId: _dashboardController.servicesListData!.id).then((value) async {
       appStore.setLoading(false);
 
       getCurrentRequest().then((value) async {
         if (status == ARRIVED) {
-          _polyLines.clear();
+          _dashboardController. polyLines.clear();
 
           setMapPins();
         }
@@ -1014,7 +961,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     await sendTripPriceToRider(request: req).then((value) {
       stopAudio();
       // sendPrice = true;
-         Get.put(DashboardController()).changeStateBool( "sendPrice" ,true); 
+         _dashboardController.emitStateBool( "sendPrice" ,true); 
       // Get.put(dependency)
       startCountdown();
       appStore.setLoading(false);
@@ -1026,7 +973,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       getCurrentRequest();
     }).catchError((error) {
       stopAudio();
-                Get.put(DashboardController()).changeStateBool( "sendPrice" , true); 
+                _dashboardController.emitStateBool( "sendPrice" , true); 
 
       // sendPrice = true;
       startCountdown();
@@ -1042,13 +989,13 @@ class DashboardScreenState extends State<DashboardScreen> {
     appStore.setLoading(true);
 
     Map req = {
-      "id": servicesListData!.id,
+      "id": _dashboardController.servicesListData!.id,
       if (!deCline) "driver_id": sharedPref.getInt(USER_ID),
       "is_accept": deCline ? "0" : "1",
     };
 
     // timeSetCalled = false;
-   Get.put(DashboardController()).changeStateBool( "timeSetCalled" , false); 
+   _dashboardController.emitStateBool( "timeSetCalled" , false); 
     await rideRequestResPond(request: req).then((value) async {
       stopAudio();
       appStore.setLoading(false);
@@ -1056,7 +1003,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       getCurrentRequest();
 
       if (deCline) {
-        rideService.updateStatusOfRide(rideID: servicesListData!.id, req: {
+        _dashboardController.rideService.updateStatusOfRide(rideID: _dashboardController.servicesListData!.id, req: {
           'on_stream_api_call': 0, /* 'driver_id': null*/
         });
 
@@ -1064,9 +1011,9 @@ class DashboardScreenState extends State<DashboardScreen> {
 
         // isOnLine=false;
 
-        servicesListData = null;
+         _dashboardController.emitStateService( "servicesListData" , null);
 
-        _polyLines.clear();
+        _dashboardController. polyLines.clear();
 
         sharedPref.remove(ON_RIDE_MODEL);
 
@@ -1088,40 +1035,41 @@ class DashboardScreenState extends State<DashboardScreen> {
     appStore.setLoading(true);
 
     Map req = {
-      "id": servicesListData!.id,
-      "service_id": servicesListData!.serviceId,
-      "end_latitude": driverLocation!.latitude,
-      "end_longitude": driverLocation!.longitude,
-      "end_address": endLocationAddress,
-      "distance": Get.put(DashboardController()).totalDistance,
-      if (extraChargeList.isNotEmpty) "extra_charges": extraChargeList,
-      if (extraChargeList.isNotEmpty) "extra_charges_amount": Get.put(DashboardController()).extraChargeAmount,
+      "id":_dashboardController. servicesListData!.id,
+      "service_id": _dashboardController.servicesListData!.serviceId,
+      "end_latitude": _dashboardController. driverLocation!.latitude,
+      "end_longitude": _dashboardController.driverLocation!.longitude,
+      "end_address":_dashboardController. endLocationAddress,
+      "distance": _dashboardController.totalDistance,
+      if (_dashboardController.extraChargeList.isNotEmpty) "extra_charges": _dashboardController.extraChargeList,
+      if (_dashboardController.extraChargeList.isNotEmpty) "extra_charges_amount": _dashboardController.extraChargeAmount,
     };
 
     log(req);
 
     await completeRide(request: req).then((value) async {
       chatMessageService.exportChat(
-          rideId: servicesListData!.id.toString(),
+          rideId: _dashboardController.servicesListData!.id.toString(),
           senderId: sharedPref.getString(UID).validate(),
-          receiverId: riderData!.uid.validate());
+          receiverId: _dashboardController.riderData!.uid.validate());
 
       try {
-        await rideService.updateStatusOfRide(rideID: servicesListData!.id, req: {'on_rider_stream_api_call': 0});
+        await _dashboardController.rideService.updateStatusOfRide(rideID: _dashboardController.servicesListData!.id, req: {'on_rider_stream_api_call': 0});
       } catch (e) {
         print("Error Found:::$e");
       }
 
-      sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
+      // sourceIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon);
+      _dashboardController.emitStateBitmap( "sourceIcon" , await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), SourceIcon));
 
       appStore.setLoading(false);
 
       getCurrentRequest();
     }).catchError((error) {
       chatMessageService.exportChat(
-          rideId: servicesListData!.id.toString(),
+          rideId: _dashboardController.servicesListData!.id.toString(),
           senderId: sharedPref.getString(UID).validate(),
-          receiverId: riderData!.uid.validate());
+          receiverId: _dashboardController.riderData!.uid.validate());
 
       appStore.setLoading(false);
 
@@ -1133,37 +1081,30 @@ class DashboardScreenState extends State<DashboardScreen> {
     // if (servicesListData != null) _polyLines.clear();
 
     try {
-      var result = await polylinePoints.getRouteBetweenCoordinates(
+      var result = await  _dashboardController.polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: GOOGLE_MAP_API_KEY,
 
         request: PolylineRequest(
-            origin: PointLatLng(driverLocation!.latitude, driverLocation!.longitude),
-            destination: servicesListData!.status != IN_PROGRESS
-                ? PointLatLng(double.parse(servicesListData!.startLatitude.validate()),
-                    double.parse(servicesListData!.startLongitude.validate()))
-                : PointLatLng(double.parse(servicesListData!.endLatitude.validate()),
-                    double.parse(servicesListData!.endLongitude.validate())),
+            origin: PointLatLng(_dashboardController.driverLocation!.latitude, _dashboardController.driverLocation!.longitude),
+            destination:_dashboardController. servicesListData!.status != IN_PROGRESS
+                ? PointLatLng(double.parse(_dashboardController.servicesListData!.startLatitude.validate()),
+                    double.parse(_dashboardController.servicesListData!.startLongitude.validate()))
+                : PointLatLng(double.parse(_dashboardController.servicesListData!.endLatitude.validate()),
+                    double.parse(_dashboardController.servicesListData!.endLongitude.validate())),
             mode: TravelMode.driving),
-
-        // PointLatLng(driverLocation!.latitude, driverLocation!.longitude),
-
-        // servicesListData!.status != IN_PROGRESS
-
-        //     ? PointLatLng(double.parse(servicesListData!.startLatitude.validate()), double.parse(servicesListData!.startLongitude.validate()))
-
-        //     : PointLatLng(double.parse(servicesListData!.endLatitude.validate()), double.parse(servicesListData!.endLongitude.validate())),
+ 
       );
 
       if (result.points.isNotEmpty) {
-        polylineCoordinates.clear();
+     _dashboardController.   polylineCoordinates.clear();
 
         result.points.forEach((element) {
-          polylineCoordinates.add(LatLng(element.latitude, element.longitude));
+        _dashboardController.  polylineCoordinatesAdd(LatLng(element.latitude, element.longitude));
         });
 
-        _polyLines.clear();
+       _dashboardController.  polyLines.clear();
 
-        _polyLines.add(
+       _dashboardController.  polyLines.add(
           Polyline(
             visible: true,
             width: 5,
@@ -1171,9 +1112,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             endCap: Cap.roundCap,
             polylineId: PolylineId('poly'),
             color: polyLineColor,
-            points: polylineCoordinates,
+            points:   _dashboardController.polylineCoordinates,
           ),
         );
+         _dashboardController. update();
 
         setState(() {});
       }
@@ -1182,41 +1124,47 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> setMapPins() async {
     try {
-      markers.clear();
+      _dashboardController.   markers.clear();
 
       ///source pin
 
       MarkerId id = MarkerId("driver");
 
-      markers.remove(id);
+     _dashboardController.   markers.remove(id);
 
-      markers.add(
-        Marker(
+      // markers.add(
+      //   Marker(
+      //     markerId: id,
+      //     position: _dashboardController.driverLocation!,
+      //     icon: Get.put( DashboardController()). driverIcon,
+      //     infoWindow: InfoWindow(title: ''),
+      //   ),
+      // );
+
+ _dashboardController. mapAdd( Marker(
           markerId: id,
-          position: driverLocation!,
-          icon: driverIcon,
+          position: _dashboardController.driverLocation!,
+          icon: Get.put( DashboardController()). driverIcon,
           infoWindow: InfoWindow(title: ''),
-        ),
-      );
-
-      if (servicesListData != null)
-        servicesListData!.status != IN_PROGRESS
-            ? markers.add(
+        ),);
+      if (_dashboardController.servicesListData != null)
+        _dashboardController.servicesListData!.status != IN_PROGRESS
+            ? _dashboardController. mapAdd(
                 Marker(
                   markerId: MarkerId('sourceLocation'),
                   position: LatLng(
-                      double.parse(servicesListData!.startLatitude!), double.parse(servicesListData!.startLongitude!)),
-                  icon: sourceIcon,
-                  infoWindow: InfoWindow(title: servicesListData!.startAddress),
+                      double.parse(_dashboardController.servicesListData!.startLatitude!), double.parse(_dashboardController.servicesListData!.startLongitude!)),
+                  icon: Get.put( DashboardController()).sourceIcon,
+                  infoWindow: InfoWindow(title:_dashboardController. servicesListData!.startAddress),
                 ),
               )
-            : markers.add(
+            : _dashboardController. mapAdd(
                 Marker(
                   markerId: MarkerId('destinationLocation'),
                   position: LatLng(
-                      double.parse(servicesListData!.endLatitude!), double.parse(servicesListData!.endLongitude!)),
-                  icon: destinationIcon,
-                  infoWindow: InfoWindow(title: servicesListData!.endAddress),
+                      double.parse(_dashboardController.servicesListData!.endLatitude!), double.parse(_dashboardController.servicesListData!.endLongitude!)),
+                  icon: Get.put( DashboardController()).destinationIcon,
+                  infoWindow: InfoWindow(title: _dashboardController.servicesListData!.endAddress),
                 ),
               );
 
@@ -1231,33 +1179,33 @@ class DashboardScreenState extends State<DashboardScreen> {
   /// Get Current Location
 
   Future<void> startLocationTracking() async {
-    _polyLines.clear();
+     _dashboardController. polyLines.clear();
 
-    polylineCoordinates.clear();
+     _dashboardController. polylineCoordinates.clear();
 
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) async {
       log("=====Location:::${value.latitude}:::${value.longitude}");
       await Geolocator.isLocationServiceEnabled().then((value) async {
         log("======Location:::${value}");
-        if (Get.put(DashboardController()).  locationEnable) {
+        if (_dashboardController.  locationEnable) {
           final LocationSettings locationSettings =
               LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 100, timeLimit: Duration(seconds: 30));
 
-          positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((event) async {
+       var   positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((event) async {
             DateTime? d = DateTime.tryParse(sharedPref.getString("UPDATE_CALL").toString());
 
             if (d != null && DateTime.now().difference(d).inSeconds > 30) {
               if (appStore.isLoggedIn) {
-                driverLocation = LatLng(event.latitude, event.longitude);
-
+                // driverLocation = LatLng(event.latitude, event.longitude);
+                 _dashboardController.emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
                 Map req = {
-                  "latitude": driverLocation!.latitude.toString(),
-                  "longitude": driverLocation!.longitude.toString(),
+                  "latitude":  _dashboardController.driverLocation!.latitude.toString(),
+                  "longitude": _dashboardController. driverLocation!.longitude.toString(),
                 };
 
-                sharedPref.setDouble(LATITUDE, driverLocation!.latitude);
+                sharedPref.setDouble(LATITUDE,  _dashboardController.driverLocation!.latitude);
 
-                sharedPref.setDouble(LONGITUDE, driverLocation!.longitude);
+                sharedPref.setDouble(LONGITUDE, _dashboardController. driverLocation!.longitude);
 
                 await updateStatus(req).then((value) {
                   setState(() {});
@@ -1269,16 +1217,22 @@ class DashboardScreenState extends State<DashboardScreen> {
 
                 setMapPins();
 
-                if (servicesListData != null) setPolyLines();
+                if (_dashboardController.servicesListData != null) setPolyLines();
               }
 
               sharedPref.setString("UPDATE_CALL", DateTime.now().toString());
             } else if (d == null) {
               sharedPref.setString("UPDATE_CALL", DateTime.now().toString());
             }
-          }, onError: (error) {
-            positionStream.cancel();
+
+            
+          }
+          
+          , onError: (error) {
+           _dashboardController. positionStream.cancel();
           });
+                 _dashboardController.emitStateStream( "positionStream" , positionStream);
+
         }
       });
     }).catchError((error) {
@@ -1297,7 +1251,8 @@ class DashboardScreenState extends State<DashboardScreen> {
     await getUserDetail(userId: driverId).then((value) {
       appStore.setLoading(false);
 
-      riderData = value.data!;
+      // riderData = value.data!;
+      _dashboardController.emitStateUser( "riderData" , value.data!);
 
       setState(() {});
     }).catchError((error) {
@@ -1338,11 +1293,11 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     countdownTimer?.cancel(); // Clean up timer
 
-    if (timerData != null) {
-      timerData!.cancel();
+    if (_dashboardController.timerData != null) {
+     _dashboardController. timerData!.cancel();
     }
 
-    positionStream.cancel();
+   _dashboardController. positionStream.cancel();
 
     // if (timerData == null) {
 
@@ -1354,7 +1309,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   void moveMap(BuildContext context, Prediction prediction) async {
-    final GoogleMapController controller = await _controller.future;
+    final GoogleMapController controller = await    _dashboardController.controllerCompleter.future;
 
     controller.moveCamera(
       CameraUpdate.newLatLngZoom(
@@ -1393,27 +1348,32 @@ class DashboardScreenState extends State<DashboardScreen> {
         ),
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: true,
-        key: scaffoldKey,
+        key:Get.put( DashboardController()). scaffoldKey,
         drawer: DrawerComponent(onCall: () async {
           await driverStatus(status: 0);
         }),
         body: Stack(
           children: [
             if (sharedPref.getDouble(LATITUDE) != null && sharedPref.getDouble(LONGITUDE) != null)
-              GoogleMap(
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationEnabled: false,
-                compassEnabled: false,
-                padding: EdgeInsets.only(top: context.statusBarHeight + 4 + 24),
-                onMapCreated: onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: driverLocation ?? LatLng(sharedPref.getDouble(LATITUDE)!, sharedPref.getDouble(LONGITUDE)!),
-                  zoom: 17.0,
-                ),
-                markers: markers,
-                mapType: MapType.normal,
-                polylines: _polyLines,
+              GetBuilder<DashboardController>(
+                
+                builder: ( controller) {
+                  return GoogleMap(
+                    mapToolbarEnabled: false,
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: false,
+                    compassEnabled: false,
+                    padding: EdgeInsets.only(top: context.statusBarHeight + 4 + 24),
+                    onMapCreated: onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: controller.driverLocation ?? LatLng(sharedPref.getDouble(LATITUDE)!, sharedPref.getDouble(LONGITUDE)!),
+                      zoom: 17.0,
+                    ),
+                    markers: controller. markers,
+                    mapType: MapType.normal,
+                    polylines:controller. polyLines,
+                  );
+                }
               ),
  
             onlineOfflineSwitch(),
@@ -1424,7 +1384,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               top: context.statusBarHeight + 8,
               right: 14,
               left: 14,
-              child: topWidget( context, scaffoldKey: scaffoldKey, onTap: () => scaffoldKey.currentState!.openDrawer()),
+              child: topWidget( context, scaffoldKey: Get.put( DashboardController()).scaffoldKey, onTap: () => Get.put( DashboardController()).scaffoldKey.currentState!.openDrawer()),
             ),
 
             // myLocationWidget(),
@@ -1444,7 +1404,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             init: DashboardController(),
             builder: ( controller) {
               return StreamBuilder<QuerySnapshot>(
-                stream: rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
+                stream: _dashboardController.rideService.fetchRide(userId: sharedPref.getInt(USER_ID)),
                 builder: (c, snapshot) {
                   if (snapshot.hasData) {
                     List<FRideBookingModel> data = snapshot.data!.docs
@@ -1454,16 +1414,16 @@ class DashboardScreenState extends State<DashboardScreen> {
                     if (data.length == 2) {
                       //here old ride of this driver remove if completed and payment is done code set
               
-                      rideService.removeOldRideEntry(
+                      _dashboardController.rideService.removeOldRideEntry(
                         userId: sharedPref.getInt(USER_ID),
                       );
                     }
               
                     if (data.length != 0) {
                       // rideCancelDetected = false;
-                           controller.changeStateBool( "rideCancelDetected" , false);      
+                           controller.emitStateBool( "rideCancelDetected" , false);      
                       if (data[0].onStreamApiCall == 0) {
-                        rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 1});
+                        _dashboardController.rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 1});
                         if (data[0].status == NEW_RIDE_REQUESTED) {
                           print("TEST1");
                           getNewRideReq(data[0].rideId);
@@ -1472,34 +1432,34 @@ class DashboardScreenState extends State<DashboardScreen> {
                           getCurrentRequest();
                         }
                       }
-                      if (servicesListData == null &&
+                      if (controller.servicesListData == null &&
                           data[0].status == NEW_RIDE_REQUESTED &&
                           data[0].onStreamApiCall == 1) {
                         // reqCheckCounter++;
               
-             controller.changeStateInt( "reqCheckCounter"  , Get.put(DashboardController()).reqCheckCounter + 1);
+             controller.emitStateInt( "reqCheckCounter"  , _dashboardController.reqCheckCounter + 1);
               
                         if (controller.reqCheckCounter < 1) {
-                          rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                         _dashboardController. rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
                         }
                       }
-                      if ((servicesListData != null &&
-                              servicesListData!.status != NEW_RIDE_REQUESTED &&
+                      if ((controller.servicesListData != null &&
+                              controller.servicesListData!.status != NEW_RIDE_REQUESTED &&
                               data[0].status == NEW_RIDE_REQUESTED &&
                               data[0].onStreamApiCall == 1) ||
-                          (servicesListData == null &&
+                          (controller.servicesListData == null &&
                               data[0].status == NEW_RIDE_REQUESTED &&
                               data[0].onStreamApiCall == 1)) {
                         if (    controller.rideDetailsFetching != true) {
                           // rideDetailsFetching = true;
-                 controller.changeStateBool( "rideDetailsFetching" , true) ;
+                 controller.emitStateBool( "rideDetailsFetching" , true) ;
               
-                          rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
+                         _dashboardController. rideService.updateStatusOfRide(rideID: data[0].rideId, req: {'on_stream_api_call': 0});
                         }
                       }
               
-                      if (servicesListData != null) {
-                        return servicesListData!.status != null && servicesListData!.status == NEW_RIDE_REQUESTED
+                      if (controller.servicesListData != null) {
+                        return controller.servicesListData!.status != null && controller.servicesListData!.status == NEW_RIDE_REQUESTED
                               ? Builder(builder: (context) {
                                   // if (sendPrice == true && countdown == 0)
                                   //   return SizedBox();
@@ -1510,7 +1470,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                       alignment: Alignment.bottomCenter,
                                       children: [
               
-                                        servicesListData != null && controller. duration >= 0
+                                       controller. servicesListData != null && controller. duration >= 0
                                                 ? Container(
                                                     decoration: BoxDecoration(
                                                       color: Colors.white,
@@ -1552,7 +1512,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                     ClipRRect(
                                                                       borderRadius: BorderRadius.circular(defaultRadius),
                                                                       child: commonCachedNetworkImage(
-                                                                          servicesListData!.riderProfileImage.validate(),
+                                                                          controller.servicesListData!.riderProfileImage.validate(),
                                                                           height: 35,
                                                                           width: 35,
                                                                           fit: BoxFit.cover),
@@ -1563,12 +1523,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text(
-                                                                              '${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                                              '${controller.servicesListData!.riderName.capitalizeFirstLetter()}',
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: boldTextStyle(size: 14)),
                                                                           SizedBox(height: 4),
-                                                                          Text('${servicesListData!.riderEmail.validate()}',
+                                                                          Text('${controller.servicesListData!.riderEmail.validate()}',
                                                                               maxLines: 1,
                                                                               overflow: TextOverflow.ellipsis,
                                                                               style: secondaryTextStyle()),
@@ -1588,7 +1548,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                       )
                                                                   ],
                                                                 ),
-                                                                if (estimatedTotalPrice != null && estimatedDistance != null)
+                                                                if (controller. estimatedTotalPrice != null && controller.estimatedDistance != null)
                                                                   Container(
                                                                     padding: EdgeInsets.symmetric(vertical: 8),
                                                                     decoration: BoxDecoration(
@@ -1611,7 +1571,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                             Text('${language.distance}:',
                                                                                 style: secondaryTextStyle(size: 16)),
                                                                             SizedBox(width: 4),
-                                                                            Text('${estimatedDistance} ${distance_unit}',
+                                                                            Text('${controller.estimatedDistance} ${controller.distance_unit}',
                                                                                 maxLines: 1,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 style: boldTextStyle(size: 14)),
@@ -1623,29 +1583,29 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                   ),
                                                                 addressDisplayWidget(
                                                                     endLatLong: LatLng(
-                                                                        servicesListData!.endLatitude.toDouble(),
-                                                                        servicesListData!.endLongitude.toDouble()),
-                                                                    endAddress: servicesListData!.endAddress,
+                                                                        controller.servicesListData!.endLatitude.toDouble(),
+                                                                       controller. servicesListData!.endLongitude.toDouble()),
+                                                                    endAddress: controller.servicesListData!.endAddress,
                                                                     startLatLong: LatLng(
-                                                                        servicesListData!.startLatitude.toDouble(),
-                                                                        servicesListData!.startLongitude.toDouble()),
-                                                                    startAddress: servicesListData!.startAddress),
+                                                                       controller. servicesListData!.startLatitude.toDouble(),
+                                                                        controller.servicesListData!.startLongitude.toDouble()),
+                                                                    startAddress:controller. servicesListData!.startAddress),
                                                                 Align(
                                                                   alignment: AlignmentDirectional.centerStart,
                                                                   child: Text(
-                                                                    '${language.shipmentType}: ${servicesListData!.shipmentType}',
+                                                                    '${language.shipmentType}: ${controller.servicesListData!.shipmentType}',
                                                                     style: primaryTextStyle(),
                                                                     textAlign: TextAlign.start,
                                                                   ),
                                                                 ),
-                                                                if (servicesListData != null &&
-                                                                    servicesListData!.otherRiderData != null)
+                                                                if (controller.servicesListData != null &&
+                                                                   controller. servicesListData!.otherRiderData != null)
                                                                   Divider(
                                                                     color: Colors.grey.shade300,
                                                                     thickness: 0.7,
                                                                     height: 8,
                                                                   ),
-                                                                _bookingForView(),
+                                                                _bookingForView( controller ),
                                                                 SizedBox(height: 8),
                                                                 (countdown > 0)
                                                                     ? Stack(
@@ -1681,7 +1641,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                         ],
                                                                       )
                                                                     : AppTextField(
-                                                                        controller: priceController,
+                                                                        controller: _dashboardController. priceController,
                                                                         textFieldType: TextFieldType.PHONE,
                                                                         decoration: InputDecoration(
                                                                           hintText: language.enterPrice,
@@ -1715,7 +1675,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                                   // FlutterRingtonePlayer()
                                                                                   // .stop();
                                                                     
-                                                                                  timerData!.cancel();
+                                                                                  _dashboardController.timerData!.cancel();
                                                                                 } catch (e) {}
                                                                     
                                                                                 sharedPref.remove(IS_TIME2);
@@ -1725,7 +1685,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                                 rideRequestAccept(deCline: true);
                                                                               }).then(
                                                                                 (value) {
-                                                                                  _polyLines.clear();
+                                                                                  _dashboardController. polyLines.clear();
                                                                     
                                                                                   setState;
                                                                                 },
@@ -1766,15 +1726,15 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                                     title: language
                                                                                         .areYouSureYouWantToAcceptThisRequest,
                                                                                     context, onAccept: (v) {
-                                                                                  if (double.tryParse(priceController.text) ==
+                                                                                  if (double.tryParse(_dashboardController. priceController.text) ==
                                                                                       null) {
                                                                                     toast(language.pleaseEnterValidPrice);
                                                                     
                                                                                     return;
-                                                                                  } else if (int.parse(priceController.text) <
-                                                                                      estimatedTotalPrice) {
+                                                                                  } else if (int.parse(_dashboardController. priceController.text) <
+                                                                                     controller. estimatedTotalPrice) {
                                                                                     toast(
-                                                                                        "${language.pleaseEnterPriceGreaterThan} ${printAmount(estimatedTotalPrice.toStringAsFixed(2))}");
+                                                                                        "${language.pleaseEnterPriceGreaterThan} ${printAmount(controller.estimatedTotalPrice.toStringAsFixed(2))}");
                                                                     
                                                                                     return;
                                                                                   }
@@ -1782,14 +1742,14 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                                                   try {
                                                                               
                                                                     
-                                                                                    timerData!.cancel();
+                                                                                  _dashboardController.  timerData!.cancel();
                                                                                   } catch (e) {}
                                                                     
                                                                                   
                                                                     
                                                                                   sendTripPrice(
-                                                                                    price: priceController.text,
-                                                                                    rideId: servicesListData!.id.toString(),
+                                                                                    price: _dashboardController. priceController.text,
+                                                                                    rideId: controller.servicesListData!.id.toString(),
                                                                                   );
                                                                                 });
                                                                               },
@@ -1833,7 +1793,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                           children: [
                                             ClipRRect(
                                               borderRadius: BorderRadius.circular(defaultRadius),
-                                              child: commonCachedNetworkImage(servicesListData!.riderProfileImage,
+                                              child: commonCachedNetworkImage(controller.servicesListData!.riderProfileImage,
                                                   height: 48, width: 48, fit: BoxFit.cover),
                                             ),
                                             SizedBox(width: 12),
@@ -1841,12 +1801,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text('${servicesListData!.riderName.capitalizeFirstLetter()}',
+                                                  Text('${controller.servicesListData!.riderName.capitalizeFirstLetter()}',
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: boldTextStyle(size: 18)),
                                                   SizedBox(height: 4),
-                                                  Text('${servicesListData!.riderEmail.validate()}',
+                                                  Text('${controller.servicesListData!.riderEmail.validate()}',
                                                       maxLines: 1,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: secondaryTextStyle()),
@@ -1861,8 +1821,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                     return AlertDialog(
                                                       contentPadding: EdgeInsets.all(0),
                                                       content: AlertScreen(
-                                                          rideId: servicesListData!.id,
-                                                          regionId: servicesListData!.regionId),
+                                                          rideId:controller. servicesListData!.id,
+                                                          regionId:controller. servicesListData!.regionId),
                                                     );
                                                   },
                                                 );
@@ -1872,7 +1832,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(width: 8),
                                             inkWellWidget(
                                               onTap: () {
-                                                launchUrl(Uri.parse('tel:${servicesListData!.riderContactNumber}'),
+                                                launchUrl(Uri.parse('tel:${controller.servicesListData!.riderContactNumber}'),
                                                     mode: LaunchMode.externalApplication);
                                               },
                                               child: chatCallWidget(Icons.call),
@@ -1880,26 +1840,26 @@ class DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(width: 8),
                                             inkWellWidget(
                                               onTap: () {
-                                                if (riderData == null || (riderData != null && riderData!.uid == null)) {
+                                                if (controller. riderData == null || (controller.riderData != null && controller.riderData!.uid == null)) {
                                                   init();
               
                                                   return;
                                                 }
               
-                                                if (riderData != null) {
+                                                if (controller.riderData != null) {
                                                   launchScreen(
                                                       context,
                                                       ChatScreen(
-                                                        userData: riderData,
-                                                        ride_id: Get.put(DashboardController()). riderId,
+                                                        userData: controller.riderData,
+                                                        ride_id: _dashboardController. riderId,
                                                       ));
                                                 }
                                               },
-                                              child: chatCallWidget(Icons.chat_bubble_outline, data: riderData),
+                                              child: chatCallWidget(Icons.chat_bubble_outline, data: controller.riderData),
                                             ),
                                           ],
                                         ),
-                                        if (estimatedTotalPrice != null && estimatedDistance != null)
+                                        if (controller.estimatedTotalPrice != null && controller.estimatedDistance != null)
                                           Container(
                                             padding: EdgeInsets.symmetric(vertical: 8),
                                             child: Row(
@@ -1915,7 +1875,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                   children: [
                                                     Text('${language.distance}:', style: secondaryTextStyle(size: 16)),
                                                     SizedBox(width: 4),
-                                                    Text('${estimatedDistance} ${distance_unit}',
+                                                    Text('${controller.estimatedDistance} ${controller.distance_unit}',
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                         style: boldTextStyle(size: 14)),
@@ -1933,28 +1893,28 @@ class DashboardScreenState extends State<DashboardScreen> {
                                         ),
                                         SizedBox(height: 8),
                                         addressDisplayWidget(
-                                            endLatLong: LatLng(servicesListData!.endLatitude.toDouble(),
-                                                servicesListData!.endLongitude.toDouble()),
-                                            endAddress: servicesListData!.endAddress,
-                                            startLatLong: LatLng(servicesListData!.startLatitude.toDouble(),
-                                                servicesListData!.startLongitude.toDouble()),
-                                            startAddress: servicesListData!.startAddress),
+                                            endLatLong: LatLng(controller.servicesListData!.endLatitude.toDouble(),
+                                               controller. servicesListData!.endLongitude.toDouble()),
+                                            endAddress: controller.servicesListData!.endAddress,
+                                            startLatLong: LatLng(controller.servicesListData!.startLatitude.toDouble(),
+                                               controller. servicesListData!.startLongitude.toDouble()),
+                                            startAddress: controller.servicesListData!.startAddress),
                                         SizedBox(height: 8),
-                                        servicesListData!.status != NEW_RIDE_REQUESTED
+                                       controller. servicesListData!.status != NEW_RIDE_REQUESTED
                                             ? Padding(
                                                 padding: EdgeInsets.only(
-                                                    bottom: servicesListData!.status == IN_PROGRESS ? 0 : 8),
-                                                child: _bookingForView(),
+                                                    bottom: controller.servicesListData!.status == IN_PROGRESS ? 0 : 8),
+                                                child: _bookingForView( controller ),
                                               )
                                             : SizedBox(),
-                                        if (servicesListData!.status == IN_PROGRESS &&
-                                            servicesListData != null &&
-                                            servicesListData!.otherRiderData != null)
+                                        if (controller.servicesListData!.status == IN_PROGRESS &&
+                                            controller.servicesListData != null &&
+                                           controller. servicesListData!.otherRiderData != null)
               
                                    
               
                                           SizedBox(height: 8),
-                                        if (servicesListData!.status == IN_PROGRESS)
+                                        if (controller.servicesListData!.status == IN_PROGRESS)
                                           if (appStore.extraChargeValue != null)
                                             Observer(builder: (context) {
                                               return Visibility(
@@ -1973,7 +1933,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                         return Padding(
                                                           padding: EdgeInsets.only(
                                                               bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                          child: ExtraChargesWidget(data: extraChargeList),
+                                                          child: ExtraChargesWidget(data:controller. extraChargeList),
                                                         );
                                                       },
                                                     );
@@ -1982,16 +1942,18 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                       log("extraChargeListData   $extraChargeListData");
               
                                                       // extraChargeAmount = 0;
-                controller.changeStateInt( "extraChargeAmount"  , 0); 
+                controller.emitStateInt( "extraChargeAmount"  , 0); 
               
-                                                      extraChargeList.clear();
+                                                     controller. extraChargeList.clear();
               
                                                       extraChargeListData.forEach((element) {
-                controller.changeStateInt( "extraChargeAmount"  , controller. extraChargeAmount + element.value!); 
+                controller.emitStateInt( "extraChargeAmount"  , controller. extraChargeAmount + element.value!); 
               
                                                         // extraChargeAmount = extraChargeAmount + element.value!;
               
-                                                        extraChargeList = extraChargeListData;
+                                                        // extraChargeList = extraChargeListData;
+                        controller.extraChargeListChange( extraChargeListData);
+
                                                       });
                                                     }
                                                   },
@@ -2026,7 +1988,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                 ),
                                               );
                                             }),
-                                        buttonWidget()
+                                        buttonWidget( controller)
                                       ],
                                     ),
                                   ),
@@ -2039,30 +2001,30 @@ class DashboardScreenState extends State<DashboardScreen> {
                         try {
                           // FlutterRingtonePlayer().stop();
               
-                          if (timerData != null) {
-                            timerData!.cancel();
+                          if (_dashboardController.timerData != null) {
+                           _dashboardController. timerData!.cancel();
                           }
                         } catch (e) {}
                       }
               
-                      if (servicesListData != null) {
+                      if (controller.servicesListData != null) {
                         checkRideCancel();
                       }
               
-                      if (  Get.put(DashboardController()).riderId != 0) {
+                      if (  _dashboardController.riderId != 0) {
                         // riderId = 0;
-                controller..changeStateInt( "riderId" , 0) ;
+                controller..emitStateInt( "riderId" , 0) ;
               
                         try {
                           sharedPref.remove(IS_TIME2);
               
-                          timerData!.cancel();
+                       _dashboardController.   timerData!.cancel();
                         } catch (e) {}
                       }
               
-                      servicesListData = null;
+                     controller. servicesListData = null;
               
-                      _polyLines.clear();
+                    controller.  polyLines.clear();
               
                       return SizedBox();
                     }
@@ -2112,11 +2074,12 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> getUserLocation() async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(driverLocation!.latitude, driverLocation!.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates( _dashboardController. driverLocation!.latitude,_dashboardController. driverLocation!.longitude);
 
     Placemark place = placemarks[0];
 
-    endLocationAddress = '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
+    // endLocationAddress = '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}';
+    _dashboardController.emitStateString( "endLocationAddress"  , '${place.street},${place.subLocality},${place.thoroughfare},${place.locality}');
   }
 
 //TODO:Hossam hadi kharajha fi widgets
@@ -2162,7 +2125,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                         await NotificationWithSoundService.initializeService();
                       }
 
-   WidgetsBinding.instance.addPostFrameCallback((_)  => Get.put(DashboardController()).changeStateBool( "isOnLine" ,!controller. isOnLine) ); 
+   WidgetsBinding.instance.addPostFrameCallback((_)  => _dashboardController.emitStateBool( "isOnLine" ,!controller. isOnLine) ); 
 
                       // isOnLine = !isOnLine;
                       setState(() {});
@@ -2199,13 +2162,13 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
 //TODO:Hossam hadi kharajha fi widgets
-  Widget buttonWidget() {
-    if (servicesListData!.status == ACCEPTED) {
+  Widget buttonWidget(DashboardController controller ) {
+    if ( controller.servicesListData!.status == ACCEPTED) {
       cancelTimer();
     }
     return Row(
       children: [
-        if (servicesListData!.status != IN_PROGRESS)
+        if ( controller.servicesListData!.status != IN_PROGRESS)
           Expanded(
             flex: 0,
             child: Padding(
@@ -2236,7 +2199,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                   }),
             ),
           ),
-        if (servicesListData!.status == IN_PROGRESS)
+        if ( controller.servicesListData!.status == IN_PROGRESS)
           Expanded(
             flex: 0,
             child: Padding(
@@ -2248,13 +2211,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                         Icons.add,
                         size: 18,
                       ),
-                      // SizedBox(width: 0),
-                      // Text(
-                      //   language.extraFees,
-                      //   style: boldTextStyle(
-                      //     color: primaryColor,
-                      //   ),
-                      // )
+               
                     ],
                   ),
 
@@ -2280,7 +2237,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                       builder: (_) {
                         return Padding(
                           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: ExtraChargesWidget(data: extraChargeList),
+                          child: ExtraChargesWidget(data: controller.extraChargeList),
                         );
                       },
                     );
@@ -2289,15 +2246,16 @@ class DashboardScreenState extends State<DashboardScreen> {
                       log("extraChargeListData   $extraChargeListData");
 
                       // extraChargeAmount = 0;
-                Get.put(DashboardController()).changeStateInt( "extraChargeAmount" , 0); 
+                _dashboardController.emitStateInt( "extraChargeAmount" , 0); 
 
-                      extraChargeList.clear();
+                      controller.extraChargeList.clear();
 
                       extraChargeListData.forEach((element) {
                         // extraChargeAmount = extraChargeAmount + element.value!;
-                Get.put(DashboardController()).changeStateInt( "extraChargeAmount" ,   Get.put(DashboardController()).extraChargeAmount + element.value!); 
+                _dashboardController.emitStateInt( "extraChargeAmount" ,   _dashboardController.extraChargeAmount + element.value!); 
 
-                        extraChargeList = extraChargeListData;
+                        // extraChargeList = extraChargeListData;
+                        controller.extraChargeListChange( extraChargeListData);
                       });
                     }
                   }),
@@ -2313,7 +2271,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                 child: AppButtonWidget(
                   // width: MediaQuery.of(context).size.width,
             
-                  text: buttonText(status: servicesListData!.status),
+                  text: buttonText(status:  controller.servicesListData!.status),
             
                   color: primaryColor,
             
@@ -2321,7 +2279,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             
                   onTap: () async {
                     if (await checkPermission()) {
-                      if (servicesListData!.status == ACCEPTED) {
+                      if ( controller.servicesListData!.status == ACCEPTED) {
                         showConfirmDialogCustom(
                             primaryColor: primaryColor,
                             positiveText: language.yes,
@@ -2331,7 +2289,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                             context, onAccept: (v) {
                           rideRequest(status: ARRIVING);
                         });
-                      } else if (servicesListData!.status == ARRIVING) {
+                      } else if ( controller.servicesListData!.status == ARRIVING) {
                         showConfirmDialogCustom(
                             primaryColor: primaryColor,
                             positiveText: language.yes,
@@ -2341,8 +2299,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                             context, onAccept: (v) {
                           rideRequest(status: ARRIVED);
                         });
-                      } else if (servicesListData!.status == ARRIVED) {
-                        otpController.clear();
+                      } else if ( controller.servicesListData!.status == ARRIVED) {
+                       _dashboardController.  otpController.clear();
             
                         showDialog(
                           context: context,
@@ -2443,34 +2401,40 @@ class DashboardScreenState extends State<DashboardScreen> {
             
                                         autofillHints: [],
             
-                                        controller: otpController,
+                                        controller: _dashboardController. otpController,
             
                                         onCompleted: (val) {
-                                          otpCheck = val;
+                                          // otpCheck = val;
+                                           _dashboardController.emitStateInt( "otpCheck" , val);
                                         },
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 16),
-                                  AppButtonWidget(
-                                    width: MediaQuery.of(context).size.width,
-                                    text: language.confirm,
-                                    onTap: () {
-                                      if (otpCheck == null || otpCheck != servicesListData!.otp) {
-                                        return toast(language.pleaseEnterValidOtp);
-                                      } else {
-                                        Navigator.pop(context);
-            
-                                        rideRequest(status: IN_PROGRESS);
-                                      }
-                                    },
+                                  GetBuilder<DashboardController>(
+                                    init:  DashboardController(),
+                                    builder: (  controller) {
+                                      return AppButtonWidget(
+                                        width: MediaQuery.of(context).size.width,
+                                        text: language.confirm,
+                                        onTap: () {
+                                          if (  controller. otpCheck == null || controller. otpCheck !=  controller.servicesListData!.otp) {
+                                            return toast(language.pleaseEnterValidOtp);
+                                          } else {
+                                            Navigator.pop(context);
+                                                  
+                                            rideRequest(status: IN_PROGRESS);
+                                          }
+                                        },
+                                      );
+                                    }
                                   )
                                 ],
                               ),
                             );
                           },
                         );
-                      } else if (servicesListData!.status == IN_PROGRESS) {
+                      } else if ( controller.servicesListData!.status == IN_PROGRESS) {
                         showConfirmDialogCustom(
                             primaryColor: primaryColor,
                             dialogType: DialogType.ACCEPT,
@@ -2482,10 +2446,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             
                           getUserLocation().then((value2) async {
                           controller.  totalDistance = calculateDistance(
-                                double.parse(servicesListData!.startLatitude.validate()),
-                                double.parse(servicesListData!.startLongitude.validate()),
-                                driverLocation!.latitude,
-                                driverLocation!.longitude);
+                                double.parse( controller.servicesListData!.startLatitude.validate()),
+                                double.parse( controller.servicesListData!.startLongitude.validate()),
+                                _dashboardController.driverLocation!.latitude,
+                                _dashboardController.driverLocation!.longitude);
             
                             await completeRideRequest();
                           });
@@ -2592,11 +2556,11 @@ class DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  _bookingForView() {
-    if (servicesListData != null && servicesListData!.otherRiderData != null) {
+  _bookingForView(DashboardController controller) {
+    if ( controller.servicesListData != null &&  controller.servicesListData!.otherRiderData != null) {
       return Rideforwidget(
-          name: servicesListData!.otherRiderData!.name.validate(),
-          contact: servicesListData!.otherRiderData!.conatctNumber.validate());
+          name:  controller.servicesListData!.otherRiderData!.name.validate(),
+          contact:  controller.servicesListData!.otherRiderData!.conatctNumber.validate());
     }
 
     return SizedBox();
@@ -2604,13 +2568,13 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> cancelRequest(String? reason) async {
     Map req = {
-      "id": servicesListData!.id,
+      "id":_dashboardController. servicesListData!.id,
       "cancel_by": DRIVER,
       "status": CANCELED,
       "reason": reason,
     };
     print("CancelRIdeCall");
-    await rideRequestUpdate(request: req, rideId: servicesListData!.id).then((value) async {
+    await rideRequestUpdate(request: req, rideId:_dashboardController.servicesListData!.id).then((value) async {
       print("CancelRIdeCall2");
       print("CancelRIdeCall2CHeck::${value}");
       toast(value.message);
@@ -2618,7 +2582,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       chatMessageService.exportChat(
           rideId: "",
           senderId: sharedPref.getString(UID).validate(),
-          receiverId: riderData!.uid.validate(),
+          receiverId:_dashboardController. riderData!.uid.validate(),
           onlyDelete: true);
 
       setMapPins();
@@ -2629,7 +2593,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         chatMessageService.exportChat(
             rideId: "",
             senderId: sharedPref.getString(UID).validate(),
-            receiverId: riderData!.uid.validate(),
+            receiverId:_dashboardController. riderData!.uid.validate(),
             onlyDelete: true);
       } catch (e) {
         developer.log('e.toString() $e');
@@ -2642,10 +2606,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   void checkRideCancel() async {
-    if (Get.put(DashboardController()).rideCancelDetected) return;
+    if (_dashboardController.rideCancelDetected) return;
 
     // rideCancelDetected = true;
-             WidgetsBinding.instance.addPostFrameCallback((_)  =>    Get.put(DashboardController()).changeStateBool( "rideCancelDetected" , false)  ); 
+             WidgetsBinding.instance.addPostFrameCallback((_)  =>    _dashboardController.emitStateBool( "rideCancelDetected" , false)  ); 
 
     appStore.setLoading(true);
 
@@ -2653,11 +2617,11 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     sharedPref.remove(IS_TIME2);
 
-    await rideDetail(rideId: servicesListData!.id).then((value) {
+    await rideDetail(rideId:_dashboardController. servicesListData!.id).then((value) {
       appStore.setLoading(false);
 
       if (value.data!.status == CANCELED && value.data!.cancelBy == RIDER) {
-        _polyLines.clear();
+         _dashboardController.  polyLines.clear();
 
         setMapPins();
 

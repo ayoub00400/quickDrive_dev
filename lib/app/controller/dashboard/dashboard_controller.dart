@@ -1,6 +1,19 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:taxi_driver/app/model/CurrentRequestModel.dart';
+
+import '../../Services/RideService.dart';
+import '../../model/ExtraChargeRequestModel.dart';
+import '../../model/UserDetailModel.dart';
 
 class DashboardController  extends   GetxController{
+  UserData? riderData;
 
 
   bool timeSetCalled = false;
@@ -36,9 +49,100 @@ class DashboardController  extends   GetxController{
   num extraChargeAmount = 0;
   double totalDistance = 0.0;
 
+// String
+  String? otpCheck;
+
+  String endLocationAddress = '';
+
+  // AudioPlayer
+
+  final player = AudioPlayer();
 
 
-changeStateBool(tag ,bool valu){
+//  Timer
+  Timer? timerUpdateLocation;
+
+  Timer? timerData;
+
+
+//  LatLng
+  LatLng? driverLocation;
+
+  LatLng? sourceLocation;
+
+  LatLng? destinationLocation;
+
+//  BitmapDescriptor
+  late BitmapDescriptor driverIcon;
+
+  late BitmapDescriptor destinationIcon;
+
+  late BitmapDescriptor sourceIcon;
+
+//  PolylinePoints
+    var estimatedTotalPrice;
+  var estimatedDistance;
+  var distance_unit;
+  late PolylinePoints polylinePoints;
+  Set<Polyline> polyLines = Set<Polyline>();
+
+// Service
+  RideService rideService = RideService();
+  OnRideRequest? servicesListData;
+
+// Completer
+  Completer<GoogleMapController> controllerCompleter = Completer();
+
+
+  // map 
+
+final Set<Marker> markers = {};
+  List<LatLng> polylineCoordinates = [];
+  List<ExtraChargeRequestModel> extraChargeList = [];
+
+
+mapAdd( Marker marker){
+
+  markers.add(
+    marker
+  );
+  update();
+}
+
+polylineCoordinatesAdd(   val){
+
+  polylineCoordinates.add(
+    val
+  );
+  update();
+}extraChargeListChange(   val){
+
+  extraChargeList = val;
+  update();
+}
+
+//  Stream
+  late StreamSubscription<Position> positionStream;
+  LocationPermission? permissionData;
+  late StreamSubscription messageSubscription;
+  late StreamSubscription<ServiceStatus> serviceStatusStream;
+  StreamController messageController = StreamController.broadcast();
+
+
+  // TextEditing 
+
+  final otpController = TextEditingController();
+
+  final priceController = TextEditingController();
+
+
+  // key
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  
+
+
+emitStateBool(tag ,bool valu){
  switch(tag){
    case "timeSetCalled":
      timeSetCalled = valu;
@@ -85,7 +189,7 @@ changeStateBool(tag ,bool valu){
 //  update();
 }
 
-changeStateInt(tag ,  valu){
+emitStateInt(tag ,  valu){
  switch(tag){
    case "reqCheckCounter":
      reqCheckCounter = valu;
@@ -126,4 +230,137 @@ changeStateInt(tag ,  valu){
  }
 
 }
+
+emitStateString(tag ,  valu){
+ switch(tag){
+   case "otpCheck":
+     otpCheck = valu;
+     update();
+     break;
+   case "endLocationAddress":
+     endLocationAddress = valu;
+     update();
+     break;
+ }
+}
+
+emitStateLatLng(tag ,  valu){
+ switch(tag){
+   case "driverLocation":
+     driverLocation = valu;
+     update();
+     break;
+   case "sourceLocation":
+     sourceLocation = valu;
+     update();
+     break;
+   case "destinationLocation":
+     destinationLocation = valu;
+     update();
+     break;
+ }
+}
+
+emitStateTime(tag ,  valu){
+ switch(tag){
+   case "timerUpdateLocation":
+     timerUpdateLocation = valu;
+     update();
+     break;
+   case "timerData":
+     timerData = valu;
+     update();
+     break;
+   
+ }
+}
+emitStateBitmap(tag ,  valu){
+ switch(tag){
+   case "driverIcon":
+     driverIcon = valu;
+     update();
+     break;
+   case "destinationIcon":
+     destinationIcon = valu;
+     update();
+     break;
+   case "sourceIcon":
+     sourceIcon = valu;
+     update();
+     break;
+ }
+ }
+emitStatePolyline(tag ,  valu){
+ switch(tag){
+   case "estimatedTotalPrice":
+     estimatedTotalPrice = valu;
+     update();
+     break;
+   case "estimatedDistance":
+     estimatedDistance = valu;
+     update();
+     break;
+   case "distance_unit":
+     distance_unit = valu;
+     update();
+     break;
+      case "polylinePoints":
+     polylinePoints = valu;
+     update();
+     break;
+       case "polyLines":
+     polyLines = valu;
+     update();
+     break;
+ }
+ }
+emitStateStream(tag ,  valu){
+
+ switch(tag){
+   case "positionStream":
+     positionStream = valu;
+     update();
+     break;
+   case "permissionData":
+     permissionData = valu;
+     update();
+     break;
+
+     case "messageSubscription":
+     messageSubscription = valu;
+     update();
+     break;
+
+      case "messageController":
+     messageController = valu;
+     update();
+     break;
+      case "serviceStatusStream":
+     serviceStatusStream = valu;
+     update();
+     break;
+   
+ }
+}
+ 
+
+ emitStateService( tag ,  valu){
+ switch(tag){
+   case "servicesListData":
+     servicesListData = valu;
+     update();
+     break;
+
+
+ }
+ }
+
+ emitStateUser( tag ,  valu){
+ switch(tag){
+   case "riderData":
+     riderData = valu;
+     update();
+     break;
+ }
+ }
 }
