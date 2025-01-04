@@ -148,44 +148,73 @@ polylineCoordinatesAdd(   val){
 emitStateBool(tag ,bool valu){
  switch(tag){
    case "timeSetCalled":
-     timeSetCalled = valu;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+          timeSetCalled = valu;
      update();
+
+      });
      break;
    case "isOnLine":
+     WidgetsBinding.instance.addPostFrameCallback((_) {
      isOnLine = valu;
      update();
 
+      });
+
      break;
    case "locationEnable":
-     locationEnable = valu;
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+ locationEnable = valu;
      update();
+
+      });
+    
 
      break;
    case "current_screen":
+     WidgetsBinding.instance.addPostFrameCallback((_) {
      current_screen = valu;
      update();
+      });
+
 
      break;
    case "sendPrice":
-     sendPrice = valu;
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+       sendPrice = valu;
      update();
+
+      });
+ 
 
      break;
    case "rideCancelDetected":
-     rideCancelDetected = valu;
-    //  update();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    rideCancelDetected = valu;
+     update();
+
+      });
+ 
 
 
 
      break;
 
     case "rideDetailsFetching":
-      rideDetailsFetching = valu;
-      // update();
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+        rideDetailsFetching = valu;
+     update();
+
+      });
+
       break;
     case "requestDataFetching":
-      requestDataFetching = valu;
-      // update();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+   requestDataFetching = valu;
+      update();
+
+      });
+   
       break;
     
  }
