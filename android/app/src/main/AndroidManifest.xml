@@ -48,7 +48,7 @@
 
  
         <!-- Declare the background service -->
-        <service android:name=".MyBackgroundService" android:enabled="true" android:exported="true" />
+        <!-- <service android:name=".MyBackgroundService" android:enabled="true" android:exported="true" /> -->
          <!-- Firebase Messaging Service -->
       
         <meta-data android:name="flutterEmbedding" android:value="2" />
