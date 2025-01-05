@@ -1,8 +1,11 @@
 
   import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 
+import '../../../../controller/dashboard/dashboard_controller.dart';
 import '../../../../utils/Colors.dart';
 import '../../../../utils/Common.dart';
 import '../../../../utils/Constants.dart';
@@ -10,10 +13,13 @@ import '../../../../utils/Extensions/app_common.dart';
 import '../../../../utils/var/var_app.dart';
 import '../../EditProfileScreen.dart';
 import '../../NotificationScreen.dart';
+import '../function/map/moveMap.dart';
 
 Widget topWidget(context ,  {scaffoldKey ,
   dynamic Function()? onTap
 }) {
+DashboardController _dashboardController=  Get.put(DashboardController());
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -114,7 +120,15 @@ Widget topWidget(context ,  {scaffoldKey ,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             inkWellWidget(
-              onTap:  onTap, 
+              onTap:  () {
+                moveMap(
+                  context,
+                  Prediction(
+                    lat:_dashboardController. driverLocation!.latitude.toString(),
+                    lng: _dashboardController. driverLocation!.longitude.toString(),
+                  ),
+                );
+              },
               child: Container(
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(

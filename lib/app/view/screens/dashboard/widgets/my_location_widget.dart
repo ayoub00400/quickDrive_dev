@@ -36,12 +36,3 @@ Widget myLocationWidget({void Function()? onTap}) {
       ),
     );
   }
-// () {
-//                 moveMap(
-//                   context,
-//                   Prediction(
-//                     lat: driverLocation!.latitude.toString(),
-//                     lng: driverLocation!.longitude.toString(),
-//                   ),
-//                 );
-//               },
