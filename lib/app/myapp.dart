@@ -6,11 +6,9 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
 import 'package:taxi_driver/app/utils/AppTheme.dart';
 import 'package:taxi_driver/app/utils/Constants.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
-
 import '../main.dart';
 import 'language/AppLocalizations.dart';
 import 'model/LanguageDataModel.dart';
@@ -69,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             FocusManager.instance.primaryFocus?.unfocus();
           }
         },
-        child: GetMaterialApp(
+        child: MaterialApp(
           navigatorObservers: [ChuckerFlutter.navigatorObserver],
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
