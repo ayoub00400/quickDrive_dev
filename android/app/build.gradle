@@ -5,7 +5,7 @@ plugins {
     id "com.google.gms.google-services"
 }
 
-
+apply plugin: 'com.google.gms.google-services' 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -112,6 +112,7 @@ dependencies {
     implementation 'io.card:android-sdk:5.5.1'
     // implementation 'com.braintreepayments.api:drop-in:5.4.0'
     implementation 'com.google.android.material:material:1.9.0'
+    
 //    implementation('com.braintreepayments.api:drop-in:6.16.0'){
 //        exclude group: "org.jfrog.cardinalcommerce.gradle", module: "cardinalmobilesdk"
 //    }

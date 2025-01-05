@@ -22,12 +22,8 @@ class DashboardScreen extends StatefulWidget {
   @override
   DashboardScreenState createState() => DashboardScreenState();
 }
-
 class DashboardScreenState extends State<DashboardScreen> {
-
-
 DashboardController _dashboardController=  Get.put(DashboardController());
- 
   @override
   void initState() {
     super.initState();
@@ -106,6 +102,4 @@ DashboardController _dashboardController=  Get.put(DashboardController());
       ),
     );
   }
-
-
 }
