@@ -46,8 +46,7 @@ class LanguageAr extends BaseLanguage {
   @override
   String get writeMessage => 'اكتب رسالة....';
   @override
-  String get enterTheEmailAssociatedWithYourAccount =>
-      'أدخل البريد الإلكتروني المرتبط بحسابك';
+  String get enterTheEmailAssociatedWithYourAccount => 'أدخل البريد الإلكتروني المرتبط بحسابك';
   @override
   String get submit => 'تسجيل';
   @override
@@ -81,8 +80,7 @@ class LanguageAr extends BaseLanguage {
   @override
   String get emergencyContact => 'الاتصال بالطوارىء';
   @override
-  String get areYouSureYouWantDeleteThisNumber =>
-      'هل أنت متأكد أنك تريد حذف هذا الرقم؟';
+  String get areYouSureYouWantDeleteThisNumber => 'هل أنت متأكد أنك تريد حذف هذا الرقم؟';
   @override
   String get addContact => 'إضافة جهة اتصال';
   @override
@@ -158,8 +156,7 @@ class LanguageAr extends BaseLanguage {
   @override
   String get logOut => 'تسجيل خروج';
   @override
-  String get areYouSureYouWantToLogoutThisApp =>
-      'هل أنت متأكد من أنك تريد تسجيل هذا التطبيق؟';
+  String get areYouSureYouWantToLogoutThisApp => 'هل أنت متأكد من أنك تريد تسجيل هذا التطبيق؟';
   @override
   String get destinationLocation => 'موقع وجهة';
   @override
@@ -181,14 +178,13 @@ class LanguageAr extends BaseLanguage {
   @override
   String get sos => 'سوس';
   @override
-  String get signInUsingYourMobileNumber =>
-      'تسجيل الدخول باستخدام رقم \ nmobile';
+  String get signInUsingYourMobileNumber => 'تسجيل الدخول باستخدام رقم \ nmobile';
   @override
   String get accepted => 'تم القبول';
   @override
   String get arriving => 'قادم';
   @override
-  String get arrived => 'وصلت'; 
+  String get arrived => 'وصلت';
   @override
   String get cancelled => 'ألغيت';
   @override
@@ -240,15 +236,13 @@ class LanguageAr extends BaseLanguage {
   @override
   String get requests => 'طلب';
   @override
-  String get areYouSureYouWantToCancelThisRequest =>
-      'هل أنت متأكد من أنك تريد إلغاء هذا الطلب؟';
+  String get areYouSureYouWantToCancelThisRequest => 'هل أنت متأكد من أنك تريد إلغاء هذا الطلب؟';
   @override
   String get decline => 'رفض';
   @override
   String get accept => 'قبول';
   @override
-  String get areYouSureYouWantToAcceptThisRequest =>
-      'هل أنت متأكد أنك تريد قبول هذا الطلب؟';
+  String get areYouSureYouWantToAcceptThisRequest => 'هل أنت متأكد أنك تريد قبول هذا الطلب؟';
   @override
   String get call => 'يتصل';
   @override
@@ -282,18 +276,15 @@ class LanguageAr extends BaseLanguage {
   @override
   String get updateVehicle => 'تحديث السيارة';
   @override
-  String get userNotApproveMsg =>
-      'ملفك الشخصي قيد المراجعة...  سيصلك اشعار في اقرب وقت  .';
+  String get userNotApproveMsg => 'ملفك الشخصي قيد المراجعة...  سيصلك اشعار في اقرب وقت  .';
   @override
-  String get uploadFileConfirmationMsg =>
-      'هل أنت متأكد من أنك تريد تحميل هذا الملف؟';
+  String get uploadFileConfirmationMsg => 'هل أنت متأكد من أنك تريد تحميل هذا الملف؟';
   @override
   String get selectDocument => 'حدد المستند';
   @override
   String get addDocument => 'أضف وثيقة';
   @override
-  String get areYouSureYouWantToDeleteThisDocument =>
-      'هل أنت متأكد أنك تريد حذف هذه الوثيقة؟';
+  String get areYouSureYouWantToDeleteThisDocument => 'هل أنت متأكد أنك تريد حذف هذه الوثيقة؟';
   @override
   String get expireDate => 'تاريخ انتهاء الصلاحية';
   @override
@@ -303,14 +294,12 @@ class LanguageAr extends BaseLanguage {
   @override
   String get account => 'حساب';
   @override
-  String get areYouSureYouWantPleaseReadAffect =>
-      'هل انت متأكد انك تريد حذف حسابك؟ يرجى قراءة كيفية تأثير حذف الحساب.';
+  String get areYouSureYouWantPleaseReadAffect => 'هل انت متأكد انك تريد حذف حسابك؟ يرجى قراءة كيفية تأثير حذف الحساب.';
   @override
   String get deletingAccountEmail =>
       'حذف حسابك يزيل المعلومات الشخصية من قاعدة البيانات الخاصة بنا. يصبح بريدك الإلكتروني محجوزًا بشكل دائم ولا يمكن إعادة استخدام البريد الإلكتروني نفسه لتسجيل حساب جديد';
   @override
-  String get areYouSureYouWantDeleteAccount =>
-      'هل أنت متأكد من أنك تريد حذف الحساب؟';
+  String get areYouSureYouWantDeleteAccount => 'هل أنت متأكد من أنك تريد حذف الحساب؟';
   @override
   String get yourInternetIsNotWorking => 'الإنترنت الخاص بك لا يعمل';
   @override
@@ -362,13 +351,11 @@ class LanguageAr extends BaseLanguage {
   String get someRequiredDocumentAreNotUploaded =>
       'لم يتم تحميل بعض المستند المطلوب. يرجى تحميل جميع المستندات المطلوبة.';
   @override
-  String get areYouCertainOffline =>
-      'هل متأكد من أنك لا تريد استقبال الطلبات ؟ ';
+  String get areYouCertainOffline => 'هل متأكد من أنك لا تريد استقبال الطلبات ؟ ';
   @override
   String get areYouCertainOnline => 'هل متأكد من أنك جاهز لاستقبال الطلبات ؟';
   @override
-  String get pleaseAcceptTermsOfServicePrivacyPolicy =>
-      'يرجى قبول شروط الخدمة وسياسة الخصوصية';
+  String get pleaseAcceptTermsOfServicePrivacyPolicy => 'يرجى قبول شروط الخدمة وسياسة الخصوصية';
   @override
   String get rememberMe => 'تذكرنى';
   @override
@@ -418,11 +405,9 @@ class LanguageAr extends BaseLanguage {
   @override
   String get notAvailable => 'غير متاح';
   @override
-  String get youWillReceiveNewRidersAndNotifications =>
-      'سوف تتلقى ركاب وإشعارات جدد';
+  String get youWillReceiveNewRidersAndNotifications => 'سوف تتلقى ركاب وإشعارات جدد';
   @override
-  String get youWillNotReceiveNewRidersAndNotifications =>
-      'لن تتلقى ركابا وإشعارات جدد';
+  String get youWillNotReceiveNewRidersAndNotifications => 'لن تتلقى ركابا وإشعارات جدد';
   @override
   String get yourAccountIs => 'حسابك هو';
   @override
@@ -479,8 +464,7 @@ class LanguageAr extends BaseLanguage {
   @override
   String get otpCodeHasBeenSentTo => 'تم إرسال رمز OTP إلى';
   @override
-  String get pleaseEnterOtp =>
-      'الرجاء إدخال OTP أدناه للتحقق من رقم هاتفك المحمول.';
+  String get pleaseEnterOtp => 'الرجاء إدخال OTP أدناه للتحقق من رقم هاتفك المحمول.';
   @override
   String get selectSources => 'حدد المصادر';
   @override
@@ -594,4 +578,6 @@ class LanguageAr extends BaseLanguage {
   String get platformDeduction => 'خصم المنصة';
   @override
   String get state => 'الولاية';
+  @override
+  String get scheduledRide => 'الرحلات المجدولة';
 }

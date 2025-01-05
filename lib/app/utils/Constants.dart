@@ -6,8 +6,7 @@ const mAppName = 'QuickCargoo';
 //endregion
 
 //region DomainUrl
-const DOMAIN_URL =
-    'https://quickcargoo.com'; // Don't add slash at the end of the url
+const DOMAIN_URL = 'https://quickcargoo.com'; // Don't add slash at the end of the url
 //endregion
 
 //region Google map key
@@ -31,12 +30,10 @@ const digitAfterDecimal = 2;
 //region OneSignal Keys
 //You have to generate 2 onesignal account one for Rider and one for Driver
 const mOneSignalAppIdDriver = 'abc5a87a-4297-4465-8439-e4cff8d1c7e5';
-const mOneSignalRestKeyDriver =
-    'ZDZkMGFhOWItMmI2ZC00MjlhLTk3ZGUtN2M5ZWIyNjU5ZDk0';
+const mOneSignalRestKeyDriver = 'ZDZkMGFhOWItMmI2ZC00MjlhLTk3ZGUtN2M5ZWIyNjU5ZDk0';
 
 const mOneSignalAppIdRider = 'a5e97fc2-6427-4ad4-a2e2-9b51e50d9b98';
-const mOneSignalRestKeyRider =
-    'ODFhYTJmYmEtMzRiMi00ODA3LTg0ZDAtN2Y3NmM2ZGJmYWM5';
+const mOneSignalRestKeyRider = 'ODFhYTJmYmEtMzRiMi00ODA3LTg0ZDAtN2Y3NmM2ZGJmYWM5';
 //endregion
 
 //region PDF configuration
@@ -143,6 +140,7 @@ const mRazorDescription = mAppName;
 const mStripeIdentifier = defaultCountry;
 //endregion
 
+//TODO: this is ride status :
 //region Rides Status
 const UPCOMING = 'upcoming';
 const NEW_RIDE_REQUESTED = 'new_ride_requested';
@@ -154,6 +152,7 @@ const IN_PROGRESS = 'in_progress';
 const CANCELED = 'canceled';
 const COMPLETED = 'completed';
 const COMPLAIN_COMMENT = "complaintcomment";
+const SCHEDULED = 'scheduled';
 //endregion
 
 //region FireBase Collection Name
@@ -204,10 +203,8 @@ const LEFT = 'left';
 const CLOCK = 'clock';
 const PRESENT_TOPUP_AMOUNT = 'preset_topup_amount';
 const PRESENT_TIP_AMOUNT = 'preset_tip_amount';
-const MAX_TIME_FOR_RIDER_MINUTE =
-    'max_time_for_find_drivers_for_regular_ride_in_minute';
-const MAX_TIME_FOR_DRIVER_SECOND =
-    'ride_accept_decline_duration_for_driver_in_second';
+const MAX_TIME_FOR_RIDER_MINUTE = 'max_time_for_find_drivers_for_regular_ride_in_minute';
+const MAX_TIME_FOR_DRIVER_SECOND = 'ride_accept_decline_duration_for_driver_in_second';
 const MIN_AMOUNT_TO_ADD = 'min_amount_to_add';
 const MAX_AMOUNT_TO_ADD = 'max_amount_to_add';
 const APPLY_ADDITIONAL_FEE = 'apply_additional_fee';

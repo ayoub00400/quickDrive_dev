@@ -413,7 +413,8 @@ class LanguageEn extends BaseLanguage {
   String get updateVehicle => 'Update Vehicle Detail';
 
   @override
-  String get userNotApproveMsg => 'Your profile is currently being reviewed. Please wait for some time or get in touch with your administrator.';
+  String get userNotApproveMsg =>
+      'Your profile is currently being reviewed. Please wait for some time or get in touch with your administrator.';
 
   @override
   String get uploadFileConfirmationMsg => 'Are you sure you want to upload this file?';
@@ -440,7 +441,8 @@ class LanguageEn extends BaseLanguage {
   String get account => 'Account ';
 
   @override
-  String get areYouSureYouWantPleaseReadAffect => 'Are you sure you want to delete your account? Please read how account deletion will affect.';
+  String get areYouSureYouWantPleaseReadAffect =>
+      'Are you sure you want to delete your account? Please read how account deletion will affect.';
 
   @override
   String get deletingAccountEmail =>
@@ -450,7 +452,8 @@ class LanguageEn extends BaseLanguage {
   String get areYouSureYouWantDeleteAccount => 'Are you sure you want to delete Account?';
 
   @override
-  String get yourInternetIsNotWorking => 'I apologize, but it seems that your internet connection is currently not functioning.';
+  String get yourInternetIsNotWorking =>
+      'I apologize, but it seems that your internet connection is currently not functioning.';
 
   @override
   String get allow => 'Allow';
@@ -459,7 +462,8 @@ class LanguageEn extends BaseLanguage {
   String get mostReliableMightyDriverApp => 'Most Reliable QuickCargoo Driver App';
 
   @override
-  String get toEnjoyYourRideExperiencePleaseAllowPermissions => 'To enjoy your ride experience\nPlease allow us the following permissions';
+  String get toEnjoyYourRideExperiencePleaseAllowPermissions =>
+      'To enjoy your ride experience\nPlease allow us the following permissions';
 
   @override
   String get cashCollected => 'Cash Collected';
@@ -519,7 +523,8 @@ class LanguageEn extends BaseLanguage {
   String get isMandatoryDocument => '* is a mandatory document.';
 
   @override
-  String get someRequiredDocumentAreNotUploaded => 'Some required document are not uploaded. Please upload all required documents.';
+  String get someRequiredDocumentAreNotUploaded =>
+      'Some required document are not uploaded. Please upload all required documents.';
 
   @override
   String get areYouCertainOffline => 'Are you sure you want to switch to offline mode?';
@@ -615,7 +620,8 @@ class LanguageEn extends BaseLanguage {
   String get pleaseContactSystemAdministrator => 'Please contact system administrator';
 
   @override
-  String get youCanNotThisActionsPerformBecauseYourCurrentRideIsNotCompleted => 'You can not this actions perform,because your current ride is not completed';
+  String get youCanNotThisActionsPerformBecauseYourCurrentRideIsNotCompleted =>
+      'You can not this actions perform,because your current ride is not completed';
 
   @override
   String get applyExtraCharges => 'Apply extra charges';
@@ -726,7 +732,8 @@ class LanguageEn extends BaseLanguage {
   String get startRideAskOTP => 'To start the ride, ask the client for their OTP.';
 
   @override
-  String get lessWalletAmountMsg => "You can't ride because your wallet balance is below the limit.  Add money to your wallet now to continue using the driver app";
+  String get lessWalletAmountMsg =>
+      "You can't ride because your wallet balance is below the limit.  Add money to your wallet now to continue using the driver app";
 
   @override
   String get via => 'Via';
@@ -754,33 +761,52 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get signcontinue => 'Sign in to continue ';
-  @override String get chooseMap => 'Choose Map';
-  @override String get rideFor => 'Ride For';
-  @override String get updateVehicleInfo => 'Vehicle Details';
-  @override String get ridingPerson => 'Riding Person';
+  @override
+  String get chooseMap => 'Choose Map';
+  @override
+  String get rideFor => 'Ride For';
+  @override
+  String get updateVehicleInfo => 'Vehicle Details';
+  @override
+  String get ridingPerson => 'Riding Person';
   String get writeReasonHere => 'Write reason here...';
   String get cancelRide => 'Cancel Ride';
   String get riderNotAnswer => 'Rider Not answering';
   String get accidentAccept => 'Accidentally accepted the trip';
   String get riderNotOnTime => "Rider didn't show up on time";
   String get vehicleProblem => 'Vehicle problems';
-  @override String get paymentSuccess => 'Payment Successful';
+  @override
+  String get paymentSuccess => 'Payment Successful';
 
-  @override String get estAmount => 'Est. Amount';
-  @override String get dontFeelSafe => "I don't feel safe";
-  @override String get wrongTurn => "Made a wrong turn";
+  @override
+  String get estAmount => 'Est. Amount';
+  @override
+  String get dontFeelSafe => "I don't feel safe";
+  @override
+  String get wrongTurn => "Made a wrong turn";
 
-  @override String get rideCanceledByRider => "Ride canceled by Rider";
-  @override String get cancelledReason => "Cancelled Reason";
-  @override String get networkErr =>   "Network Error";
-  @override String get tryAgain   =>   "Try Again";
-  @override String get noConnected=>   "Check your network connection";
-  @override String get riderReview=>   "Rider Review";
-  @override String get fileSizeValidate => 'Max upload size: 5 MB';
-  @override String get fileSizeValidateMsg => 'File too large to upload';
-  @override String get routingNumber => 'Routing Number';
-  @override String get iban => 'Bank IBAN';
-  @override String get swift => 'Bank Swift';
+  @override
+  String get rideCanceledByRider => "Ride canceled by Rider";
+  @override
+  String get cancelledReason => "Cancelled Reason";
+  @override
+  String get networkErr => "Network Error";
+  @override
+  String get tryAgain => "Try Again";
+  @override
+  String get noConnected => "Check your network connection";
+  @override
+  String get riderReview => "Rider Review";
+  @override
+  String get fileSizeValidate => 'Max upload size: 5 MB';
+  @override
+  String get fileSizeValidateMsg => 'File too large to upload';
+  @override
+  String get routingNumber => 'Routing Number';
+  @override
+  String get iban => 'Bank IBAN';
+  @override
+  String get swift => 'Bank Swift';
   @override
   String get enterPrice => 'Enter Price';
   @override
@@ -801,4 +827,6 @@ class LanguageEn extends BaseLanguage {
   String get platformDeduction => 'Platform Deduction';
   @override
   String get state => 'State';
+  @override
+  String get scheduledRide => 'Scheduled Ride';
 }

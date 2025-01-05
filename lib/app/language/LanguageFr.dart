@@ -56,8 +56,7 @@ class LanguageFr extends BaseLanguage {
   String get passwordDoesNotMatch => "Le mot de passe ne correspond pas";
 
   @override
-  String get passwordInvalid =>
-      "La longueur minimale du mot de passe devrait être de 8";
+  String get passwordInvalid => "La longueur minimale du mot de passe devrait être de 8";
 
   @override
   String get yes => "Oui";
@@ -69,8 +68,7 @@ class LanguageFr extends BaseLanguage {
   String get writeMessage => "Écrit un message....";
 
   @override
-  String get enterTheEmailAssociatedWithYourAccount =>
-      "Entre l'e-mail associé à votre compte";
+  String get enterTheEmailAssociatedWithYourAccount => "Entre l'e-mail associé à votre compte";
 
   @override
   String get submit => "Soumettre ";
@@ -109,8 +107,7 @@ class LanguageFr extends BaseLanguage {
   String get updateProfile => "Mettr à jour le profil";
 
   @override
-  String get notChangeUsername =>
-      "Vou ne pouvez pas changer le nom d'utilisateur";
+  String get notChangeUsername => "Vou ne pouvez pas changer le nom d'utilisateur";
 
   @override
   String get notChangeEmail => "Vou ne pouvez pas modifier l'ID de messagerie";
@@ -122,8 +119,7 @@ class LanguageFr extends BaseLanguage {
   String get emergencyContact => "Personn à contacter en cas d'urgence";
 
   @override
-  String get areYouSureYouWantDeleteThisNumber =>
-      "Ête-vous sûr de vouloir supprimer ce numéro?";
+  String get areYouSureYouWantDeleteThisNumber => "Ête-vous sûr de vouloir supprimer ce numéro?";
 
   @override
   String get addContact => "Ajoute le contact";
@@ -204,8 +200,7 @@ class LanguageFr extends BaseLanguage {
   String get cash => "Espèce";
 
   @override
-  String get waitingForDriverConformation =>
-      "En attente de la confirmation du passager";
+  String get waitingForDriverConformation => "En attente de la confirmation du passager";
 
   @override
   String get tip => "Consei";
@@ -238,8 +233,7 @@ class LanguageFr extends BaseLanguage {
   String get logOut => "Se déconnecter";
 
   @override
-  String get areYouSureYouWantToLogoutThisApp =>
-      "Ête-vous sûr de vouloir déconnecter cette application?";
+  String get areYouSureYouWantToLogoutThisApp => "Ête-vous sûr de vouloir déconnecter cette application?";
 
   @override
   String get destinationLocation => "Lie de destination";
@@ -272,8 +266,7 @@ class LanguageFr extends BaseLanguage {
   String get sos => "So";
 
   @override
-  String get signInUsingYourMobileNumber =>
-      "Connecte-vous en utilisant votre numéro \ nmobile";
+  String get signInUsingYourMobileNumber => "Connecte-vous en utilisant votre numéro \ nmobile";
 
   @override
   String get accepted => "Accept";
@@ -291,8 +284,7 @@ class LanguageFr extends BaseLanguage {
   String get completed => "Complét";
 
   @override
-  String get pleaseEnableLocationPermission =>
-      "Veuille activer l'autorisation de localisation";
+  String get pleaseEnableLocationPermission => "Veuille activer l'autorisation de localisation";
 
   @override
   String get pending => "En attente";
@@ -349,8 +341,7 @@ class LanguageFr extends BaseLanguage {
   String get addBankDetail => "Ajouter les détails de la banque";
 
   @override
-  String get bankInfoUpdateSuccessfully =>
-      "Mis à jour des informations bancaires avec succès";
+  String get bankInfoUpdateSuccessfully => "Mis à jour des informations bancaires avec succès";
 
   @override
   String get youAreOnlineNow => "Vous êtes en ligne maintenant";
@@ -362,8 +353,7 @@ class LanguageFr extends BaseLanguage {
   String get requests => "Demande";
 
   @override
-  String get areYouSureYouWantToCancelThisRequest =>
-      "Ête-vous sûr de vouloir annuler cette demande?";
+  String get areYouSureYouWantToCancelThisRequest => "Ête-vous sûr de vouloir annuler cette demande?";
 
   @override
   String get decline => "Annuler";
@@ -372,8 +362,7 @@ class LanguageFr extends BaseLanguage {
   String get accept => "Accepte";
 
   @override
-  String get areYouSureYouWantToAcceptThisRequest =>
-      "Ête-vous sûr de vouloir accepter cette demande?";
+  String get areYouSureYouWantToAcceptThisRequest => "Ête-vous sûr de vouloir accepter cette demande?";
 
   @override
   String get call => "Appele";
@@ -428,8 +417,7 @@ class LanguageFr extends BaseLanguage {
       "Votre profile est en cours d'examen. Attendez un peu de temps ou un contact 0560722304 / 0560695539.";
 
   @override
-  String get uploadFileConfirmationMsg =>
-      "Ête-vous sûr de vouloir télécharger ce fichier?";
+  String get uploadFileConfirmationMsg => "Ête-vous sûr de vouloir télécharger ce fichier?";
 
   @override
   String get selectDocument => "Sélectionne un document";
@@ -438,8 +426,7 @@ class LanguageFr extends BaseLanguage {
   String get addDocument => "Ajoute un document";
 
   @override
-  String get areYouSureYouWantToDeleteThisDocument =>
-      "Ête-vous sûr de vouloir supprimer ce document?";
+  String get areYouSureYouWantToDeleteThisDocument => "Ête-vous sûr de vouloir supprimer ce document?";
 
   @override
   String get expireDate => "Date d'expiration";
@@ -462,8 +449,7 @@ class LanguageFr extends BaseLanguage {
       "L suppression de votre compte supprime les informations personnelles de notre base de données. Votre e-mail devient permanent et le même e-mail ne peut pas être réutilisé pour enregistrer un nouveau compte";
 
   @override
-  String get areYouSureYouWantDeleteAccount =>
-      "Ête-vous sûr de vouloir supprimer le compte?";
+  String get areYouSureYouWantDeleteAccount => "Ête-vous sûr de vouloir supprimer le compte?";
 
   @override
   String get yourInternetIsNotWorking => "Votre Internet ne fonctionne pas";
@@ -472,8 +458,7 @@ class LanguageFr extends BaseLanguage {
   String get allow => "Permettre";
 
   @override
-  String get mostReliableMightyDriverApp =>
-      "Applicatio de pilote puissante la plus fiable";
+  String get mostReliableMightyDriverApp => "Applicatio de pilote puissante la plus fiable";
 
   @override
   String get toEnjoyYourRideExperiencePleaseAllowPermissions =>
@@ -483,8 +468,7 @@ class LanguageFr extends BaseLanguage {
   String get cashCollected => "Argent collecté";
 
   @override
-  String get areYouSureCollectThisPayment =>
-      "Ête-vous sûr de percevoir ce paiement?";
+  String get areYouSureCollectThisPayment => "Ête-vous sûr de percevoir ce paiement?";
 
   @override
   String get txtURLEmpty => "URL est vide";
@@ -505,12 +489,10 @@ class LanguageFr extends BaseLanguage {
   String get vehicleInfo => "Information sur le véhicule";
 
   @override
-  String get demoMsg =>
-      "Le rôle du testeur n'est pas autorisé à effectuer cette action";
+  String get demoMsg => "Le rôle du testeur n'est pas autorisé à effectuer cette action";
 
   @override
-  String get youCannotChangePhoneNumber =>
-      "Vous ne pouvez pas modifier le numéro de téléphone";
+  String get youCannotChangePhoneNumber => "Vous ne pouvez pas modifier le numéro de téléphone";
 
   @override
   String get offLine => "Hors ligne";
@@ -534,8 +516,7 @@ class LanguageFr extends BaseLanguage {
   String get youCannotChangeService => "Vous ne pouvez pas changer de service";
 
   @override
-  String get vehicleInfoUpdateSucessfully =>
-      "Mise à jour des informations sur le véhicule avec succès";
+  String get vehicleInfoUpdateSucessfully => "Mise à jour des informations sur le véhicule avec succès";
 
   @override
   String get isMandatoryDocument => " est un document obligatoire.";
@@ -545,12 +526,10 @@ class LanguageFr extends BaseLanguage {
       "Certain documents requis ne sont pas téléchargés. Veuillez télécharger tous les documents requis.";
 
   @override
-  String get areYouCertainOffline =>
-      "Ête-vous certain que vous voulez vous déconnecter?";
+  String get areYouCertainOffline => "Ête-vous certain que vous voulez vous déconnecter?";
 
   @override
-  String get areYouCertainOnline =>
-      "Ête-vous certain que vous voulez aller en ligne?";
+  String get areYouCertainOnline => "Ête-vous certain que vous voulez aller en ligne?";
 
   @override
   String get pleaseAcceptTermsOfServicePrivacyPolicy =>
@@ -587,8 +566,7 @@ class LanguageFr extends BaseLanguage {
   String get totalEarning => "Gain total";
 
   @override
-  String get pleaseSelectFromDateAndToDate =>
-      "Veuille sélectionner parmi la date et à ce jour";
+  String get pleaseSelectFromDateAndToDate => "Veuille sélectionner parmi la date et à ce jour";
 
   @override
   String get fromDate => "Partie de la date";
@@ -630,8 +608,7 @@ class LanguageFr extends BaseLanguage {
   String get notAvailable => "Pas disponible";
 
   @override
-  String get youWillReceiveNewRidersAndNotifications =>
-      "Vous recevrez de nouveaux coureurs et notifications";
+  String get youWillReceiveNewRidersAndNotifications => "Vous recevrez de nouveaux coureurs et notifications";
 
   @override
   String get youWillNotReceiveNewRidersAndNotifications =>
@@ -641,8 +618,7 @@ class LanguageFr extends BaseLanguage {
   String get yourAccountIs => "Votre compte est";
 
   @override
-  String get pleaseContactSystemAdministrator =>
-      "Veuiller contacter l'administrateur du système";
+  String get pleaseContactSystemAdministrator => "Veuiller contacter l'administrateur du système";
 
   @override
   String get youCanNotThisActionsPerformBecauseYourCurrentRideIsNotCompleted =>
@@ -652,8 +628,7 @@ class LanguageFr extends BaseLanguage {
   String get applyExtraCharges => "Applique des frais supplémentaires";
 
   @override
-  String get pleaseSelectExtraCharges =>
-      "Veuille sélectionner des frais supplémentaires";
+  String get pleaseSelectExtraCharges => "Veuille sélectionner des frais supplémentaires";
 
   @override
   String get unsupportedPlatForm => "Plat-forme non prise en charge";
@@ -722,8 +697,7 @@ class LanguageFr extends BaseLanguage {
   String get otpCodeHasBeenSentTo => "Le code OTP a été envoyé à";
 
   @override
-  String get pleaseEnterOtp =>
-      "Veuille saisir OTP ci-dessous pour vérifier votre numéro de mobile.";
+  String get pleaseEnterOtp => "Veuille saisir OTP ci-dessous pour vérifier votre numéro de mobile.";
 
   @override
   String get selectSources => "Sélectionne des sources";
@@ -756,8 +730,7 @@ class LanguageFr extends BaseLanguage {
   String get chatWithAdmin => "Discute avec admin";
 
   @override
-  String get startRideAskOTP =>
-      "Pou commencer le trajet, demandez au client son OTP.";
+  String get startRideAskOTP => "Pou commencer le trajet, demandez au client son OTP.";
 
   @override
   String get lessWalletAmountMsg =>
@@ -832,8 +805,7 @@ class LanguageFr extends BaseLanguage {
   @override
   String get fileSizeValidate => 'Taille maximale de téléchargement : 5 Mo';
   @override
-  String get fileSizeValidateMsg =>
-      'Fichier trop volumineux pour être téléchargé';
+  String get fileSizeValidateMsg => 'Fichier trop volumineux pour être téléchargé';
   @override
   String get routingNumber => 'Numéro de routage';
   @override
@@ -843,13 +815,11 @@ class LanguageFr extends BaseLanguage {
   @override
   String get enterPrice => 'Entrez le prix';
   @override
-  String get pleaseEnterPriceGreaterThan =>
-      'Veuillez entrer un prix supérieur à';
+  String get pleaseEnterPriceGreaterThan => 'Veuillez entrer un prix supérieur à';
   @override
   String get pleaseEnterValidPrice => 'Veuillez entrer un prix valide';
   @override
-  String get priceSentSuccessfully =>
-      'Prix envoyé avec succès, en attente d\'approbation';
+  String get priceSentSuccessfully => 'Prix envoyé avec succès, en attente d\'approbation';
   @override
   String get changeLanguage => 'Changer la langue';
   @override
@@ -862,4 +832,6 @@ class LanguageFr extends BaseLanguage {
   String get platformDeduction => 'Déduction de la plateforme';
   @override
   String get state => 'État';
+  @override
+  String get scheduledRide => 'Trajet programmé';
 }

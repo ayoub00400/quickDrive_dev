@@ -306,15 +306,14 @@ Future<AppSettingModel> getAppSetting() async {
       await handleResponse(await buildHttpResponse('admin-dashboard', method: HttpMethod.GET)));
 }
 
-Future<RiderListModel> getRiderRequestList({int? page, String? status, LatLng? sourceLatLog, int? driverId}) async {
+Future<RiderListModel> getRiderRequestList(
+    {int? page, String? status, LatLng? sourceLatLog, int? driverId, bool? is_schedule}) async {
   if (sourceLatLog != null) {
     return RiderListModel.fromJson(await handleResponse(
         await buildHttpResponse('riderequest-list?page=$page&driver_id=$driverId', method: HttpMethod.GET)));
   } else {
     return RiderListModel.fromJson(await handleResponse(await buildHttpResponse(
-        status != null
-            ? 'riderequest-list?page=$page&status=$status&driver_id=$driverId'
-            : 'riderequest-list?page=$page&driver_id=$driverId',
+        'riderequest-list?page=$page${status != null ? '&status=$status' : ''}${driverId != null ? '&driver_id=$driverId' : ''}${is_schedule != null ? '&is_schedule=${is_schedule ? 1 : 0}' : ''}',
         method: HttpMethod.GET)));
   }
 }
