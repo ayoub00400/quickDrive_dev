@@ -284,7 +284,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
             
                                         onCompleted: (val) {
                                           // otpCheck = val;
-                                           _dashboardController.emitStateInt( "otpCheck" , val);
+                                           _dashboardController.emitStateString( "otpCheck" , val);
                                         },
                                       ),
                                     ),
