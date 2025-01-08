@@ -136,6 +136,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   get: ^4.6.6
   firebase_messaging: ^15.1.6
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
