@@ -303,6 +303,8 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                                             Navigator.pop(Get.context!);
                                                   
                                             rideRequest(status: IN_PROGRESS);
+     
+
                                           }
                                         },
                                       );
@@ -332,6 +334,8 @@ DashboardController _dashboardController=  Get.put(DashboardController());
             
                             await completeRideRequest();
                           });
+                          appStore.setLoading(false);
+
                         });
                       }
                     }
