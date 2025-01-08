@@ -33,6 +33,8 @@ const ic_history_img7 = 'images/icons/ic_completed.png';
 
 const ic_my_profile = 'images/ic_my_profile.png';
 const ic_my_rides = 'images/ic_my_rides.png';
+const ic_schedule_ride = 'images/ic_schedule_ride.png';
+
 const ic_vehical_detail = 'images/ic_vehical_detail.png';
 const ic_my_wallet = 'images/my_wallet.png';
 const ic_emergency = 'images/ic_emergency_contact.png';

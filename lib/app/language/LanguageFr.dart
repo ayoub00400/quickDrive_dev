@@ -862,4 +862,8 @@ class LanguageFr extends BaseLanguage {
   String get platformDeduction => 'Déduction de la plateforme';
   @override
   String get state => 'État';
+  
+  @override
+  // TODO: implement scheduledRide
+  String get scheduledRide =>  'Conduite planifiée';
 }

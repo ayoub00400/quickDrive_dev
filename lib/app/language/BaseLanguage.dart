@@ -524,8 +524,8 @@ abstract class BaseLanguage {
 
   String get rideCanceledByRider;
   String get cancelledReason;
-  String get networkErr ;
-  String get tryAgain   ;
+  String get networkErr;
+  String get tryAgain;
   String get noConnected;
   String get riderReview;
   String get fileSizeValidate;
@@ -542,4 +542,5 @@ abstract class BaseLanguage {
   String get cancelReason;
   String get platformDeduction;
   String get state;
+  String get scheduledRide;
 }

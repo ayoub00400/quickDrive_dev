@@ -594,4 +594,8 @@ class LanguageAr extends BaseLanguage {
   String get platformDeduction => 'خصم المنصة';
   @override
   String get state => 'الولاية';
+  
+  @override
+  // TODO: implement scheduledRide
+  String get scheduledRide => 'رحلة مجدولة';
 }
