@@ -428,9 +428,9 @@ class DashboardController extends GetxController {
     appStore.setLoading(true);
     update();
 
-    Map req = {"ride_request_id": rideId, "offer_price": price, "type": SCHEDULED};
+    Map<String, String> req = {"ride_request_id": rideId.toString(), "offer_price": price, "type": SCHEDULED};
 
-    await sendTripPriceToRider(request: req).then((value) async {
+    await sendScheduledTripPriceOffre(request: req).then((value) async {
       await ignoreScheduledRide();
       SchedulerPriceController.clear();
       Logger().d(isScheduleRideRequestShowed);

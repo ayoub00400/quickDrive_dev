@@ -35,6 +35,7 @@ import '../../view/screens/SignInScreen.dart';
 import '../../utils/Constants.dart';
 import '../../utils/Extensions/app_common.dart';
 import 'NetworkUtils.dart';
+import 'package:http/http.dart' as http;
 
 Future<LoginResponse> signUpApi(Map request) async {
   Response response = await buildHttpResponse('driver-register', request: request, method: HttpMethod.POST);
@@ -463,6 +464,21 @@ Future<void> sendTripPriceToRider({required Map request}) async {
     log('value:${value}');
     log('value.body:${value.body}');
     throw jsonDecode(value.body)['message'];
+  }
+  return;
+}
+
+Future<void> sendScheduledTripPriceOffre({required Map<String, String> request}) async {
+  var headers = buildHeaderTokens();
+  var url = Uri.parse(
+    '${mBaseUrl}driver-offer',
+  ).replace(queryParameters: request);
+
+  var response = await http.post(url, headers: headers);
+  if (response.statusCode != 200) {
+    log('value:${response}');
+    log('value.body:${response.body}');
+    throw jsonDecode(response.body)['message'];
   }
   return;
 }
