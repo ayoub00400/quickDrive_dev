@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'dart:developer' as developer;
@@ -14,6 +16,7 @@ import '../../../../utils/var/var_app.dart';
 import 'cancelTimer.dart';
 import 'getCurrentRequest.dart';
 
+@pragma('vm:entry-point')
 void initPusher() async {
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
 
@@ -69,30 +72,53 @@ void onMemberRemoved(String channelName, PusherMember member) {
   developer.log("onMemberRemoved: $channelName member: $member");
 }
 
+void showTopSnackBar(
+  context,
+  String message, {
+  Duration? duration,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      dismissDirection: DismissDirection.up,
+      duration: duration ?? const Duration(seconds: 3),
+      backgroundColor: Colors.black87,
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 100, left: 10, right: 10),
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        message,
+        style: const TextStyle(
+          fontSize: textSecondarySizeGlobal,
+        ),
+      ),
+    ),
+  );
+}
+
+@pragma('vm:entry-point')
 void onEvent(PusherEvent event) {
   DashboardController _dashboardController = Get.put(DashboardController());
 
   if (event.data != null) {
     Map<String, dynamic> data = jsonDecode(event.data.toString());
-    if (data['action'] != null && data['action'] == 'acceptOffer') {
+
+    if (data['action'] != null && data['action'] == 'acceptScheduledOffer') {
+      showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+    }
+
+    if (data['action'] != null && data['action'] == 'acceptOffer' || data['action'] == 'scheduledRideAccepted') {
       if (data['data'] != null &&
           data['data'] != {} &&
           data['data'].isNotEmpty &&
           int.parse(data['data'][0]['driver_id'].toString()) == sharedPref.getInt(USER_ID)) getCurrentRequest();
-
-      {
-        getCurrentRequest();
-      }
     }
 
     if (data['action'] != null && data['action']['action'] == 'new_ride_request') {
       if (data['action']['drivers_id'] != null) {
         if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
           developer.log('Audio play condition met.');
-          // audioPlayWithLimit();
+
           cancelTimer();
           _dashboardController.emitStateBool("sendPrice", false);
-          // setState(() {});
         }
       }
     }
