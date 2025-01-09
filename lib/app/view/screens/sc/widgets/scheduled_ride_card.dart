@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
+import 'package:taxi_driver/app/controller/dashboard/dashboard_controller.dart';
 import 'package:taxi_driver/app/utils/Extensions/AppButtonWidget.dart';
 
 import '../../../../controller/dashboard/controller.dart';
@@ -14,10 +15,13 @@ import '../../../../utils/Extensions/app_common.dart';
 import '../../../../utils/var/var_app.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../RideDetailScreen.dart';
+import '../../dashboard/dashboard.dart';
+import 'send_offre_bottom_sheet.dart';
 
 class ScheduledRideCard extends StatelessWidget {
   final RiderModel data;
-  ScheduledRideCard({required this.data});
+  final  data2;
+  ScheduledRideCard({required this.data, this.data2});
 
   @override
   Widget build(BuildContext context) {
@@ -33,78 +37,98 @@ class ScheduledRideCard extends StatelessWidget {
           border: Border.all(color: dividerColor),
           borderRadius: BorderRadius.circular(defaultRadius),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Ionicons.calendar, color: textSecondaryColorGlobal, size: 16),
-                    SizedBox(width: 4),
-                    Padding(
-                      padding: EdgeInsets.only(top: 2),
-                      child: Text('${printDate(data.createdAt.validate())}', style: primaryTextStyle(size: 14)),
-                    ),
-                  ],
-                ),
-                Text('${language.rideId} #${data.id}', style: boldTextStyle(size: 14)),
-              ],
-            ),
-            Divider(height: 20, thickness: 0.5),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.near_me, color: Colors.green, size: 18),
-                    SizedBox(width: 4),
-                    Expanded(child: Text(data.startAddress.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
-                  ],
-                ),
-                SizedBox(height: 2),
-                Row(
-                  children: [
-                    SizedBox(width: 8),
-                    SizedBox(
-                      height: 34,
-                      child: DottedLine(
-                        direction: Axis.vertical,
-                        lineLength: double.infinity,
-                        lineThickness: 1,
-                        dashLength: 2,
-                        dashColor: primaryColor,
-                      ),
+                    Row(
+                      children: [
+                        Icon(Ionicons.calendar, color: textSecondaryColorGlobal, size: 16),
+                        SizedBox(width: 4),
+                        Padding(
+                          padding: EdgeInsets.only(top: 2),
+                          child: Text('${printDate(data.createdAt.validate())}', style: primaryTextStyle(size: 14)),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                SizedBox(height: 2),
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.red, size: 18),
-                    SizedBox(width: 4),
-                    Expanded(child: Text(data.endAddress.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
-                  ],
-                ),
-                SizedBox(height: 2),
-                Divider(height: 20, thickness: 0.5),
-                Row(
-                  children: [
-                    Icon(Ionicons.person, color: textSecondaryColorGlobal, size: 16),
-                    SizedBox(width: 4),
-                    Text('${data.otherRiderData!.name.validate()}', style: primaryTextStyle(size: 14)),
+                    Text('${language.rideId} #${data.id}', style: boldTextStyle(size: 14)),
                   ],
                 ),
                 Divider(height: 20, thickness: 0.5),
-                AppButtonWidget(
-                  width: MediaQuery.of(context).size.width,
-                  child: Text("Give Offre", style: boldTextStyle(color: Colors.white)),
-                  color: primaryColor,
-                  onTap: Get.put(ScheduledRidesController(scrollController: ScrollController())).sendScheduledRideOffre,
-                )
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.near_me, color: Colors.green, size: 18),
+                        SizedBox(width: 4),
+                        Expanded(child: Text(data.startAddress.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
+                      ],
+                    ),
+                    SizedBox(height: 2),
+                    Row(
+                      children: [
+                        SizedBox(width: 8),
+                        SizedBox(
+                          height: 34,
+                          child: DottedLine(
+                            direction: Axis.vertical,
+                            lineLength: double.infinity,
+                            lineThickness: 1,
+                            dashLength: 2,
+                            dashColor: primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Icon(Icons.location_on, color: Colors.red, size: 18),
+                        SizedBox(width: 4),
+                        Expanded(child: Text(data.endAddress.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
+                      ],
+                    ),
+                    SizedBox(height: 2),
+                    Divider(height: 20, thickness: 0.5),
+                    Row(
+                      children: [
+                        Icon(Ionicons.person, color: textSecondaryColorGlobal, size: 16),
+                        SizedBox(width: 4),
+                        Text('${data.riderName}', style: primaryTextStyle(size: 14)),
+                      ],
+                    ), 
+                    SizedBox(height: 2),
+                    
+                     Row(
+                      children: [
+                        Icon(Ionicons.time, color: textSecondaryColorGlobal, size: 16),
+                        SizedBox(width: 4),
+                        Text('وقت البدأ : ${data.startTime.validate()}', style: primaryTextStyle(size: 14)),
+                      ],
+                    ),
+                    Divider(height: 20, thickness: 0.5),
+                    AppButtonWidget(
+                      width: MediaQuery.of(context).size.width,
+                      child: Text((DateTime.now().isAfter(DateTime.parse(data.startTime.validate())))? "استمر" : "${getTimeDifferenceAsText(data.startTime .toString())}", style: boldTextStyle(color: Colors.white)),
+                      color: primaryColor,
+                      onTap:()async {
+                        Get.back();
+                   
+              //   if (DateTime.now().isAfter(DateTime.parse(data.startTime.validate()))) {
+              // await SendScheduledRideOffreBottomSheet().showOffreInputDialog();   } else {
+              //     toast("لا يمكنك الضغط على الزر قبل انتهاء الوقت المحدد.");
+              //   }
+              } ,
+                    )
+                  ],
+                ),
               ],
             ),
-          ],
+       scheduledRideRequestView(Get.put(DashboardController()), data2)   ],
         ),
       ),
     );
@@ -139,3 +163,29 @@ class ScheduledRideCard extends StatelessWidget {
 //     );
 //   }
 // }
+
+String getTimeDifferenceAsText(String startTime) {
+  // تحويل النص إلى كائن DateTime
+  DateTime startDate = DateTime.parse(startTime);
+  DateTime now = DateTime.now();
+
+  // حساب الفرق بين الوقتين
+  Duration difference = startDate.difference(now);
+
+  if (difference.isNegative) {
+    return "الوقت المحدد قد مضى.";
+  }
+
+  // استخراج الأيام والساعات والدقائق
+  int days = difference.inDays;
+  int hours = difference.inHours % 24;
+  int minutes = difference.inMinutes % 60;
+
+  // إنشاء النص المناسب
+  String result = "تبقى ";
+  if (days > 0) result += "$days يوم${days > 1 ? '' : ''} ";
+  if (hours > 0) result += "$hours ساعة${hours > 1 ? '' : ''} ";
+  if (minutes > 0) result += "$minutes دقيقة${minutes > 1 ? '' : ''}";
+
+  return result.trim();
+}

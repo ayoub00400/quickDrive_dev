@@ -17,7 +17,7 @@ class ScheduledRides extends StatefulWidget {
 }
 
 class _ScheduledRidesState extends State<ScheduledRides> {
-    final ScheduledRidesController controller = Get.put(ScheduledRidesController(
+    final ScheduledRidesController controller2 = Get.put(ScheduledRidesController(
       scrollController: ScrollController(),
     ));
 
@@ -25,7 +25,7 @@ class _ScheduledRidesState extends State<ScheduledRides> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.fetchScheduledRides()
+    controller2.fetchScheduledRides()
 ;    
   }
   @override
@@ -34,16 +34,16 @@ class _ScheduledRidesState extends State<ScheduledRides> {
 
 
     return Scaffold(
-//       floatingActionButton: FloatingActionButton(
-//         child: Icon(
-//           Icons.add,
-//           color: appTextPrimaryColorWhite,
-//         ),
-//         onPressed: () {
-// Get.put(ScheduledRidesController(
-//       scrollController: ScrollController(),
-//     ).fetchScheduledRides());        },
-//       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          color: appTextPrimaryColorWhite,
+        ),
+        onPressed: () {
+Get.put(ScheduledRidesController(
+      scrollController: ScrollController(),
+    ).fetchScheduledRides2());        },
+      ),
       appBar: AppBar(
         title: Text(
           'Scheduled Rides',
@@ -51,42 +51,42 @@ class _ScheduledRidesState extends State<ScheduledRides> {
         ),
       ),
       body: SafeArea(
-        child: Obx(() {
-          // Show a loader while data is being fetched
-          if (controller.isLoading.value) {
-            return loaderWidget();
-          }
-
-          // Show an error message if fetching failed
-          if (controller.hasError.value) {
-            return Center(child: Text("Oops, Loading Failed"));
-          }
-
-          // Show an empty widget if no scheduled rides are available
-          if (controller.scheduledRides.isEmpty) {
-            return emptyWidget();
-          }
-
-          // Show the list of scheduled rides
-          return ListView.builder(
-            controller: controller.scrollController,
-            itemCount: controller.scheduledRides.length,
-            itemBuilder: (context, index) {
-              final item = controller.scheduledRides[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: ScheduledRideCard(
-                  data: RiderModel(
-                    id: item.id,
-                    createdAt: DateTime.now().toString(),
-                    startAddress: item.startAddress,
-                    endAddress: item.endAddress,
-                  ),
-                ),
+        child: GetBuilder< ScheduledRidesController>(
+          // init:   ScheduledRidesController( scrollController: ScrollController(),),
+          builder: (controller) {
+                // Show a loader while data is being fetched
+              if (controller.isLoading.value) {
+                return loaderWidget();
+              }
+            
+              // Show an error message if fetching failed
+              if (controller.hasError.value) {
+                return Center(child: Text("Oops, Loading Failed"));
+              }
+            
+              // Show an empty widget if no scheduled rides are available
+              if (controller.scheduledRides.isEmpty) {
+                return emptyWidget();
+              }
+            
+              // Show the list of scheduled rides
+              return ListView.builder(
+                controller: controller.scrollController,
+                itemCount: controller.scheduledRides.length,
+                itemBuilder: (context, index) {
+                  final item = controller.scheduledRides[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: ScheduledRideCard(
+                      data: item,
+                      data2:controller.scheduledRides22 ,
+                    ),
+                  );
+                },
               );
-            },
-          );
-        }),
+           
+          }
+        ),
       ),
     );
   }

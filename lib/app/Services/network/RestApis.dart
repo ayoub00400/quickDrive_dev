@@ -318,6 +318,18 @@ Future<RiderListModel> getRiderRequestList({int? page, String? status, LatLng? s
             : 'riderequest-list?page=$page&driver_id=$driverId',
         method: HttpMethod.GET)));
   }
+  // riderequest-list?status=scheduled&service_id=9
+}Future<RiderListModel> getRiderRequestList2({int? page, String? status, LatLng? sourceLatLog, int? driverId}) async {
+  if (sourceLatLog != null) {
+    return RiderListModel.fromJson(await handleResponse(
+        await buildHttpResponse('riderequest-list?status=scheduled&service_id=9', method: HttpMethod.GET)));
+  } else {
+    return RiderListModel.fromJson(await handleResponse(await buildHttpResponse(
+        status != null
+            ? 'riderequest-list?status=scheduled&service_id=9'
+            : 'riderequest-list?status=scheduled&service_id=9',
+        method: HttpMethod.GET)));
+  }
 }
 
 Future<DocumentListModel> getDocumentList() async {

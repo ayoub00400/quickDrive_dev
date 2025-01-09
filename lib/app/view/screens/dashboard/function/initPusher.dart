@@ -13,6 +13,7 @@ import '../../../../utils/Constants.dart';
 import '../../../../utils/var/var_app.dart';
 import 'cancelTimer.dart';
 import 'getCurrentRequest.dart';
+  @pragma('vm:entry-point')
 
 void initPusher() async {
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
@@ -68,6 +69,7 @@ void onMemberAdded(String channelName, PusherMember member) {
 void onMemberRemoved(String channelName, PusherMember member) {
   developer.log("onMemberRemoved: $channelName member: $member");
 }
+  @pragma('vm:entry-point')
 
 void onEvent(PusherEvent event) {
   DashboardController _dashboardController = Get.put(DashboardController());
@@ -92,6 +94,8 @@ void onEvent(PusherEvent event) {
           // audioPlayWithLimit();
           cancelTimer();
           _dashboardController.emitStateBool("sendPrice", false);
+          audioPlayWithLimit();
+
           // setState(() {});
         }
       }
