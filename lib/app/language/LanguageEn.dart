@@ -801,4 +801,8 @@ class LanguageEn extends BaseLanguage {
   String get platformDeduction => 'Platform Deduction';
   @override
   String get state => 'State';
+  
+  @override
+  // TODO: implement scheduledRide
+  String get scheduledRide =>  'Scheduled Ride';
 }

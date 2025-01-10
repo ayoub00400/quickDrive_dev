@@ -16,6 +16,7 @@ import 'package:audioplayers/src/audioplayer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_driver/app/Services/sound_service.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/function/initPusher.dart';
 
 import '../../main.dart';
 import '../model/FRideBookingModel.dart';
@@ -139,7 +140,7 @@ class NotificationWithSoundService {
 
     bool isNotificationShown =
         false; // Flag to ensure notification triggers only once
-
+initPusher();
     result.listen((event) {
       List<FRideBookingModel> data = event.docs.map((e) {
         return FRideBookingModel.fromJson(e.data() as Map<String, dynamic>);

@@ -24,66 +24,83 @@ DashboardController _dashboardController=  Get.put(DashboardController());
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Stack(
           children: [
-            inkWellWidget(
-              onTap: () => scaffoldKey.currentState!.openDrawer(),
-              child: Container(
-                padding: EdgeInsets.all(4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 4,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                inkWellWidget(
+                  onTap: () => scaffoldKey.currentState!.openDrawer(),
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 4,
+                          width: 24,
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Container(
+                          height: 4,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Container(
+                          height: 4,
+                          width: 24,
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 4),
-                    Container(
-                      height: 4,
-                      width: 16,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                      height: 4,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Text(
+                  'Quick Cargoo , ${sharedPref.getString(FIRST_NAME).validate().capitalizeFirstLetter()}!',
+                  style: boldTextStyle(size: 20),
+                ),
+                inkWellWidget(
+                  onTap: () {
+                    launchScreen(
+                      context,
+                      EditProfileScreen(isGoogle: false),
+                      pageRouteAnimation: PageRouteAnimation.Slide,
+                    );
+                  },
+                  child: ClipOval(
+                    child: commonCachedNetworkImage(
+                      appStore.userProfile.validate(),
+                      height: 55,
+                      width: 55,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(
-              'Quick Cargoo , ${sharedPref.getString(FIRST_NAME).validate().capitalizeFirstLetter()}!',
-              style: boldTextStyle(size: 20),
-            ),
-            inkWellWidget(
-              onTap: () {
-                launchScreen(
-                  context,
-                  EditProfileScreen(isGoogle: false),
-                  pageRouteAnimation: PageRouteAnimation.Slide,
-                );
-              },
-              child: ClipOval(
-                child: commonCachedNetworkImage(
-                  appStore.userProfile.validate(),
-                  height: 55,
-                  width: 55,
-                  fit: BoxFit.cover,
+            Positioned(
+              top: 14,
+              right: 0,
+              child: Container(
+                height: 10, width: 10,
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+
+                  color: Colors.red,
+                     borderRadius:  BorderRadius.circular(50),
                 ),
               ),
             ),

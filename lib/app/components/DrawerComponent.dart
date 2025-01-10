@@ -20,7 +20,6 @@ import '../utils/Constants.dart';
 import '../utils/Extensions/ConformationDialog.dart';
 import '../utils/Extensions/app_common.dart';
 import '../utils/Images.dart';
-import '../view/screens/scheduled_rides/scheduled_rides.dart';
 import 'DrawerWidget.dart';
 
 class DrawerComponent extends StatefulWidget {
@@ -87,20 +86,21 @@ class _DrawerComponentState extends State<DrawerComponent> {
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
+                title: language.scheduledRide,
+                iconData: ic_schedule_ride,
+                icon: Ionicons.car_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
+                }),
+            DrawerWidget(
                 title: language.rides,
                 iconData: ic_my_rides,
                 icon: Ionicons.car_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, RidesListScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
-                }),
-            DrawerWidget(
-                title: 'language.scheduledRide',
-                iconData: ic_my_rides,
-                icon: Ionicons.car_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, RidesListScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.updateVehicleInfo,

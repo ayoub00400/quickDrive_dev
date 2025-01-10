@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -10,8 +9,6 @@ import 'package:get/get.dart';
 import 'package:taxi_driver/app/utils/AppTheme.dart';
 import 'package:taxi_driver/app/utils/Constants.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
-
-import '../main.dart';
 import 'language/AppLocalizations.dart';
 import 'model/LanguageDataModel.dart';
 import 'utils/Common.dart';

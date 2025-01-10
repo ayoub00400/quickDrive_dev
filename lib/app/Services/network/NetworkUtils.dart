@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import '../../../main.dart';
 import '../../utils/Common.dart';
@@ -76,6 +77,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
   if (!await isNetworkAvailable()) {
     throw 'Your internet is not working';
   }
+  Logger().d(response.statusCode);
   if (response.statusCode == 401) {
     if (appStore.isLoggedIn) {
       Map req = {
