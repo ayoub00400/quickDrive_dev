@@ -135,7 +135,7 @@ Widget scheduledRideRequestView(DashboardController controller, RideDetailModel 
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Scheduled Ride Request', style: boldTextStyle(size: 18)),
+          Text(language.scheduledRideRequest, style: boldTextStyle(size: 18)),
           SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,7 +193,7 @@ Widget scheduledRideRequestView(DashboardController controller, RideDetailModel 
           SizedBox(height: 16),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             AppButtonWidget(
-                text: 'Send Offre',
+                text: language.sendOffre,
                 onTap: () {
                   controller.sendScheduledTripPrice(
                       rideId: rideData.data!.id!, price: controller.schedulerPriceController.text);

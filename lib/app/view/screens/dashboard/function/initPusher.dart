@@ -101,13 +101,28 @@ void showTopSnackBar(
 
 @pragma('vm:entry-point')
 void onEvent(PusherEvent event) {
-      showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+      // showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
 
 
   DashboardController _dashboardController = Get.put(DashboardController());
 
   if (event.data != null) {
     Map<String, dynamic> data = jsonDecode(event.data.toString());
+
+     if (data['action'] != null && data['action'] == 'acceptOffer' || data['action'] == 'scheduledRideAccepted') {
+      if (data['data'] != null &&
+          data['data'] != {} &&
+          data['data'].isNotEmpty &&
+          int.parse(data['data'][0]['driver_id'].toString()) == sharedPref.getInt(USER_ID))
+          
+          {
+        Get.to(    ScreenLaoding());
+            getCurrentRequest();
+          } 
+
+
+
+    }
 if (data['data'] != null && data['data']['driver_id'] == sharedPref.getInt(USER_ID)) {
     // Get.to(SplashScreen());
 getCurrentRequest();
@@ -119,12 +134,7 @@ Logger().d('karim data : $data');
       showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
     }
 
-    if (data['action'] != null && data['action'] == 'acceptOffer' || data['action'] == 'scheduledRideAccepted') {
-      if (data['data'] != null &&
-          data['data'] != {} &&
-          data['data'].isNotEmpty &&
-          int.parse(data['data'][0]['driver_id'].toString()) == sharedPref.getInt(USER_ID)) getCurrentRequest();
-    }
+   
 
     if (data['action'] != null && data['action']['action'] == 'new_ride_request') {
       if (data['action']['drivers_id'] != null) {
@@ -186,4 +196,29 @@ Future<void> audioPlayWithLimit() async {
     await NotificationWithSoundService.player
       ..play(AssetSource('sounds/request_sound.aac'));
   } catch (e) {}
+}
+
+class ScreenLaoding extends StatefulWidget {
+  const ScreenLaoding({super.key});
+
+  @override
+  State<ScreenLaoding> createState() => _ScreenLaodingState();
+}
+
+class _ScreenLaodingState extends State<ScreenLaoding> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Timer(Duration(seconds: 1), () {
+      Get.off(DashboardScreen());
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(backgroundColor: Colors.white,
+    
+    body: Center(child: CircularProgressIndicator( ),),);
+  }
 }

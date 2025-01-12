@@ -98,26 +98,20 @@ class ScheduledRideCard2 extends StatelessWidget {
                     ),
                     SizedBox(height: 2),
                     Divider(height: 20, thickness: 0.5),
-                    Row(
-                      children: [
-                        Icon(Ionicons.person, color: textSecondaryColorGlobal, size: 16),
-                        SizedBox(width: 4),
-                        // Text('${data.rideRequest!.riderData.name}', style: primaryTextStyle(size: 14)),
-                      ],
-                    ), 
+                   
                     SizedBox(height: 2),
                     
                      Row(
                       children: [
                         Icon(Ionicons.time, color: textSecondaryColorGlobal, size: 16),
                         SizedBox(width: 4),
-                        Text('وقت البدأ : ${data!.rideRequest.datetime.validate()}', style: primaryTextStyle(size: 14)),
+                        Text('${language.starttime} ${data!.rideRequest.datetime.validate()}', style: primaryTextStyle(size: 14)),
                       ],
                     ),
                     Divider(height: 20, thickness: 0.5),
                     AppButtonWidget(
                       width: MediaQuery.of(context).size.width,
-                      child: Text((DateTime.now().isAfter(DateTime.parse(data!.rideRequest.datetime.validate())))? "استمر" : "${getTimeDifferenceAsText(data!.rideRequest.datetime .toString())}", style: boldTextStyle(color: Colors.white)),
+                      child: Text((DateTime.now().isAfter(DateTime.parse(data!.rideRequest.datetime.validate())))? language. scheduledStart : "${getTimeDifferenceAsText(data!.rideRequest.datetime .toString())}", style: boldTextStyle(color: Colors.white)),
                       color: primaryColor,
                       onTap:()async {
                   Get.put(NewDriverNormalRidesController ()).updatePrice(data );

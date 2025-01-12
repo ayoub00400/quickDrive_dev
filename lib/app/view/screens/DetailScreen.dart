@@ -95,10 +95,11 @@ class DetailScreenState extends State<DetailScreen> {
       appStore.setLoading(false);
       log(error.toString());
     });
+          appStore.setLoading(false);
   }
 
   Future<void> orderDetailApi() async {
-    appStore.setLoading(true);
+
     await rideDetail(
             rideId: currentData!.payment != null ? currentData!.payment!.rideRequestId : currentData!.onRideRequest!.id)
         .then((value) {
@@ -223,6 +224,7 @@ class DetailScreenState extends State<DetailScreen> {
                     if (currentScreen == false) return;
                     currentScreen = false;
                     orderDetailApi();
+                         appStore.setLoading(false);
                     // launchScreen(context, DashboardScreen(), isNewTask: true);
                   },
                 );
@@ -236,10 +238,12 @@ class DetailScreenState extends State<DetailScreen> {
                     currentData!.payment!.paymentType != CASH) {
                   currentData!.payment!.paymentType = CASH;
                   currentRideRequest();
+                       appStore.setLoading(false);
                 }
                 if (data[0].tips == 1 && data[0].onStreamApiCall == 0) {
                   rideService.updateStatusOfRide(rideID: data[0].rideId, req: {"on_stream_api_call": 1});
                   currentRideRequest();
+                       appStore.setLoading(false);
                 }
                 if (data[0].paymentStatus == PAYMENT_PAID && data[0].status == COMPLETED) {
                   if (isPaymentDone != true) {
@@ -248,6 +252,8 @@ class DetailScreenState extends State<DetailScreen> {
                     Future.delayed(
                       Duration(seconds: 3),
                       () {
+
+                             appStore.setLoading(false);
                         isPaymentDone = false;
                         launchScreen(context, DashboardScreen(),
                             isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
@@ -350,9 +356,11 @@ class DetailScreenState extends State<DetailScreen> {
                       onTap: () {
                         if (currentData!.payment!.paymentStatus == COMPLETED) {
                           orderDetailApi();
+                               appStore.setLoading(false);
                           // launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                         } else {
                           //currentRideRequest();
+                               appStore.setLoading(false);
                           toast(language.waitingForDriverConformation);
                         }
                       },

@@ -543,4 +543,19 @@ abstract class BaseLanguage {
   String get platformDeduction;
   String get state;
   String get scheduledRide;
+  String get scheduledRideWait;
+  String get scheduledStart;
+  String get starttime;
+  String get allnewscheduledflights;
+  String get acceptedScheduledTrips;
+  String get oopsLoadingFailed;
+  String get sendOffre;
+  String get scheduledRideRequest;
+
+
+
+
+
+
+
 }

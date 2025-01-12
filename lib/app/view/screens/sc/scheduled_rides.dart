@@ -34,19 +34,19 @@ class _ScheduledRidesState extends State<ScheduledRides> {
 
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: appTextPrimaryColorWhite,
-        ),
-        onPressed: () {
-Get.put(ScheduledRidesController(
-      scrollController: ScrollController(),
-    ).fetchScheduledRides2());        },
-      ),
+//       floatingActionButton: FloatingActionButton(
+//         child: Icon(
+//           Icons.add,
+//           color: appTextPrimaryColorWhite,
+//         ),
+//         onPressed: () {
+// Get.put(ScheduledRidesController(
+//       scrollController: ScrollController(),
+//     ).fetchScheduledRides2());        },
+//       ),
       appBar: AppBar(
         title: Text(
-          'Scheduled Rides',
+         language.acceptedScheduledTrips,
           style: boldTextStyle(color: appTextPrimaryColorWhite),
         ),
       ),
@@ -61,7 +61,7 @@ Get.put(ScheduledRidesController(
             
               // Show an error message if fetching failed
               if (controller.hasError.value) {
-                return Center(child: Text("Oops, Loading Failed"));
+                return Center(child: Text(language.oopsLoadingFailed));
               }
             
               // Show an empty widget if no scheduled rides are available

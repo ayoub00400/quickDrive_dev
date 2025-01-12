@@ -40,7 +40,7 @@ class _TestScreenState extends State<TestScreen> {
     return Scaffold(
  
       appBar: AppBar(
-        title: Text('Driver Rides' , style: TextStyle(color: Colors.white),),
+        title: Text(language.allnewscheduledflights, style: TextStyle(color: Colors.white),),
         actions: [
      
         ],
@@ -113,7 +113,7 @@ Widget scheduledRideRequestView2(DashboardController controller, NewDriverSchedu
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Scheduled Ride Request', style: boldTextStyle(size: 18)),
+          Text(language.scheduledRideRequest, style: boldTextStyle(size: 18)),
           SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -165,7 +165,7 @@ Widget scheduledRideRequestView2(DashboardController controller, NewDriverSchedu
           SizedBox(height: 16),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             AppButtonWidget(
-                text: 'Send Offre',
+                text: language.sendOffre,
                 onTap: () async{
                 
                    Map<String, String> req = {"ride_request_id": rideData.rideRequest.id.toString(), "offer_price": controller.schedulerPriceController.text, "type": SCHEDULED};

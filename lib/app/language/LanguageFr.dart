@@ -866,4 +866,37 @@ class LanguageFr extends BaseLanguage {
   @override
   // TODO: implement scheduledRide
   String get scheduledRide =>  'Conduite planifiée';
+  
+  @override
+  // TODO: implement scheduledRideWait
+  String get scheduledRideWait => "Tous les vols réguliers";
+  
+  @override
+  // TODO: implement scheduledStart
+  String get scheduledStart => "Commencer";
+  
+  @override
+  // TODO: implement starttime
+  String get starttime => "Horaires";
+  
+  @override
+  // TODO: implement allnewscheduledflights
+  String get allnewscheduledflights => "Tous les vols réguliers";
+  
+  @override
+  // TODO: implement acceptedScheduledTrips
+  String get acceptedScheduledTrips => "Trajets acceptés";
+  
+  @override
+  // TODO: implement oopsLoadingFailed
+  String get oopsLoadingFailed => "Oops, chargement echoué";
+  
+  @override
+  // TODO: implement sendOffre
+  String get sendOffre => "Envoyer une offre";
+  
+  @override
+  // TODO: implement scheduledRideRequest
+  String get scheduledRideRequest => "Demande de conduite planifiée";
+  
 }

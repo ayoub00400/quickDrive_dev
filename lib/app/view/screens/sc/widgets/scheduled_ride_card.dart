@@ -107,13 +107,13 @@ class ScheduledRideCard extends StatelessWidget {
                       children: [
                         Icon(Ionicons.time, color: textSecondaryColorGlobal, size: 16),
                         SizedBox(width: 4),
-                        Text('وقت البدأ : ${data.startTime.validate()}', style: primaryTextStyle(size: 14)),
+                        Text('${language.starttime}: ${data.startTime.validate()}', style: primaryTextStyle(size: 14)),
                       ],
                     ),
                     Divider(height: 20, thickness: 0.5),
                     AppButtonWidget(
                       width: MediaQuery.of(context).size.width,
-                      child: Text((DateTime.now().isAfter(DateTime.parse(data.startTime.validate())))? "استمر" : "${getTimeDifferenceAsText(data.startTime .toString())}", style: boldTextStyle(color: Colors.white)),
+                      child: Text((DateTime.now().isAfter(DateTime.parse(data.startTime.validate())))?language. scheduledStart : "${getTimeDifferenceAsText(data.startTime .toString())}", style: boldTextStyle(color: Colors.white)),
                       color: primaryColor,
                       onTap:()async {
                         Get.back();

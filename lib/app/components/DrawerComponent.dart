@@ -88,14 +88,14 @@ class _DrawerComponentState extends State<DrawerComponent> {
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
-                title: language.scheduledRide,
+                title: language.acceptedScheduledTrips,
                 iconData: ic_schedule_ride,
                 icon: Ionicons.car_outline,
                 onTap: () {
                   Navigator.pop(context);
                   launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
                 }),  DrawerWidget(
-                title: "العروض",
+                title:language. scheduledRideWait,
                 iconData: ic_schedule_ride,
                 icon: Ionicons.car_outline,
                 onTap: () {

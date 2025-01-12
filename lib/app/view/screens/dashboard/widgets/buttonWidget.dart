@@ -303,7 +303,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                                             Navigator.pop(Get.context!);
                                                   
                                             rideRequest(status: IN_PROGRESS);
-     
+     appStore.setLoading(false);
 
                                           }
                                         },

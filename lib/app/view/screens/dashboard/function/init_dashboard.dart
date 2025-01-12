@@ -32,12 +32,14 @@ DashboardController _dashboardController=  Get.put(DashboardController());
     Geolocator.getPositionStream().listen((event) {
       // driverLocation = LatLng(event.latitude, event.longitude);
       Get.put( DashboardController()).emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
- 
+ getCurrentRequest();
                   Get.put( DashboardController()).update();
     });
 
     LiveStream().on(CHANGE_LANGUAGE, (p0) {
+ getCurrentRequest();
                   Get.put( DashboardController()).update();
+                  
     });
 
     walletCheckApi(Get. context!);

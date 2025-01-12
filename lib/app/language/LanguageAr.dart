@@ -598,4 +598,36 @@ class LanguageAr extends BaseLanguage {
   @override
   // TODO: implement scheduledRide
   String get scheduledRide => 'رحلة مجدولة';
+  
+  @override
+  // TODO: implement scheduledRideWait
+  String get scheduledRideWait => 'كل الرحلات المجدولة';
+  
+  @override
+  // TODO: implement scheduledStart
+  String get scheduledStart => 'إسترم';
+  
+  @override
+  // TODO: implement starttime
+  String get starttime => 'وقت البدء';
+  
+  @override
+  // TODO: implement allnewscheduledflights
+  String get allnewscheduledflights => 'كل الرحلات المجدولة';
+  
+  @override
+  // TODO: implement acceptedScheduledTrips
+  String get acceptedScheduledTrips => 'الرحلات المقبولة المجدولة';
+  
+  @override
+  // TODO: implement oopsLoadingFailed
+  String get oopsLoadingFailed => 'عذرا، فشل التحميل';
+  
+  @override
+  // TODO: implement sendOffre
+  String get sendOffre => "ارسال عرض";
+  
+  @override
+  // TODO: implement scheduledRideRequest
+  String get scheduledRideRequest => 'طلب رحلة مجدولة';
 }
