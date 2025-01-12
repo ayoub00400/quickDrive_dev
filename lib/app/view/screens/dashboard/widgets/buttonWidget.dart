@@ -11,6 +11,7 @@ import 'package:get/get.dart';
  
 
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/function/initPusher.dart';
 
 
 
@@ -73,6 +74,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                             await cancelRequest(reason);
 
                             appStore.setLoading(false);
+                            
                           });
                         });
                   }),
@@ -303,7 +305,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                                             Navigator.pop(Get.context!);
                                                   
                                             rideRequest(status: IN_PROGRESS);
-     appStore.setLoading(false);
+                                                appStore.setLoading(false);
 
                                           }
                                         },
@@ -316,6 +318,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                           },
                         );
                       } else if ( controller.servicesListData!.status == IN_PROGRESS) {
+
                         showConfirmDialogCustom(
                             primaryColor: primaryColor,
                             dialogType: DialogType.ACCEPT,
@@ -326,15 +329,15 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                           appStore.setLoading(true);
             
                           getUserLocation().then((value2) async {
-                          controller.  totalDistance = calculateDistance(
+                       controller.emitStateInt( "totalDistance" , calculateDistance(
                                 double.parse( controller.servicesListData!.startLatitude.validate()),
                                 double.parse( controller.servicesListData!.startLongitude.validate()),
                                 _dashboardController.driverLocation!.latitude,
-                                _dashboardController.driverLocation!.longitude);
+                                _dashboardController.driverLocation!.longitude));
             
                             await completeRideRequest();
                           });
-                          appStore.setLoading(false);
+                         
 
                         });
                       }

@@ -74,8 +74,9 @@ DashboardController _dashboardController=  Get.put(DashboardController());
           senderId: sharedPref.getString(UID).validate(),
           receiverId: _dashboardController.riderData!.uid.validate());
 
-      appStore.setLoading(false);
+   appStore.setLoading(false);
 
       log(error.toString());
     });
+    
   }

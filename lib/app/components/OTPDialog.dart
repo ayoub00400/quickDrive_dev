@@ -125,6 +125,8 @@ class OTPDialogState extends State<OTPDialog> {
     // }).catchError((e) {
     //   toast(e.toString());
     // });
+        appStore.setLoading(false);
+        setState(() {});
   }
 
   @override

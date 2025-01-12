@@ -86,20 +86,20 @@ class DetailScreenState extends State<DetailScreen> {
     };
     log('Payment req---' + req.toString());
     await savePayment(req).then((value) async {
-      // await rideService.updateStatusOfRide(rideID: currentData!.payment!.rideRequestId, req: {"payment_status": PAYMENT_PAID});
+      await rideService.updateStatusOfRide(rideID: currentData!.payment!.rideRequestId, req: {"payment_status": PAYMENT_PAID});
       //
       appStore.setLoading(false);
       orderDetailApi();
-      // launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
     }).catchError((error) {
       appStore.setLoading(false);
       log(error.toString());
     });
-          appStore.setLoading(false);
+           appStore.setLoading(false);
   }
 
   Future<void> orderDetailApi() async {
-
+    appStore.setLoading(true);
     await rideDetail(
             rideId: currentData!.payment != null ? currentData!.payment!.rideRequestId : currentData!.onRideRequest!.id)
         .then((value) {
@@ -121,7 +121,7 @@ class DetailScreenState extends State<DetailScreen> {
               launchScreen(context, DashboardScreen(),
                   isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               isPaymentDone = false;
-              // setState(() {});
+              setState(() {});
             },
           );
         }
@@ -224,7 +224,7 @@ class DetailScreenState extends State<DetailScreen> {
                     if (currentScreen == false) return;
                     currentScreen = false;
                     orderDetailApi();
-                         appStore.setLoading(false);
+                        appStore.setLoading(false);
                     // launchScreen(context, DashboardScreen(), isNewTask: true);
                   },
                 );
@@ -239,12 +239,13 @@ class DetailScreenState extends State<DetailScreen> {
                   currentData!.payment!.paymentType = CASH;
                   currentRideRequest();
                        appStore.setLoading(false);
+
                 }
                 if (data[0].tips == 1 && data[0].onStreamApiCall == 0) {
                   rideService.updateStatusOfRide(rideID: data[0].rideId, req: {"on_stream_api_call": 1});
                   currentRideRequest();
                        appStore.setLoading(false);
-                }
+                                  }
                 if (data[0].paymentStatus == PAYMENT_PAID && data[0].status == COMPLETED) {
                   if (isPaymentDone != true) {
                     isPaymentDone = true;
@@ -252,8 +253,7 @@ class DetailScreenState extends State<DetailScreen> {
                     Future.delayed(
                       Duration(seconds: 3),
                       () {
-
-                             appStore.setLoading(false);
+                         appStore.setLoading(false);
                         isPaymentDone = false;
                         launchScreen(context, DashboardScreen(),
                             isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
@@ -359,8 +359,8 @@ class DetailScreenState extends State<DetailScreen> {
                                appStore.setLoading(false);
                           // launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                         } else {
-                          //currentRideRequest();
-                               appStore.setLoading(false);
+                          //currentRideRequest();                               appStore.setLoading(false);
+appStore.setLoading(false);
                           toast(language.waitingForDriverConformation);
                         }
                       },

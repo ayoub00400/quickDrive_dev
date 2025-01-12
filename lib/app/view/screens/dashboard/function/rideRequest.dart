@@ -28,7 +28,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
 
           setMapPins();
         }
-_dashboardController.update();
+ _dashboardController.update();
         // setState(() {});
       });
     }).catchError((error) {
@@ -38,4 +38,5 @@ _dashboardController.update();
 
       log(error.toString());
     });
+        appStore.setLoading(false);
   }

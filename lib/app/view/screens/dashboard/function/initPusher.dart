@@ -104,7 +104,6 @@ void onEvent(PusherEvent event) {
       // showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
 
 
-  DashboardController _dashboardController = Get.put(DashboardController());
 
   if (event.data != null) {
     Map<String, dynamic> data = jsonDecode(event.data.toString());
@@ -131,6 +130,8 @@ getCurrentRequest();
 
 Logger().d('karim data : $data');
     if (data['action'] != null && data['action'] == 'acceptScheduledOffer') {
+
+      Get.off(ScreenLaoding());
       showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
     }
 
@@ -139,6 +140,8 @@ Logger().d('karim data : $data');
     if (data['action'] != null && data['action']['action'] == 'new_ride_request') {
       if (data['action']['drivers_id'] != null) {
         if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
+  DashboardController _dashboardController = Get.put(DashboardController());
+
           developer.log('Audio play condition met.');
 
           cancelTimer();
@@ -151,6 +154,8 @@ Logger().d('karim data : $data');
     if (data['action'] != null && data['action']['action'] == 'new_scheduled_ride_request') {
       if (data['action']['drivers_id'] != null) {
         if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
+  DashboardController _dashboardController = Get.put(DashboardController());
+
           _dashboardController.fetshScheduledRideDetails(data["rideRequestId"]);
           NotificationWithSoundService.player.stop();
           audioPlayWithLimit();
@@ -165,6 +170,8 @@ Logger().d('karim data : $data');
         if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
 
           Logger().d('karim data : +data');
+  DashboardController _dashboardController = Get.put(DashboardController());
+
           _dashboardController.fetshScheduledRideDetails(data["rideRequestId"]);
 
           // Get.off(DashboardScreen());
@@ -212,7 +219,7 @@ class _ScreenLaodingState extends State<ScreenLaoding> {
     super.initState();
 
     Timer(Duration(seconds: 1), () {
-      Get.off(DashboardScreen());
+      Get.to(DashboardScreen());
     });
   }
   @override
