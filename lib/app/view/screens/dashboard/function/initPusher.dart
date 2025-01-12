@@ -5,7 +5,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:taxi_driver/app/view/screens/SplashScreen.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/dashboard.dart';
 import 'dart:developer' as developer;
 
 import '../../../../Services/bg_notification_service.dart';
@@ -98,11 +101,20 @@ void showTopSnackBar(
 
 @pragma('vm:entry-point')
 void onEvent(PusherEvent event) {
+      showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+
+
   DashboardController _dashboardController = Get.put(DashboardController());
 
   if (event.data != null) {
     Map<String, dynamic> data = jsonDecode(event.data.toString());
+if (data['data'] != null && data['data']['driver_id'] == sharedPref.getInt(USER_ID)) {
+    // Get.to(SplashScreen());
+getCurrentRequest();
+    }
+   
 
+Logger().d('karim data : $data');
     if (data['action'] != null && data['action'] == 'acceptScheduledOffer') {
       showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
     }
@@ -134,6 +146,34 @@ void onEvent(PusherEvent event) {
           audioPlayWithLimit();
         }
       }
+    }
+
+    if (data['action'] != null && data['action']['action'] == 'acceptScheduledOffer') {
+          Logger().d('karim data : $data');
+
+      if (data['action']['drivers_id'] != null) {
+        if ((data['action']['drivers_id'] as List).contains(sharedPref.getInt(USER_ID))) {
+
+          Logger().d('karim data : +data');
+          _dashboardController.fetshScheduledRideDetails(data["rideRequestId"]);
+
+          // Get.off(DashboardScreen());
+          NotificationWithSoundService.player.stop();
+          audioPlayWithLimit();
+        }
+      }
+    }
+
+    if (data['action'] != null && data['action'] == 'scheduledRideAccepted') {
+      showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+    // Get.to(SplashScreen());
+
+    }
+
+    
+    if (data['data'] != null && data['data']['driver_id'] == sharedPref.getInt(USER_ID)) {
+    // Get.to(SplashScreen());
+
     }
   } else {
     developer.log('condition false');

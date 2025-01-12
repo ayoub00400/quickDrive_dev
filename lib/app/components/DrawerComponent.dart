@@ -9,6 +9,7 @@ import '../view/screens/BankInfoScreen.dart';
 import '../view/screens/EarningScreen.dart';
 import '../view/screens/EditProfileScreen.dart';
 import '../view/screens/EmergencyContactScreen.dart';
+import '../view/screens/NewDriverNormalRidesScreen.dart';
 import '../view/screens/RidesListScreen.dart';
 import '../view/screens/WalletScreen.dart';
 import '../view/screens/SettingScreen.dart';
@@ -20,6 +21,7 @@ import '../utils/Constants.dart';
 import '../utils/Extensions/ConformationDialog.dart';
 import '../utils/Extensions/app_common.dart';
 import '../utils/Images.dart';
+import '../view/screens/sc/scheduled_rides.dart';
 import 'DrawerWidget.dart';
 
 class DrawerComponent extends StatefulWidget {
@@ -92,6 +94,13 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 onTap: () {
                   Navigator.pop(context);
                   launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
+                }),  DrawerWidget(
+                title: "العروض",
+                iconData: ic_schedule_ride,
+                icon: Ionicons.car_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  launchScreen(context, TestScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.rides,

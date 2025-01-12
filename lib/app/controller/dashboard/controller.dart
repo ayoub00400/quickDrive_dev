@@ -54,7 +54,7 @@ print("fetchScheduledRides");
         status: SCHEDULED,
       );
       Logger().e(response.data!.first.riderName);
-      scheduledRides2.addAll(response.data!);
+      scheduledRides.addAll(response.data!);
       maxPages = response.pagination!.totalPages!;
     update();
 
@@ -86,7 +86,7 @@ print("fetchScheduledRides");
         driverId: sharedPref.getInt(USER_ID),
         status: SCHEDULED,
       );
-      Logger().e(response.data!.length);
+      Logger().e(response.data!);
       maxPages = response.pagination!.totalPages!;
       scheduledRides.addAll(response.data!);
       

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 import 'package:taxi_driver/app/model/DocumentListModel.dart';
 import 'package:taxi_driver/app/model/RideDetailModel.dart';
 import 'package:taxi_driver/app/model/RiderListModel.dart';
@@ -320,9 +321,13 @@ Future<RiderListModel> getRiderRequestList({int? page, String? status, LatLng? s
   }
   // riderequest-list?status=scheduled&service_id=9
 }Future<RiderListModel> getRiderRequestList2({int? page, String? status, LatLng? sourceLatLog, int? driverId}) async {
+
+  var res= await buildHttpResponse('riderequest-list?status=scheduled&service_id=9', method: HttpMethod.GET);
+
+  Logger().d(res.body);
   if (sourceLatLog != null) {
-    return RiderListModel.fromJson(await handleResponse(
-        await buildHttpResponse('riderequest-list?status=scheduled&service_id=9', method: HttpMethod.GET)));
+    return RiderListModel.fromJson(await handleResponse( res
+       ));
   } else {
     return RiderListModel.fromJson(await handleResponse(await buildHttpResponse(
         status != null

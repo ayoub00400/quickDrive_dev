@@ -128,7 +128,9 @@ class ScheduledRideCard extends StatelessWidget {
                 ),
               ],
             ),
-       scheduledRideRequestView(Get.put(DashboardController()), data2)   ],
+      //  scheduledRideRequestView(Get.put(DashboardController()), data2) 
+       
+         ],
         ),
       ),
     );

@@ -17,7 +17,6 @@ import '../../../utils/Constants.dart';
 import '../../../utils/Extensions/AppButtonWidget.dart';
 import '../../../utils/Extensions/app_common.dart';
 import '../../../utils/var/var_app.dart';
-import '../ChatScreen.dart';
 import 'function/driverStatus.dart';
 import 'function/fetchTotalEarning.dart';
 import 'function/initPusher.dart';
@@ -25,8 +24,6 @@ import 'function/init_dashboard.dart';
 import 'function/locationPermission.dart';
 import 'widgets/MapView.dart';
 import 'widgets/addressDisplayWidget.dart';
-import 'widgets/bookingForView.dart';
-import 'widgets/buttonWidget.dart';
 import 'widgets/fetchRideView.dart';
 
 import 'widgets/onlineOfflineSwitch.dart';
@@ -186,7 +183,7 @@ Widget scheduledRideRequestView(DashboardController controller, RideDetailModel 
           SizedBox(height: 8),
           TextFormField(
             keyboardType: TextInputType.number,
-            controller: controller.SchedulerPriceController,
+            controller: controller.schedulerPriceController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: language.price,
@@ -199,7 +196,7 @@ Widget scheduledRideRequestView(DashboardController controller, RideDetailModel 
                 text: 'Send Offre',
                 onTap: () {
                   controller.sendScheduledTripPrice(
-                      rideId: rideData.data!.id!, price: controller.SchedulerPriceController.text);
+                      rideId: rideData.data!.id!, price: controller.schedulerPriceController.text);
                 }),
             AppButtonWidget(
                 text: '${language.decline}',

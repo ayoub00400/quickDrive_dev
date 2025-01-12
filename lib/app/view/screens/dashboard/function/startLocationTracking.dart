@@ -46,6 +46,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                 sharedPref.setDouble(LONGITUDE, _dashboardController. driverLocation!.longitude);
 
                 await updateStatus(req).then((value) {
+                  Get.put( DashboardController()).update();
                   // setState(() {});
                 }).catchError((error) {
                   log(error);

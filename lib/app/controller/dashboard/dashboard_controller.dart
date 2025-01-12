@@ -140,7 +140,7 @@ class DashboardController extends GetxController {
 
   final priceController = TextEditingController();
 
-  final SchedulerPriceController = TextEditingController();
+  final schedulerPriceController = TextEditingController();
 
   // key
 
@@ -416,11 +416,11 @@ class DashboardController extends GetxController {
     required String price,
     required int rideId,
   }) async {
-    if (SchedulerPriceController.text.isEmpty) {
+    if (schedulerPriceController.text.isEmpty) {
       toast('Please enter price');
       return;
     }
-    if (double.parse(SchedulerPriceController.text.trim()) <= 0) {
+    if (double.parse(schedulerPriceController.text.trim()) <= 0) {
       toast('Please enter price greater than 0');
       return;
     }
@@ -432,7 +432,7 @@ class DashboardController extends GetxController {
 
     await sendScheduledTripPriceOffre(request: req).then((value) async {
       await ignoreScheduledRide();
-      SchedulerPriceController.clear();
+      schedulerPriceController.clear();
       Logger().d(isScheduleRideRequestShowed);
       toast(language.priceSentSuccessfully);
 

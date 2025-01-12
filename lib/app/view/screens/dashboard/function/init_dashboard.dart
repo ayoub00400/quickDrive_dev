@@ -33,11 +33,11 @@ DashboardController _dashboardController=  Get.put(DashboardController());
       // driverLocation = LatLng(event.latitude, event.longitude);
       Get.put( DashboardController()).emitStateLatLng( "driverLocation" , LatLng(event.latitude, event.longitude));
  
-      // setState(() {});
+                  Get.put( DashboardController()).update();
     });
 
     LiveStream().on(CHANGE_LANGUAGE, (p0) {
-      // setState(() {});
+                  Get.put( DashboardController()).update();
     });
 
     walletCheckApi(Get. context!);
