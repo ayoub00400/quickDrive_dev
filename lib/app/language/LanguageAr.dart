@@ -605,7 +605,7 @@ class LanguageAr extends BaseLanguage {
   
   @override
   // TODO: implement scheduledStart
-  String get scheduledStart => 'إسترم';
+  String get scheduledStart => 'إستمرار';
   
   @override
   // TODO: implement starttime
@@ -621,7 +621,7 @@ class LanguageAr extends BaseLanguage {
   
   @override
   // TODO: implement oopsLoadingFailed
-  String get oopsLoadingFailed => 'عذرا، فشل التحميل';
+  String get oopsLoadingFailed => 'عذرا فشل التحميل';
   
   @override
   // TODO: implement sendOffre
@@ -630,4 +630,32 @@ class LanguageAr extends BaseLanguage {
   @override
   // TODO: implement scheduledRideRequest
   String get scheduledRideRequest => 'طلب رحلة مجدولة';
+  
+  @override
+  // TODO: implement nonewflights
+  String get nonewflights => 'لا يوجد رحلات مجدولة';
+  
+  @override
+  // TODO: implement remain
+  String get remain => 'المتبقي';
+  
+  @override
+  // TODO: implement day
+  String get day => "يوم";
+  
+  @override
+  // TODO: implement hours
+  String get hours => "ساعة";
+  
+  @override
+  // TODO: implement minutes
+  String get minutes => "دقيقة";
+  
+  @override
+  // TODO: implement seconds
+  String get seconds => "ثانية";
+  
+  @override
+  // TODO: implement thespecifiedtimehaspassed
+  String get thespecifiedtimehaspassed =>"تم تجاوز الوقت المحدد";
 }

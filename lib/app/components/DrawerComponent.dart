@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/get.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../main.dart';
 import '../Services/network/RestApis.dart';
+import '../controller/dashboard/dashboard_controller.dart';
 import '../utils/var/var_app.dart';
 import '../view/screens/BankInfoScreen.dart';
 import '../view/screens/EarningScreen.dart';
@@ -21,6 +23,7 @@ import '../utils/Constants.dart';
 import '../utils/Extensions/ConformationDialog.dart';
 import '../utils/Extensions/app_common.dart';
 import '../utils/Images.dart';
+import '../view/screens/dashboard/dashboard.dart';
 import '../view/screens/sc/scheduled_rides.dart';
 import 'DrawerWidget.dart';
 
@@ -87,21 +90,54 @@ class _DrawerComponentState extends State<DrawerComponent> {
                       ),
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
-            DrawerWidget(
-                title: language.acceptedScheduledTrips,
-                iconData: ic_schedule_ride,
-                icon: Ionicons.car_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
-                }),  DrawerWidget(
-                title:language. scheduledRideWait,
-                iconData: ic_schedule_ride,
-                icon: Ionicons.car_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  launchScreen(context, TestScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
-                }),
+            Stack(
+              children: [
+                DrawerWidget(
+                    title: language.acceptedScheduledTrips,
+                    iconData: ic_schedule_ride,
+                    icon: Ionicons.car_outline,
+                    onTap: () {
+                      box.write("acceptScheduledOffer", false);
+                       Get.put(DashboardController()).
+                            emitStateBool( "acceptScheduledOffer" , false);
+
+                      Navigator.pop(context);
+                      launchScreen(context, ScheduledRides(), pageRouteAnimation: PageRouteAnimation.Slide);
+                    }),
+      // box .write("acceptScheduledOffer", true);
+              if(box.read("acceptScheduledOffer") == true)
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                child: Icon(
+                  Icons.brightness_1,
+                  size: 6,
+                  color: Colors.red,
+                ))
+              ],
+            ),  Stack(
+              children: [
+                DrawerWidget(
+                    title:language. scheduledRideWait,
+                    iconData: ic_schedule_ride,
+                    icon: Ionicons.car_outline,
+                    onTap: () {
+                      box.write("new_scheduled_ride_request", false);
+                          Get.put(DashboardController()).
+                            emitStateBool( "new_scheduled_ride_request" , false);
+                      Navigator.pop(context);
+                      launchScreen(context, TestScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                    }),
+                  if(box.read("new_scheduled_ride_request") == true)
+              Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                child: Icon(
+                  Icons.brightness_1,
+                  size: 6,
+                  color: Colors.red,
+                )) ],
+            ),
             DrawerWidget(
                 title: language.rides,
                 iconData: ic_my_rides,

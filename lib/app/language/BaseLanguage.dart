@@ -336,6 +336,16 @@ abstract class BaseLanguage {
   String get online;
 
   String get aboutRider;
+  String get remain;
+  String get day;
+  String get thespecifiedtimehaspassed;
+
+  String get hours;
+  String get minutes;
+  String get seconds;
+
+
+  String get nonewflights;
 
   String get pleaseEnterMessage;
 

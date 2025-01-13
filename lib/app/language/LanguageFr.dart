@@ -899,4 +899,32 @@ class LanguageFr extends BaseLanguage {
   // TODO: implement scheduledRideRequest
   String get scheduledRideRequest => "Demande de conduite planifiée";
   
+  @override
+  // TODO: implement nonewflights
+  String get nonewflights => "Aucun vol";
+  
+  @override
+  // TODO: implement remain
+  String get remain => "Reste";
+  
+  @override
+  // TODO: implement day
+  String get day => "Jour";
+  
+  @override
+  // TODO: implement hours
+  String get hours => "Horaires";
+  
+  @override
+  // TODO: implement minutes
+  String get minutes => "Minutes";
+  
+  @override
+  // TODO: implement seconds
+  String get seconds => "Secondes";
+  
+  @override
+  // TODO: implement thespecifiedtimehaspassed
+  String get thespecifiedtimehaspassed => "Le temps spécifié a passé";
+  
 }

@@ -2,7 +2,9 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
+import 'package:taxi_driver/app/view/screens/dashboard/function/initPusher.dart';
 import 'package:taxi_driver/main.dart';
 import 'package:taxi_driver/app/utils/Colors.dart';
 import 'package:taxi_driver/app/utils/Constants.dart';
@@ -90,11 +92,13 @@ class DetailScreenState extends State<DetailScreen> {
       //
       appStore.setLoading(false);
       orderDetailApi();
-      launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      launchScreen(context, ScreenLaoding(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
     }).catchError((error) {
       appStore.setLoading(false);
       log(error.toString());
     });
+     Get.off( ScreenLaoding());
+
            appStore.setLoading(false);
   }
 
@@ -118,8 +122,7 @@ class DetailScreenState extends State<DetailScreen> {
           Future.delayed(
             Duration(seconds: 3),
             () {
-              launchScreen(context, DashboardScreen(),
-                  isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+        Get.off(ScreenLaoding());
               isPaymentDone = false;
               setState(() {});
             },

@@ -50,10 +50,11 @@ class ScheduledRides extends StatelessWidget {
             if (state is ScheduledRidesLoading) {
               return loaderWidget();
             }
-            if (state is ScheduledRidesLoadingFailed) {
-              return Center(child: Text("Opps,Loading Failed"));
-            }
+      
             if (state is ScheduledRidesLoaded && context.read<ScheduledRidesCubit>().scheduledRides.isEmpty) {
+              return emptyWidget();
+            }
+                  if (state is ScheduledRidesLoadingFailed) {
               return emptyWidget();
             }
             return ListView(

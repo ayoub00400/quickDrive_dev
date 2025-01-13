@@ -130,9 +130,14 @@ getCurrentRequest();
 
 Logger().d('karim data : $data');
     if (data['action'] != null && data['action'] == 'acceptScheduledOffer') {
+  DashboardController _dashboardController = Get.put(DashboardController());
 
       Get.off(ScreenLaoding());
       showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+
+      box .write("acceptScheduledOffer", true);
+      _dashboardController.emitStateBool( "acceptScheduledOffer" , true);
+
     }
 
    
@@ -159,11 +164,19 @@ Logger().d('karim data : $data');
           _dashboardController.fetshScheduledRideDetails(data["rideRequestId"]);
           NotificationWithSoundService.player.stop();
           audioPlayWithLimit();
+      box .write("new_scheduled_ride_request", true);
+      _dashboardController.emitStateBool( "new_scheduled_ride_request" , true);
+
         }
       }
     }
 
     if (data['action'] != null && data['action']['action'] == 'acceptScheduledOffer') {
+  DashboardController _dashboardController = Get.put(DashboardController());
+
+      box .write("acceptScheduledOffer", true);
+      _dashboardController.emitStateBool( "acceptScheduledOffer" , true);
+
           Logger().d('karim data : $data');
 
       if (data['action']['drivers_id'] != null) {
@@ -183,6 +196,8 @@ Logger().d('karim data : $data');
 
     if (data['action'] != null && data['action'] == 'scheduledRideAccepted') {
       showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
+      box .write("acceptScheduledOffer", true);
+
     // Get.to(SplashScreen());
 
     }
@@ -218,8 +233,9 @@ class _ScreenLaodingState extends State<ScreenLaoding> {
     // TODO: implement initState
     super.initState();
 
-    Timer(Duration(seconds: 1), () {
-      Get.to(DashboardScreen());
+    Timer(Duration(microseconds: 100), () {
+      Get.delete<DashboardController>();
+      Get.offAll(DashboardScreen());
     });
   }
   @override

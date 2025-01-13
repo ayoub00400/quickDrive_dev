@@ -13,6 +13,7 @@ import '../../../../utils/Extensions/app_common.dart';
 import '../../../../utils/var/var_app.dart';
 import '../../EditProfileScreen.dart';
 import '../../NotificationScreen.dart';
+import '../dashboard.dart';
 import '../function/map/moveMap.dart';
 
 Widget topWidget(context ,  {scaffoldKey ,
@@ -30,43 +31,60 @@ DashboardController _dashboardController=  Get.put(DashboardController());
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                inkWellWidget(
-                  onTap: () => scaffoldKey.currentState!.openDrawer(),
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                GetBuilder<DashboardController>(
+                  
+                  builder: (controller) {
+                    return Stack(
                       children: [
-                        Container(
-                          height: 4,
-                          width: 24,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(defaultRadius),
+                        inkWellWidget(
+                          onTap: () => scaffoldKey.currentState!.openDrawer(),
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  height: 4,
+                                  width: 24,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Container(
+                                  height: 4,
+                                  width: 16,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Container(
+                                  height: 4,
+                                  width: 24,
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Container(
-                          height: 4,
-                          width: 16,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Container(
-                          height: 4,
-                          width: 24,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          if(box.read("new_scheduled_ride_request") == true || box.read("acceptScheduledOffer") == true ||controller.acceptScheduledOffer == true || controller.new_scheduled_ride_request == true)
+                                  Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                    child: Icon(
+                      Icons.brightness_1,
+                      size: 6,
+                      color: Colors.red,
+                    )) ],
+                    );
+                  }
                 ),
                 Text(
                   'Quick Cargoo , ${sharedPref.getString(FIRST_NAME).validate().capitalizeFirstLetter()}!',
@@ -91,19 +109,7 @@ DashboardController _dashboardController=  Get.put(DashboardController());
                 ),
               ],
             ),
-            Positioned(
-              top: 14,
-              right: 0,
-              child: Container(
-                height: 10, width: 10,
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-
-                  color: Colors.red,
-                     borderRadius:  BorderRadius.circular(50),
-                ),
-              ),
-            ),
+           
           ],
         ),
         SizedBox(height: 16),

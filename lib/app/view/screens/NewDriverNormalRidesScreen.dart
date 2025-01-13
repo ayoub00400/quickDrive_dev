@@ -63,7 +63,12 @@ class _TestScreenState extends State<TestScreen> {
                              if (controller.isLoading  ) {
                       return Center(child: CircularProgressIndicator());
                     }       if (  controller.driverRidesResponse == null) {
-                      return Center(child: Text('لا رحلات جديدة'));
+                      return SizedBox(
+                        height: 100,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text(language.nonewflights)),
+                        ));
                     }
                           return ListView.builder(
                             physics: NeverScrollableScrollPhysics(),

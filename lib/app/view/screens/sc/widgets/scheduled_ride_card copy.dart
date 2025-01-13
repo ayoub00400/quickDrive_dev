@@ -19,6 +19,7 @@ import '../../../../utils/var/var_app.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
 import '../../RideDetailScreen.dart';
 import '../../dashboard/dashboard.dart';
+import 'scheduled_ride_card.dart';
 import 'send_offre_bottom_sheet.dart';
 
 class ScheduledRideCard2 extends StatelessWidget {
@@ -139,28 +140,4 @@ class ScheduledRideCard2 extends StatelessWidget {
 }
  
 
-String getTimeDifferenceAsText(String startTime) {
-  // تحويل النص إلى كائن DateTime
-  DateTime startDate = DateTime.parse(startTime);
-  DateTime now = DateTime.now();
-
-  // حساب الفرق بين الوقتين
-  Duration difference = startDate.difference(now);
-
-  if (difference.isNegative) {
-    return "الوقت المحدد قد مضى.";
-  }
-
-  // استخراج الأيام والساعات والدقائق
-  int days = difference.inDays;
-  int hours = difference.inHours % 24;
-  int minutes = difference.inMinutes % 60;
-
-  // إنشاء النص المناسب
-  String result = "تبقى ";
-  if (days > 0) result += "$days يوم${days > 1 ? '' : ''} ";
-  if (hours > 0) result += "$hours ساعة${hours > 1 ? '' : ''} ";
-  if (minutes > 0) result += "$minutes دقيقة${minutes > 1 ? '' : ''}";
-
-  return result.trim();
-}
+ 

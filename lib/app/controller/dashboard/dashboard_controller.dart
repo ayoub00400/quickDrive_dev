@@ -46,6 +46,12 @@ class DashboardController extends GetxController {
 
   bool isScheduleRideRequestShowed = false;
 
+  bool new_scheduled_ride_request = false;
+
+  bool acceptScheduledOffer = false;
+
+  // box.read("new_scheduled_ride_request") == true || box.read("new_scheduled_ride_request") == true
+
 // int
   int reqCheckCounter = 0;
 
@@ -204,6 +210,18 @@ class DashboardController extends GetxController {
         });
 
         break;
+      case "new_scheduled_ride_request":
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          new_scheduled_ride_request = valu;
+          update();
+        });
+
+        break;
+      case "acceptScheduledOffer":
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          acceptScheduledOffer = valu;
+          update();
+        });
     }
 //  update();
   }

@@ -60,15 +60,15 @@ class _ScheduledRidesState extends State<ScheduledRides> {
               }
             
               // Show an error message if fetching failed
-              if (controller.hasError.value) {
-                return Center(child: Text(language.oopsLoadingFailed));
-              }
+            
             
               // Show an empty widget if no scheduled rides are available
               if (controller.scheduledRides.isEmpty) {
                 return emptyWidget();
               }
-            
+              if (controller.hasError.value) {
+                return Center(child: Text(language.oopsLoadingFailed));
+              }
               // Show the list of scheduled rides
               return ListView.builder(
                 controller: controller.scrollController,

@@ -837,4 +837,32 @@ class LanguageEn extends BaseLanguage {
   @override
   // TODO: implement scheduledRideRequest
   String get scheduledRideRequest => "Scheduled Ride Request";
+  
+  @override
+  // TODO: implement nonewflights
+  String get nonewflights => "No new flights";
+  
+  @override
+  // TODO: implement remain
+  String get remain => "Remain";
+  
+  @override
+  // TODO: implement day
+  String get day => "Day";
+  
+  @override
+  // TODO: implement hours
+  String get hours => "Hours";
+  
+  @override
+  // TODO: implement minutes
+  String get minutes => "Minutes";
+  
+  @override
+  // TODO: implement seconds
+  String get seconds => "Seconds";
+  
+  @override
+  // TODO: implement thespecifiedtimehaspassed
+  String get thespecifiedtimehaspassed => "The specified time has passed";
 }

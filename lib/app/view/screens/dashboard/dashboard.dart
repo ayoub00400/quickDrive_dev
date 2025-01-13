@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_driver/app/model/RiderModel.dart';
 import 'package:taxi_driver/app/utils/Extensions/StringExtensions.dart';
@@ -27,6 +28,7 @@ import 'widgets/addressDisplayWidget.dart';
 import 'widgets/fetchRideView.dart';
 
 import 'widgets/onlineOfflineSwitch.dart';
+  final box = GetStorage(); // Create an instance of GetStorage
 
 class DashboardScreen extends StatefulWidget {
   @override
