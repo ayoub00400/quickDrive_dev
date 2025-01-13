@@ -99,6 +99,15 @@ void showTopSnackBar(
   );
 }
 
+          Future<void> audioPlayWithLimit() async {
+    try {
+      Timer(Duration(seconds: 10), () {
+      NotificationWithSoundService.  stopAudio();
+      });
+      await NotificationWithSoundService. player.setReleaseMode(ReleaseMode.loop);
+      await NotificationWithSoundService.player.play(AssetSource('sounds/request_sound.aac'));
+    } catch (e) {}
+  }
 @pragma('vm:entry-point')
 void onEvent(PusherEvent event) {
       // showTopSnackBar(Get.context, 'you are assigne as driver for scheduled ride');
@@ -189,7 +198,7 @@ Logger().d('karim data : $data');
 
           // Get.off(DashboardScreen());
           NotificationWithSoundService.player.stop();
-          audioPlayWithLimit();
+           audioPlayWithLimit() ;
         }
       }
     }
@@ -212,13 +221,13 @@ Logger().d('karim data : $data');
   }
 }
 
-Future<void> audioPlayWithLimit() async {
-  try {
-    await NotificationWithSoundService.player.setReleaseMode(ReleaseMode.loop);
-    await NotificationWithSoundService.player
-      ..play(AssetSource('sounds/request_sound.aac'));
-  } catch (e) {}
-}
+// Future<void> audioPlayWithLimit() async {
+//   try {
+//     await NotificationWithSoundService.player.setReleaseMode(ReleaseMode.loop);
+//     await NotificationWithSoundService.player
+//       ..play(AssetSource('sounds/request_sound.aac'));
+//   } catch (e) {}
+// }
 
 class ScreenLaoding extends StatefulWidget {
   const ScreenLaoding({super.key});
